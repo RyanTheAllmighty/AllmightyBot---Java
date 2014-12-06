@@ -17,6 +17,51 @@
  */
 package me.ryandowling.allmightybot;
 
-public class AllmightyBot {
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import me.ryandowling.allmightybot.data.Settings;
+import org.apache.commons.io.FileUtils;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.logging.Logger;
+
+public class AllmightyBot {
+    private final static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private Settings settings;
+
+    public AllmightyBot() {
+        if (Files.exists(Utils.getSettingsFile())) {
+            try {
+                this.settings = GSON.fromJson(FileUtils.readFileToString(Utils.getSettingsFile().toFile()), Settings
+                        .class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            this.settings = new Settings();
+        }
+
+        // Shut it all down
+        this.shutDown();
+    }
+
+    /**
+     * Starts the bot up
+     */
+    public void startUp() {
+        System.out.println("Bot starting up!");
+    }
+
+    /**
+     * Issues a shutdown command to safely shutdown and save all files needed
+     */
+    public void shutDown() {
+        System.out.println("Bot shutting down!");
+        try {
+            FileUtils.write(Utils.getSettingsFile().toFile(), GSON.toJson(this.settings));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

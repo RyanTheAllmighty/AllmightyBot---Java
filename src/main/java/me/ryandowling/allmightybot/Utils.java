@@ -15,17 +15,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package me.ryandowling.allmightybot;
 
-public class App {
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-    /**
-     * Store the Allmighty Bot instance so we can reference it easily for things.
-     */
-    public static AllmightyBot INSTANCE;
+public class Utils {
+    public static Path getCoreDir() {
+        return Paths.get(System.getProperty("user.dir"));
+    }
 
-    public static void main(String[] args) {
-        INSTANCE = new AllmightyBot();
-        INSTANCE.startUp();
+    public static Path getSettingsFile() {
+        return getCoreDir().resolve("settings.json");
     }
 }

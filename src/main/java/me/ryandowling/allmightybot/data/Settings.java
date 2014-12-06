@@ -15,17 +15,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ryandowling.allmightybot;
 
-public class App {
+package me.ryandowling.allmightybot.data;
+
+public class Settings {
+    /**
+     * If the initial setup has been completed
+     */
+    private boolean initialSetupComplete;
 
     /**
-     * Store the Allmighty Bot instance so we can reference it easily for things.
+     * The bot's username
      */
-    public static AllmightyBot INSTANCE;
+    private String twitchUsername;
 
-    public static void main(String[] args) {
-        INSTANCE = new AllmightyBot();
-        INSTANCE.startUp();
+    /**
+     * The bot's OAuth token
+     */
+    private String twitchToken;
+
+    /**
+     * The channel we are joining
+     */
+    private String twitchChannel;
+
+    /**
+     * Sets up some defaults where there is no settings file already there
+     */
+    public Settings() {
+        this.initialSetupComplete = false;
+    }
+
+    public boolean hasInitialSetupBeenCompleted() {
+        return this.initialSetupComplete;
+    }
+
+    public void initialSetupComplete() {
+        this.initialSetupComplete = true;
     }
 }
