@@ -21,13 +21,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.ryandowling.allmightybot.data.Settings;
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.logging.Logger;
 
 public class AllmightyBot {
     private final static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Logger logger = LogManager.getLogger(App.class.getName());
     private Settings settings;
 
     public AllmightyBot() {
@@ -50,14 +52,14 @@ public class AllmightyBot {
      * Starts the bot up
      */
     public void startUp() {
-        System.out.println("Bot starting up!");
+        logger.info("Bot starting up!");
     }
 
     /**
      * Issues a shutdown command to safely shutdown and save all files needed
      */
     public void shutDown() {
-        System.out.println("Bot shutting down!");
+        logger.info("Bot shutting down!");
         try {
             FileUtils.write(Utils.getSettingsFile().toFile(), GSON.toJson(this.settings));
         } catch (IOException e) {
