@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
+<Configuration status="error" name="AllmightyBot">
     <Appenders>
-        <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %level - %msg%n"/>
+        <RollingRandomAccessFile name="File-Output" fileName="logs/AllmightyBot.log" filePattern="logs/archived/$$
+        {date:yyyy-MM}/AllmightyBot-%d{MM-dd-yyyy}.log.gz">
+            <PatternLayout pattern="[%d{dd/M/yyy HH:mm:ss a}] [%level] %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingRandomAccessFile>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d{dd/M/yyy HH:mm:ss a}] [%level] %m%n"/>
         </Console>
     </Appenders>
     <Loggers>
-        <Root level="debug">
-            <AppenderRef ref="Console"/>
+        <Root level="all">
+            <appender-ref ref="File-Output"/>
+            <appender-ref ref="STDOUT"/>
         </Root>
     </Loggers>
 </Configuration>

@@ -18,6 +18,9 @@
 
 package me.ryandowling.allmightybot.data;
 
+import org.pircbotx.Configuration;
+import org.pircbotx.PircBotX;
+
 public class Settings {
     /**
      * If the initial setup has been completed
@@ -52,5 +55,35 @@ public class Settings {
 
     public void initialSetupComplete() {
         this.initialSetupComplete = true;
+    }
+
+    public Configuration.Builder<PircBotX> getBuilder() {
+        Configuration.Builder<PircBotX> builder = new Configuration.Builder<>();
+
+        builder.setName(this.twitchUsername);
+        builder.setLogin(this.twitchUsername);
+        builder.setServerPassword(this.twitchToken);
+        builder.setAutoNickChange(true);
+        builder.setServerHostname("irc.twitch.tv");
+        builder.setServerPort(6667);
+        builder.addAutoJoinChannel("#" + this.twitchChannel);
+
+        return builder;
+    }
+
+    public void setTwitchUsername(String twitchUsername) {
+        this.twitchUsername = twitchUsername;
+    }
+
+    public void setTwitchToken(String twitchToken) {
+        this.twitchToken = twitchToken;
+    }
+
+    public void setTwitchChannel(String twitchChannel) {
+        this.twitchChannel = twitchChannel;
+    }
+
+    public String getTwitchChannel() {
+        return twitchChannel;
     }
 }

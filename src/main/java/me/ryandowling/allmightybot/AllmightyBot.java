@@ -23,7 +23,10 @@ import me.ryandowling.allmightybot.data.Settings;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.pircbotx.PircBotX;
+import org.pircbotx.exception.IrcException;
 
+import javax.swing.JOptionPane;
 import java.io.IOException;
 import java.nio.file.Files;
 
@@ -31,6 +34,7 @@ public class AllmightyBot {
     private final static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Logger logger = LogManager.getLogger(App.class.getName());
     private Settings settings;
+    private PircBotX pirc;
 
     public AllmightyBot() {
         if (Files.exists(Utils.getSettingsFile())) {
@@ -44,6 +48,38 @@ public class AllmightyBot {
             this.settings = new Settings();
         }
 
+        if (!this.settings.hasInitialSetupBeenCompleted()) {
+            String input = null;
+
+            do {
+                input = JOptionPane.showInputDialog(null, "Please enter the username of the Twitch user " + "to act " +
+                        "as the bot", "Twitch Username", JOptionPane.QUESTION_MESSAGE);
+                settings.setTwitchUsername(input);
+            } while (input == null);
+
+            do {
+                input = JOptionPane.showInputDialog(null, "Please enter the token of the Twitch user " + "acting as " +
+                        "the bot", "Twitch Token", JOptionPane.QUESTION_MESSAGE);
+                settings.setTwitchToken(input);
+            } while (input == null);
+
+            do {
+                input = JOptionPane.showInputDialog(null, "Please enter the username of the Twitch user " + "whose " +
+                        "channel you wish to join", "User To Join", JOptionPane.QUESTION_MESSAGE);
+                settings.setTwitchChannel(input);
+            } while (input == null);
+
+            this.settings.initialSetupComplete();
+        }
+
+        this.pirc = new PircBotX(this.settings.getBuilder().addListener(new CommandListener()).buildConfiguration());
+
+        try {
+            this.pirc.startBot();
+        } catch (IOException | IrcException e) {
+            e.printStackTrace();
+        }
+
         // Shut it all down
         this.shutDown();
     }
@@ -51,6 +87,7 @@ public class AllmightyBot {
     /**
      * Starts the bot up
      */
+
     public void startUp() {
         logger.info("Bot starting up!");
     }
