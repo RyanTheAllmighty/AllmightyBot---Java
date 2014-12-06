@@ -18,15 +18,13 @@
 
 package me.ryandowling.allmightybot;
 
+import me.ryandowling.allmightybot.commands.Command;
+import me.ryandowling.allmightybot.commands.CommandBus;
+import me.ryandowling.allmightybot.commands.ExitCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class CommandListener extends ListenerAdapter {
     private static final Logger logger = LogManager.getLogger(App.class.getName());
@@ -36,5 +34,17 @@ public class CommandListener extends ListenerAdapter {
         super.onMessage(event);
         logger.debug("[" + event.getChannel().getName() + "] [" + event.getUser().getNick() + "] " + event.getMessage
                 ());
+
+        CommandBus.add(new ExitCommand());
+
+        if (event.getMessage().startsWith("!")) {
+            logger.debug("I hear a command!");
+            Command command = CommandBus.find(event.getMessage().substring(1));
+            if (command != null) {
+                logger.debug("I found a command to run!");
+                command.run(event);
+                logger.debug("I ran a command!");
+            }
+        }
     }
 }

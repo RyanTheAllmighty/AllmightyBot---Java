@@ -15,16 +15,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ryandowling.allmightybot;
 
-public class App {
+package me.ryandowling.allmightybot.commands;
 
-    /**
-     * Store the Allmighty Bot instance so we can reference it easily for things.
-     */
-    public static final AllmightyBot INSTANCE = new AllmightyBot();
+import java.util.HashMap;
+import java.util.Map;
 
-    public static void main(String[] args) {
-        INSTANCE.startUp();
+public class CommandBus {
+    private final static Map<String, Command> commands = new HashMap<>();
+    public static Command find(String commandName) {
+        return commands.get(commandName);
+    }
+
+    public static void add(Command command) {
+        commands.put(command.getName(), command);
     }
 }

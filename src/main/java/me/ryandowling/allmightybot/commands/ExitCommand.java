@@ -15,16 +15,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package me.ryandowling.allmightybot;
 
-public class App {
+package me.ryandowling.allmightybot.commands;
 
-    /**
-     * Store the Allmighty Bot instance so we can reference it easily for things.
-     */
-    public static final AllmightyBot INSTANCE = new AllmightyBot();
+import me.ryandowling.allmightybot.App;
+import org.pircbotx.hooks.events.MessageEvent;
 
-    public static void main(String[] args) {
-        INSTANCE.startUp();
+public class ExitCommand implements Command {
+    @Override
+    public String getName() {
+        return "exit";
+    }
+
+    @Override
+    public void run(MessageEvent event) {
+        event.getChannel().send().message("Goodbye!");
+        App.INSTANCE.shutDown();
     }
 }
