@@ -23,6 +23,7 @@ import me.ryandowling.allmightybot.data.Settings;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
 
@@ -72,8 +73,12 @@ public class AllmightyBot {
             this.settings.initialSetupComplete();
         }
 
-        this.pirc = new PircBotX(this.settings.getBuilder().addListener(new CommandListener(this)).buildConfiguration
-                ());
+        Configuration.Builder<PircBotX> config = this.settings.getBuilder();
+
+        config.addListener(new StartupListener(this));
+        config.addListener(new CommandListener(this));
+
+        this.pirc = new PircBotX(config.buildConfiguration());
 
         try {
             this.pirc.startBot();
