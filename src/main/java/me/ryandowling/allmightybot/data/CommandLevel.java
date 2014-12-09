@@ -16,38 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.ryandowling.allmightybot.commands;
+package me.ryandowling.allmightybot.data;
 
-import me.ryandowling.allmightybot.data.CommandLevel;
-
-public class TempCommand {
-    private String type;
-    private String name;
-    private String description;
-    private String reply;
-    private CommandLevel level;
-
-    public String getType() {
-        return this.type;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public boolean hasReply() {
-        return this.reply != null;
-    }
-
-    public String getReply() {
-        return this.reply;
-    }
-
-    public CommandLevel getLevel() {
-        return this.level;
-    }
+public enum CommandLevel {
+    ALL, MODERATOR, CASTER;
 }

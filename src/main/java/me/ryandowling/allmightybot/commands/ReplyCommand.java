@@ -27,7 +27,12 @@ public class ReplyCommand extends BaseCommand {
     }
 
     @Override
-    public void run(AllmightyBot bot, MessageEvent event) {
-        event.getChannel().send().message(this.getReply());
+    public boolean run(AllmightyBot bot, MessageEvent event) {
+        if (canAccess(event)) {
+            event.getChannel().send().message(this.getReply());
+            return true;
+        }
+
+        return false;
     }
 }

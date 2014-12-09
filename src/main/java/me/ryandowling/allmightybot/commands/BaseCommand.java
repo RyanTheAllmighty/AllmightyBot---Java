@@ -18,10 +18,14 @@
 
 package me.ryandowling.allmightybot.commands;
 
+import me.ryandowling.allmightybot.data.CommandLevel;
+import org.pircbotx.hooks.events.MessageEvent;
+
 public abstract class BaseCommand implements Command {
     private String name;
     private String description;
     private String reply;
+    private CommandLevel level;
 
     public BaseCommand(String name, String description) {
         this.name = name;
@@ -32,6 +36,27 @@ public abstract class BaseCommand implements Command {
         this.name = name;
         this.description = description;
         this.reply = reply;
+    }
+
+    public void setLevel(CommandLevel level) {
+        this.level = level;
+    }
+
+    public boolean canAccess(MessageEvent event) {
+        if (this.level == null) {
+            return false;
+        }
+
+        switch (this.level) {
+            case ALL:
+                return true;
+            case MODERATOR:
+                return event.getChannel().isOp(event.getUser());
+            case CASTER:
+                return event.getUser().getNick().equals("ryantheallmighty");
+            default:
+                return false;
+        }
     }
 
     public String getName() {

@@ -144,6 +144,8 @@ public class AllmightyBot {
                                     .getDescription());
                         }
 
+                        commandToAdd.setLevel(command.getLevel());
+
                         CommandBus.add(commandToAdd);
                         logger.debug("Added command !" + command.getName() + " of type " + command.getType());
                     } catch (ClassNotFoundException e) {

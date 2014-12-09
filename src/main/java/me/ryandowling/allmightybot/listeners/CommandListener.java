@@ -22,7 +22,6 @@ import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.App;
 import me.ryandowling.allmightybot.commands.Command;
 import me.ryandowling.allmightybot.commands.CommandBus;
-import me.ryandowling.allmightybot.commands.ExitCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -43,12 +42,12 @@ public class CommandListener extends ListenerAdapter {
                 ());
 
         if (event.getMessage().startsWith("!")) {
-            logger.debug("I hear a command!");
             Command command = CommandBus.find(event.getMessage().substring(1));
             if (command != null) {
-                logger.debug("I found a command to run!");
-                command.run(this.bot, event);
-                logger.debug("I ran a command!");
+                if (!command.run(this.bot, event)) {
+                    logger.error(event.getUser().getNick() + " tried to run command " + event.getMessage() + " with " +
+                            "no luck!");
+                }
             }
         }
     }

@@ -27,8 +27,13 @@ public class ExitCommand extends BaseCommand {
     }
 
     @Override
-    public void run(AllmightyBot bot, MessageEvent event) {
-        event.getChannel().send().message("Goodbye!");
-        bot.shutDown();
+    public boolean run(AllmightyBot bot, MessageEvent event) {
+        if (canAccess(event)) {
+            event.getChannel().send().message("Goodbye!");
+            bot.shutDown();
+            return true;
+        }
+
+        return false;
     }
 }

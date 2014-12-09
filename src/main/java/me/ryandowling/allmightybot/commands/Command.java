@@ -19,9 +19,11 @@
 package me.ryandowling.allmightybot.commands;
 
 import me.ryandowling.allmightybot.AllmightyBot;
+import me.ryandowling.allmightybot.data.CommandLevel;
 import org.pircbotx.hooks.events.MessageEvent;
 
 public interface Command {
     public String getName();
-    public void run(AllmightyBot bot, MessageEvent event);
+    public void setLevel(CommandLevel level);
+    public boolean run(AllmightyBot bot, MessageEvent event);
 }
