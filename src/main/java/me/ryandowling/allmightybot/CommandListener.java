@@ -28,6 +28,11 @@ import org.pircbotx.hooks.events.MessageEvent;
 
 public class CommandListener extends ListenerAdapter {
     private static final Logger logger = LogManager.getLogger(App.class.getName());
+    private AllmightyBot bot;
+
+    public CommandListener(AllmightyBot bot) {
+        this.bot = bot;
+    }
 
     @Override
     public void onMessage(MessageEvent event) throws Exception {
@@ -42,7 +47,7 @@ public class CommandListener extends ListenerAdapter {
             Command command = CommandBus.find(event.getMessage().substring(1));
             if (command != null) {
                 logger.debug("I found a command to run!");
-                command.run(event);
+                command.run(this.bot, event);
                 logger.debug("I ran a command!");
             }
         }

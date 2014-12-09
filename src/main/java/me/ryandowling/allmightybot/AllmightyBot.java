@@ -72,7 +72,8 @@ public class AllmightyBot {
             this.settings.initialSetupComplete();
         }
 
-        this.pirc = new PircBotX(this.settings.getBuilder().addListener(new CommandListener()).buildConfiguration());
+        this.pirc = new PircBotX(this.settings.getBuilder().addListener(new CommandListener(this)).buildConfiguration
+                ());
 
         try {
             this.pirc.startBot();
@@ -80,8 +81,10 @@ public class AllmightyBot {
             e.printStackTrace();
         }
 
-        // Shut it all down
-        this.shutDown();
+        // Shut it all down if we are still connected
+        if (this.pirc.isConnected()) {
+            this.shutDown();
+        }
     }
 
     /**
@@ -99,8 +102,13 @@ public class AllmightyBot {
         logger.info("Bot shutting down!");
         try {
             FileUtils.write(Utils.getSettingsFile().toFile(), GSON.toJson(this.settings));
+            logger.debug("Settings saved!");
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        if (this.pirc.isConnected()) {
+            this.pirc.sendIRC().quitServer();
         }
     }
 }

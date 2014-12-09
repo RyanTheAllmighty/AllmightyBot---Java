@@ -18,9 +18,10 @@
 
 package me.ryandowling.allmightybot.commands;
 
+import me.ryandowling.allmightybot.AllmightyBot;
 import org.pircbotx.hooks.events.MessageEvent;
 
 public interface Command {
     public String getName();
-    public void run(MessageEvent event);
+    public void run(AllmightyBot bot, MessageEvent event);
 }

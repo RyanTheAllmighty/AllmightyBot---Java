@@ -18,7 +18,7 @@
 
 package me.ryandowling.allmightybot.commands;
 
-import me.ryandowling.allmightybot.App;
+import me.ryandowling.allmightybot.AllmightyBot;
 import org.pircbotx.hooks.events.MessageEvent;
 
 public class ExitCommand implements Command {
@@ -28,8 +28,8 @@ public class ExitCommand implements Command {
     }
 
     @Override
-    public void run(MessageEvent event) {
+    public void run(AllmightyBot bot, MessageEvent event) {
         event.getChannel().send().message("Goodbye!");
-        App.INSTANCE.shutDown();
+        bot.shutDown();
     }
 }
