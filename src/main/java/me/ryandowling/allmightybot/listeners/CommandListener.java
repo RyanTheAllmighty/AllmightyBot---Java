@@ -42,8 +42,6 @@ public class CommandListener extends ListenerAdapter {
         logger.debug("[" + event.getChannel().getName() + "] [" + event.getUser().getNick() + "] " + event.getMessage
                 ());
 
-        CommandBus.add(new ExitCommand());
-
         if (event.getMessage().startsWith("!")) {
             logger.debug("I hear a command!");
             Command command = CommandBus.find(event.getMessage().substring(1));

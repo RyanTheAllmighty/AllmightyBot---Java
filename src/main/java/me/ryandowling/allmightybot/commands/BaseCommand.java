@@ -18,17 +18,20 @@
 
 package me.ryandowling.allmightybot.commands;
 
-import me.ryandowling.allmightybot.AllmightyBot;
-import org.pircbotx.hooks.events.MessageEvent;
+public abstract class BaseCommand implements Command {
+    private String name;
+    private String description;
 
-public class ExitCommand extends BaseCommand {
-    public ExitCommand(String name, String description) {
-        super(name, description);
+    public BaseCommand(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
-    @Override
-    public void run(AllmightyBot bot, MessageEvent event) {
-        event.getChannel().send().message("Goodbye!");
-        bot.shutDown();
+    public String getName() {
+        return this.name;
+    }
+
+    public String getDescription() {
+        return this.description;
     }
 }

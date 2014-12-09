@@ -19,6 +19,12 @@ package me.ryandowling.allmightybot;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import me.ryandowling.allmightybot.commands.BaseCommand;
+import me.ryandowling.allmightybot.commands.Command;
+import me.ryandowling.allmightybot.commands.CommandBus;
+import me.ryandowling.allmightybot.commands.ExitCommand;
+import me.ryandowling.allmightybot.commands.TempCommand;
 import me.ryandowling.allmightybot.data.ChatLog;
 import me.ryandowling.allmightybot.data.Settings;
 import me.ryandowling.allmightybot.listeners.CommandListener;
@@ -33,6 +39,9 @@ import org.pircbotx.exception.IrcException;
 
 import javax.swing.JOptionPane;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,6 +54,7 @@ public class AllmightyBot {
     private final static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Logger logger = LogManager.getLogger(App.class.getName());
     private Settings settings;
+    private List<Command> commands;
     private PircBotX pirc;
 
     private Map<String, Date> userJoined;
@@ -89,6 +99,36 @@ public class AllmightyBot {
 
         Configuration.Builder<PircBotX> config = this.settings.getBuilder();
 
+        // Add all the commands
+        try {
+            Type listType = new TypeToken<ArrayList<TempCommand>>() {
+            }.getType();
+            List<TempCommand> tempCommands = GSON.fromJson(FileUtils.readFileToString(Utils.getCommandsFile().toFile
+                    ()), listType);
+
+            if (tempCommands != null) {
+                for (TempCommand command : tempCommands) {
+                    try {
+                        Class<?> commandClass = Class.forName(command.getType());
+                        Constructor<?> commandConstructor = commandClass.getConstructor(String.class, String.class);
+                        Command commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(),
+                                command.getDescription());
+                        CommandBus.add(commandToAdd);
+                        logger.debug("Added command !" + command.getName() + " of type " + command.getType());
+                    } catch (ClassNotFoundException e) {
+                        logger.error("No class found for !" + command.getName() + " with type of " + command.getType());
+                    } catch (InstantiationException | InvocationTargetException | NoSuchMethodException |
+                            IllegalAccessException e) {
+                        logger.error("Error loading command !" + command.getName() + " with type of " + command
+                                .getType());
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Register the different listeners
         config.addListener(new StartupListener(this));
         config.addListener(new UserListener(this));
         config.addListener(new CommandListener(this));
