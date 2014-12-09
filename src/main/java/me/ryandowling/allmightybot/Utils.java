@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -65,5 +66,31 @@ public class Utils {
             }
         }
         return file.resolve("chat.json");
+    }
+
+    public static Path getEventsFile() {
+        String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        Path file = getCoreDir().resolve("events");
+
+        if (!Files.isDirectory(file)) {
+            try {
+                Files.createDirectories(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        int i = 0;
+
+        do {
+            if (i == 0) {
+                file = getCoreDir().resolve("events").resolve(date + ".json");
+            } else {
+                file = getCoreDir().resolve("events").resolve(date + "-" + i + ".json");
+            }
+            i++;
+        } while (Files.exists(file));
+
+        return file;
     }
 }

@@ -67,7 +67,7 @@ public class UserListener extends ListenerAdapter {
     public void onPart(PartEvent event) throws Exception {
         super.onPart(event);
         if (event.getUser() != event.getBot().getUserBot()) {
-            this.bot.userParted(event.getUser().getNick());
+            this.bot.userParted(event.getUser().getNick(), false);
         }
     }
 
@@ -75,7 +75,7 @@ public class UserListener extends ListenerAdapter {
     public void onKick(KickEvent event) throws Exception {
         super.onKick(event);
         if (event.getUser() != event.getBot().getUserBot()) {
-            this.bot.userParted(event.getUser().getNick());
+            this.bot.userParted(event.getUser().getNick(), true);
         }
     }
 }

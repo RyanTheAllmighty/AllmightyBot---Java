@@ -23,9 +23,10 @@ import com.google.gson.reflect.TypeToken;
 import me.ryandowling.allmightybot.commands.BaseCommand;
 import me.ryandowling.allmightybot.commands.Command;
 import me.ryandowling.allmightybot.commands.CommandBus;
-import me.ryandowling.allmightybot.commands.ExitCommand;
 import me.ryandowling.allmightybot.commands.TempCommand;
 import me.ryandowling.allmightybot.data.ChatLog;
+import me.ryandowling.allmightybot.data.Event;
+import me.ryandowling.allmightybot.data.EventType;
 import me.ryandowling.allmightybot.data.Settings;
 import me.ryandowling.allmightybot.listeners.CommandListener;
 import me.ryandowling.allmightybot.listeners.StartupListener;
@@ -54,12 +55,12 @@ public class AllmightyBot {
     private final static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Logger logger = LogManager.getLogger(App.class.getName());
     private Settings settings;
-    private List<Command> commands;
     private PircBotX pirc;
 
     private Map<String, Date> userJoined;
     private Map<String, Integer> userOnlineTime;
     private Map<String, List<ChatLog>> userLogs;
+    private List<Event> events;
 
     public AllmightyBot() {
         if (Files.exists(Utils.getSettingsFile())) {
@@ -146,6 +147,7 @@ public class AllmightyBot {
         this.userJoined = new HashMap<>();
         this.userOnlineTime = new HashMap<>();
         this.userLogs = new HashMap<>();
+        this.events = new ArrayList<>();
 
         try {
             this.pirc.startBot();
@@ -186,6 +188,9 @@ public class AllmightyBot {
                 FileUtils.write(Utils.getUserChatFile(key).toFile(), GSON.toJson(values));
             }
             logger.debug("User logs saved!");
+
+            FileUtils.write(Utils.getEventsFile().toFile(), GSON.toJson(this.events));
+            logger.debug("Events saved!");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -197,6 +202,8 @@ public class AllmightyBot {
 
     public void userJoined(String nick) {
         logger.debug("User " + nick + " joined!");
+        this.events.add(new Event(EventType.USERJOIN, nick));
+
         Date joined = this.userJoined.get(nick);
 
         if (joined == null) {
@@ -219,8 +226,10 @@ public class AllmightyBot {
         this.userJoined.put(nick, joined);
     }
 
-    public void userParted(String nick) {
+    public void userParted(String nick, boolean kicked) {
         logger.debug("User " + nick + " parted!");
+        this.events.add(new Event((kicked ? EventType.USERKICK : EventType.USERPART), nick));
+
         Date joined = this.userJoined.get(nick);
 
         if (joined != null) {
@@ -256,6 +265,7 @@ public class AllmightyBot {
 
     public void userSpoke(String nick, String message) {
         logger.debug("User " + nick + " spoke!");
+        this.events.add(new Event(EventType.USERMESSAGE, nick));
 
         if (!this.userOnlineTime.containsKey(nick)) {
             this.userJoined(nick);
