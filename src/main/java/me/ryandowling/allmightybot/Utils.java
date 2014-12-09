@@ -18,8 +18,12 @@
 
 package me.ryandowling.allmightybot;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class Utils {
     public static Path getCoreDir() {
@@ -28,5 +32,34 @@ public class Utils {
 
     public static Path getSettingsFile() {
         return getCoreDir().resolve("settings.json");
+    }
+
+    public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+        long diffInMillies = date2.getTime() - date1.getTime();
+        return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS);
+    }
+
+    public static Path getUserLoginTimeFile(String user) {
+        Path file = getCoreDir().resolve("users").resolve(user);
+        if (!Files.isDirectory(file)) {
+            try {
+                Files.createDirectories(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return file.resolve("loginTime.json");
+    }
+
+    public static Path getUserChatFile(String user) {
+        Path file = getCoreDir().resolve("users").resolve(user);
+        if (!Files.isDirectory(file)) {
+            try {
+                Files.createDirectories(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return file.resolve("chat.json");
     }
 }

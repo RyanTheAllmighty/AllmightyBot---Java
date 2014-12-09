@@ -19,7 +19,11 @@ package me.ryandowling.allmightybot;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import me.ryandowling.allmightybot.data.ChatLog;
 import me.ryandowling.allmightybot.data.Settings;
+import me.ryandowling.allmightybot.listeners.CommandListener;
+import me.ryandowling.allmightybot.listeners.StartupListener;
+import me.ryandowling.allmightybot.listeners.UserListener;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,12 +34,22 @@ import org.pircbotx.exception.IrcException;
 import javax.swing.JOptionPane;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class AllmightyBot {
     private final static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Logger logger = LogManager.getLogger(App.class.getName());
     private Settings settings;
     private PircBotX pirc;
+
+    private Map<String, Date> userJoined;
+    private Map<String, Integer> userOnlineTime;
+    private Map<String, List<ChatLog>> userLogs;
 
     public AllmightyBot() {
         if (Files.exists(Utils.getSettingsFile())) {
@@ -76,9 +90,22 @@ public class AllmightyBot {
         Configuration.Builder<PircBotX> config = this.settings.getBuilder();
 
         config.addListener(new StartupListener(this));
+        config.addListener(new UserListener(this));
         config.addListener(new CommandListener(this));
 
         this.pirc = new PircBotX(config.buildConfiguration());
+    }
+
+    /**
+     * Starts the bot up
+     */
+
+    public void startUp() {
+        logger.info("Bot starting up!");
+
+        this.userJoined = new HashMap<>();
+        this.userOnlineTime = new HashMap<>();
+        this.userLogs = new HashMap<>();
 
         try {
             this.pirc.startBot();
@@ -93,21 +120,32 @@ public class AllmightyBot {
     }
 
     /**
-     * Starts the bot up
-     */
-
-    public void startUp() {
-        logger.info("Bot starting up!");
-    }
-
-    /**
      * Issues a shutdown command to safely shutdown and save all files needed
      */
     public void shutDown() {
         logger.info("Bot shutting down!");
+
         try {
             FileUtils.write(Utils.getSettingsFile().toFile(), GSON.toJson(this.settings));
             logger.debug("Settings saved!");
+
+            saveAllOnlineTime();
+
+            for (Map.Entry<String, Integer> entry : this.userOnlineTime.entrySet()) {
+                String key = entry.getKey();
+                Integer value = entry.getValue();
+
+                FileUtils.write(Utils.getUserLoginTimeFile(key).toFile(), GSON.toJson(value));
+            }
+            logger.debug("User login time saved!");
+
+            for (Map.Entry<String, List<ChatLog>> entry : this.userLogs.entrySet()) {
+                String key = entry.getKey();
+                List<ChatLog> values = entry.getValue();
+
+                FileUtils.write(Utils.getUserChatFile(key).toFile(), GSON.toJson(values));
+            }
+            logger.debug("User logs saved!");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -115,5 +153,82 @@ public class AllmightyBot {
         if (this.pirc.isConnected()) {
             this.pirc.sendIRC().quitServer();
         }
+    }
+
+    public void userJoined(String nick) {
+        logger.debug("User " + nick + " joined!");
+        Date joined = this.userJoined.get(nick);
+
+        if (joined == null) {
+            // User has just joined
+            joined = new Date();
+        } else {
+            // User was already joined so add their time
+            int timeOnline = 0;
+
+            try {
+                timeOnline = this.userOnlineTime.get(nick);
+            } catch (NullPointerException e) {
+                timeOnline = 0;
+            }
+
+            timeOnline += (int) Utils.getDateDiff(joined, new Date(), TimeUnit.SECONDS);
+            this.userOnlineTime.put(nick, timeOnline);
+        }
+
+        this.userJoined.put(nick, joined);
+    }
+
+    public void userParted(String nick) {
+        logger.debug("User " + nick + " parted!");
+        Date joined = this.userJoined.get(nick);
+
+        if (joined != null) {
+            // User has left so add their time
+            int timeOnline = this.userOnlineTime.get(nick);
+            timeOnline += (int) Utils.getDateDiff(joined, new Date(), TimeUnit.SECONDS);
+            this.userOnlineTime.put(nick, timeOnline);
+        }
+
+        // Remove the user from the time joined list since they have left
+        this.userJoined.remove(nick);
+    }
+
+    private void saveAllOnlineTime() {
+        for (Map.Entry<String, Date> entry : this.userJoined.entrySet()) {
+            String key = entry.getKey();
+            Date value = entry.getValue();
+
+            int timeOnline = 0;
+
+            try {
+                timeOnline = this.userOnlineTime.get(key);
+            } catch (NullPointerException e) {
+                timeOnline = 0;
+            }
+
+            timeOnline += (int) Utils.getDateDiff(value, new Date(), TimeUnit.SECONDS);
+            this.userOnlineTime.put(key, timeOnline);
+
+            this.userJoined.remove(key);
+        }
+    }
+
+    public void userSpoke(String nick, String message) {
+        logger.debug("User " + nick + " spoke!");
+
+        if (!this.userOnlineTime.containsKey(nick)) {
+            this.userJoined(nick);
+        }
+
+        List<ChatLog> logs = this.userLogs.get(nick);
+
+        if (logs == null) {
+            logs = new ArrayList<>();
+        }
+
+        logs.add(new ChatLog(nick, message));
+
+        this.userLogs.put(nick, logs);
     }
 }

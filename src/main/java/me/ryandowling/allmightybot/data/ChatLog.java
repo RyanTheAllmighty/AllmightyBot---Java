@@ -16,24 +16,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.ryandowling.allmightybot;
+package me.ryandowling.allmightybot.data;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.pircbotx.hooks.ListenerAdapter;
-import org.pircbotx.hooks.events.JoinEvent;
+import java.util.Date;
 
-public class StartupListener extends ListenerAdapter {
-    private static final Logger logger = LogManager.getLogger(App.class.getName());
-    private AllmightyBot bot;
+public class ChatLog {
+    private String user;
+    private String message;
+    private Date time;
 
-    public StartupListener(AllmightyBot bot) {
-        this.bot = bot;
-    }
-
-    @Override
-    public void onJoin(JoinEvent event) throws Exception {
-        super.onJoin(event);
-        event.getChannel().send().message("Never fear, AllmightyBot is here!");
+    public ChatLog(String user, String message) {
+        this.user = user;
+        this.message = message;
+        this.time = new Date();
     }
 }

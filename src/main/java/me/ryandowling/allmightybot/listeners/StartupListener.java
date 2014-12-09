@@ -16,40 +16,30 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.ryandowling.allmightybot;
+package me.ryandowling.allmightybot.listeners;
 
-import me.ryandowling.allmightybot.commands.Command;
-import me.ryandowling.allmightybot.commands.CommandBus;
-import me.ryandowling.allmightybot.commands.ExitCommand;
+import me.ryandowling.allmightybot.AllmightyBot;
+import me.ryandowling.allmightybot.App;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.pircbotx.hooks.ListenerAdapter;
-import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.events.JoinEvent;
 
-public class CommandListener extends ListenerAdapter {
+public class StartupListener extends ListenerAdapter {
     private static final Logger logger = LogManager.getLogger(App.class.getName());
     private AllmightyBot bot;
 
-    public CommandListener(AllmightyBot bot) {
+    public StartupListener(AllmightyBot bot) {
         this.bot = bot;
     }
 
     @Override
-    public void onMessage(MessageEvent event) throws Exception {
-        super.onMessage(event);
-        logger.debug("[" + event.getChannel().getName() + "] [" + event.getUser().getNick() + "] " + event.getMessage
-                ());
-
-        CommandBus.add(new ExitCommand());
-
-        if (event.getMessage().startsWith("!")) {
-            logger.debug("I hear a command!");
-            Command command = CommandBus.find(event.getMessage().substring(1));
-            if (command != null) {
-                logger.debug("I found a command to run!");
-                command.run(this.bot, event);
-                logger.debug("I ran a command!");
-            }
+    public void onJoin(JoinEvent event) throws Exception {
+        super.onJoin(event);
+        if (event.getUser() == event.getBot().getUserBot()) {
+            event.getChannel().send().message("Never fear, AllmightyBot is here!");
         }
     }
+
+
 }
