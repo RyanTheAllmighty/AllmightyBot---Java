@@ -100,6 +100,26 @@ public class AllmightyBot {
 
         Configuration.Builder<PircBotX> config = this.settings.getBuilder();
 
+        // Register the different listeners
+        config.addListener(new StartupListener(this));
+        config.addListener(new UserListener(this));
+        config.addListener(new CommandListener(this));
+
+        this.pirc = new PircBotX(config.buildConfiguration());
+    }
+
+    /**
+     * Starts the bot up
+     */
+
+    public void startUp() {
+        logger.info("Bot starting up!");
+
+        this.userJoined = new HashMap<>();
+        this.userOnlineTime = new HashMap<>();
+        this.userLogs = new HashMap<>();
+        this.events = new ArrayList<>();
+
         // Add all the commands
         try {
             Type listType = new TypeToken<ArrayList<TempCommand>>() {
@@ -129,25 +149,16 @@ public class AllmightyBot {
             e.printStackTrace();
         }
 
-        // Register the different listeners
-        config.addListener(new StartupListener(this));
-        config.addListener(new UserListener(this));
-        config.addListener(new CommandListener(this));
-
-        this.pirc = new PircBotX(config.buildConfiguration());
-    }
-
-    /**
-     * Starts the bot up
-     */
-
-    public void startUp() {
-        logger.info("Bot starting up!");
-
-        this.userJoined = new HashMap<>();
-        this.userOnlineTime = new HashMap<>();
-        this.userLogs = new HashMap<>();
-        this.events = new ArrayList<>();
+        // Load the events from a previous run for today if they exist
+        if (Files.exists(Utils.getEventsFile())) {
+            try {
+                Type listType = new TypeToken<ArrayList<Event>>() {
+                }.getType();
+                this.events = GSON.fromJson(FileUtils.readFileToString(Utils.getEventsFile().toFile()), listType);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         try {
             this.pirc.startBot();

@@ -80,17 +80,6 @@ public class Utils {
             }
         }
 
-        int i = 0;
-
-        do {
-            if (i == 0) {
-                file = getCoreDir().resolve("events").resolve(date + ".json");
-            } else {
-                file = getCoreDir().resolve("events").resolve(date + "-" + i + ".json");
-            }
-            i++;
-        } while (Files.exists(file));
-
-        return file;
+        return file.resolve(date + ".json");
     }
 }

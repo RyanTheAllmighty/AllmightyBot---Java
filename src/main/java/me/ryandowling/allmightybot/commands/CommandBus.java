@@ -23,6 +23,7 @@ import java.util.Map;
 
 public class CommandBus {
     private final static Map<String, Command> commands = new HashMap<>();
+
     public static Command find(String commandName) {
         return commands.get(commandName);
     }
