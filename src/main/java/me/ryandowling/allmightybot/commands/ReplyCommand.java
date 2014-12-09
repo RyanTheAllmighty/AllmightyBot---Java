@@ -18,29 +18,16 @@
 
 package me.ryandowling.allmightybot.commands;
 
-public class TempCommand {
-    private String type;
-    private String name;
-    private String description;
-    private String reply;
+import me.ryandowling.allmightybot.AllmightyBot;
+import org.pircbotx.hooks.events.MessageEvent;
 
-    public String getType() {
-        return this.type;
+public class ReplyCommand extends BaseCommand {
+    public ReplyCommand(String name, String description, String reply) {
+        super(name, description, reply);
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public boolean hasReply() {
-        return this.reply != null;
-    }
-
-    public String getReply() {
-        return this.reply;
+    @Override
+    public void run(AllmightyBot bot, MessageEvent event) {
+        event.getChannel().send().message(this.getReply());
     }
 }

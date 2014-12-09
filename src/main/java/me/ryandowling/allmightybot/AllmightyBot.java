@@ -131,9 +131,19 @@ public class AllmightyBot {
                 for (TempCommand command : tempCommands) {
                     try {
                         Class<?> commandClass = Class.forName(command.getType());
-                        Constructor<?> commandConstructor = commandClass.getConstructor(String.class, String.class);
-                        Command commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(),
-                                command.getDescription());
+                        Constructor<?> commandConstructor;
+                        Command commandToAdd;
+
+                        if (command.hasReply()) {
+                            commandConstructor = commandClass.getConstructor(String.class, String.class, String.class);
+                            commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
+                                    .getDescription(), command.getReply());
+                        } else {
+                            commandConstructor = commandClass.getConstructor(String.class, String.class);
+                            commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
+                                    .getDescription());
+                        }
+
                         CommandBus.add(commandToAdd);
                         logger.debug("Added command !" + command.getName() + " of type " + command.getType());
                     } catch (ClassNotFoundException e) {

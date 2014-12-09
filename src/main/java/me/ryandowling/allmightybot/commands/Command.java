@@ -23,6 +23,5 @@ import org.pircbotx.hooks.events.MessageEvent;
 
 public interface Command {
     public String getName();
-    public String getDescription();
     public void run(AllmightyBot bot, MessageEvent event);
 }

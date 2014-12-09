@@ -21,10 +21,17 @@ package me.ryandowling.allmightybot.commands;
 public abstract class BaseCommand implements Command {
     private String name;
     private String description;
+    private String reply;
 
     public BaseCommand(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public BaseCommand(String name, String description, String reply) {
+        this.name = name;
+        this.description = description;
+        this.reply = reply;
     }
 
     public String getName() {
@@ -33,5 +40,9 @@ public abstract class BaseCommand implements Command {
 
     public String getDescription() {
         return this.description;
+    }
+
+    public String getReply() {
+        return this.reply;
     }
 }
