@@ -21,15 +21,15 @@ package me.ryandowling.allmightybot.commands;
 import me.ryandowling.allmightybot.AllmightyBot;
 import org.pircbotx.hooks.events.MessageEvent;
 
-public class ReplyCommand extends BaseCommand {
-    public ReplyCommand(String name, String description, String reply) {
-        super(name, description, reply);
+public class ReloadCommand extends BaseCommand {
+    public ReloadCommand(String name, String description) {
+        super(name, description);
     }
 
     @Override
     public boolean run(AllmightyBot bot, MessageEvent event) {
         if (super.run(bot, event)) {
-            event.getChannel().send().message(this.getReply());
+            bot.reload();
             return true;
         }
 

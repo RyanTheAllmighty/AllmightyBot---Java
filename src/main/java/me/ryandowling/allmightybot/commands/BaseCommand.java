@@ -18,10 +18,15 @@
 
 package me.ryandowling.allmightybot.commands;
 
+import me.ryandowling.allmightybot.AllmightyBot;
+import me.ryandowling.allmightybot.App;
 import me.ryandowling.allmightybot.data.CommandLevel;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.pircbotx.hooks.events.MessageEvent;
 
 public abstract class BaseCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(App.class.getName());
     private String name;
     private String description;
     private String reply;
@@ -69,5 +74,14 @@ public abstract class BaseCommand implements Command {
 
     public String getReply() {
         return this.reply;
+    }
+
+    @Override
+    public boolean run(AllmightyBot bot, MessageEvent event) {
+        if (!canAccess(event)) {
+            return false;
+        }
+
+        return true;
     }
 }

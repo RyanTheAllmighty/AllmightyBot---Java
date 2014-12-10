@@ -31,4 +31,8 @@ public class CommandBus {
     public static void add(Command command) {
         commands.put(command.getName(), command);
     }
+
+    public static void removeAll() {
+        commands.clear();
+    }
 }

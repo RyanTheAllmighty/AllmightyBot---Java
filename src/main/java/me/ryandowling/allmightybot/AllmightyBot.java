@@ -184,6 +184,51 @@ public class AllmightyBot {
         }
     }
 
+    public void reload() {
+        CommandBus.removeAll();
+
+        // Add all the commands
+        try {
+            Type listType = new TypeToken<ArrayList<TempCommand>>() {
+            }.getType();
+            List<TempCommand> tempCommands = GSON.fromJson(FileUtils.readFileToString(Utils.getCommandsFile().toFile
+                    ()), listType);
+
+            if (tempCommands != null) {
+                for (TempCommand command : tempCommands) {
+                    try {
+                        Class<?> commandClass = Class.forName(command.getType());
+                        Constructor<?> commandConstructor;
+                        Command commandToAdd;
+
+                        if (command.hasReply()) {
+                            commandConstructor = commandClass.getConstructor(String.class, String.class, String.class);
+                            commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
+                                    .getDescription(), command.getReply());
+                        } else {
+                            commandConstructor = commandClass.getConstructor(String.class, String.class);
+                            commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
+                                    .getDescription());
+                        }
+
+                        commandToAdd.setLevel(command.getLevel());
+
+                        CommandBus.add(commandToAdd);
+                        logger.debug("Added command !" + command.getName() + " of type " + command.getType());
+                    } catch (ClassNotFoundException e) {
+                        logger.error("No class found for !" + command.getName() + " with type of " + command.getType());
+                    } catch (InstantiationException | InvocationTargetException | NoSuchMethodException |
+                            IllegalAccessException e) {
+                        logger.error("Error loading command !" + command.getName() + " with type of " + command
+                                .getType());
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Issues a shutdown command to safely shutdown and save all files needed
      */
