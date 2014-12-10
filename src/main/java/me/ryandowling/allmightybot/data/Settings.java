@@ -43,10 +43,16 @@ public class Settings {
     private String twitchChannel;
 
     /**
+     * If the bot should announce itself when it joins
+     */
+    private boolean announceOnJoin;
+
+    /**
      * Sets up some defaults where there is no settings file already there
      */
     public Settings() {
         this.initialSetupComplete = false;
+        this.announceOnJoin = true;
     }
 
     public boolean hasInitialSetupBeenCompleted() {
@@ -84,6 +90,10 @@ public class Settings {
     }
 
     public String getTwitchChannel() {
-        return twitchChannel;
+        return this.twitchChannel;
+    }
+
+    public boolean shouldAnnounceOnJoin() {
+        return this.announceOnJoin;
     }
 }

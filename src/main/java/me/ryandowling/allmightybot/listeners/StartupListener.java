@@ -36,7 +36,7 @@ public class StartupListener extends ListenerAdapter {
     @Override
     public void onJoin(JoinEvent event) throws Exception {
         super.onJoin(event);
-        if (event.getUser() == event.getBot().getUserBot()) {
+        if (event.getUser() == event.getBot().getUserBot() && this.bot.getSettings().shouldAnnounceOnJoin()) {
             event.getChannel().send().message("Never fear, AllmightyBot is here!");
         }
     }

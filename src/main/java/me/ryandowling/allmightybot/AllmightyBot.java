@@ -304,4 +304,8 @@ public class AllmightyBot {
 
         this.userLogs.put(nick, logs);
     }
+
+    public Settings getSettings() {
+        return this.settings;
+    }
 }
