@@ -120,46 +120,7 @@ public class AllmightyBot {
         this.userLogs = new HashMap<>();
         this.events = new ArrayList<>();
 
-        // Add all the commands
-        try {
-            Type listType = new TypeToken<ArrayList<TempCommand>>() {
-            }.getType();
-            List<TempCommand> tempCommands = GSON.fromJson(FileUtils.readFileToString(Utils.getCommandsFile().toFile
-                    ()), listType);
-
-            if (tempCommands != null) {
-                for (TempCommand command : tempCommands) {
-                    try {
-                        Class<?> commandClass = Class.forName(command.getType());
-                        Constructor<?> commandConstructor;
-                        Command commandToAdd;
-
-                        if (command.hasReply()) {
-                            commandConstructor = commandClass.getConstructor(String.class, String.class, String.class);
-                            commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
-                                    .getDescription(), command.getReply());
-                        } else {
-                            commandConstructor = commandClass.getConstructor(String.class, String.class);
-                            commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
-                                    .getDescription());
-                        }
-
-                        commandToAdd.setLevel(command.getLevel());
-
-                        CommandBus.add(commandToAdd);
-                        logger.debug("Added command !" + command.getName() + " of type " + command.getType());
-                    } catch (ClassNotFoundException e) {
-                        logger.error("No class found for !" + command.getName() + " with type of " + command.getType());
-                    } catch (InstantiationException | InvocationTargetException | NoSuchMethodException |
-                            IllegalAccessException e) {
-                        logger.error("Error loading command !" + command.getName() + " with type of " + command
-                                .getType());
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loadCommands();
 
         // Load the events from a previous run for today if they exist
         if (Files.exists(Utils.getEventsFile())) {
@@ -184,9 +145,7 @@ public class AllmightyBot {
         }
     }
 
-    public void reload() {
-        CommandBus.removeAll();
-
+    private void loadCommands() {
         // Add all the commands
         try {
             Type listType = new TypeToken<ArrayList<TempCommand>>() {
@@ -202,13 +161,12 @@ public class AllmightyBot {
                         Command commandToAdd;
 
                         if (command.hasReply()) {
-                            commandConstructor = commandClass.getConstructor(String.class, String.class, String.class);
-                            commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
-                                    .getDescription(), command.getReply());
-                        } else {
                             commandConstructor = commandClass.getConstructor(String.class, String.class);
                             commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
-                                    .getDescription());
+                                    .getReply());
+                        } else {
+                            commandConstructor = commandClass.getConstructor(String.class);
+                            commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName());
                         }
 
                         commandToAdd.setLevel(command.getLevel());
@@ -227,6 +185,12 @@ public class AllmightyBot {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void reload() {
+        CommandBus.removeAll();
+
+        loadCommands();
     }
 
     /**
@@ -352,5 +316,9 @@ public class AllmightyBot {
 
     public Settings getSettings() {
         return this.settings;
+    }
+
+    public boolean isRegular(String nick) {
+        return false;
     }
 }

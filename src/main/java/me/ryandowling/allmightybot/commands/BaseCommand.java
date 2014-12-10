@@ -28,18 +28,15 @@ import org.pircbotx.hooks.events.MessageEvent;
 public abstract class BaseCommand implements Command {
     private static final Logger logger = LogManager.getLogger(App.class.getName());
     private String name;
-    private String description;
     private String reply;
     private CommandLevel level;
 
-    public BaseCommand(String name, String description) {
+    public BaseCommand(String name) {
         this.name = name;
-        this.description = description;
     }
 
-    public BaseCommand(String name, String description, String reply) {
+    public BaseCommand(String name, String reply) {
         this.name = name;
-        this.description = description;
         this.reply = reply;
     }
 
@@ -55,8 +52,11 @@ public abstract class BaseCommand implements Command {
         switch (this.level) {
             case ALL:
                 return true;
+            case REGULAR:
+                return event.getUser().getNick().equals("ryantheallmighty") || event.getChannel().isOp(event.getUser
+                        ()) || App.INSTANCE.isRegular(event.getUser().getNick());
             case MODERATOR:
-                return event.getChannel().isOp(event.getUser());
+                return event.getUser().getNick().equals("ryantheallmighty") || event.getChannel().isOp(event.getUser());
             case CASTER:
                 return event.getUser().getNick().equals("ryantheallmighty");
             default:
@@ -66,10 +66,6 @@ public abstract class BaseCommand implements Command {
 
     public String getName() {
         return this.name;
-    }
-
-    public String getDescription() {
-        return this.description;
     }
 
     public String getReply() {

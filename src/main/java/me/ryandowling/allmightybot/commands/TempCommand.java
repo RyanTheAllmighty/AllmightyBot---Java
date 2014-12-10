@@ -23,7 +23,6 @@ import me.ryandowling.allmightybot.data.CommandLevel;
 public class TempCommand {
     private String type;
     private String name;
-    private String description;
     private String reply;
     private CommandLevel level;
 
@@ -33,10 +32,6 @@ public class TempCommand {
 
     public String getName() {
         return this.name;
-    }
-
-    public String getDescription() {
-        return this.description;
     }
 
     public boolean hasReply() {

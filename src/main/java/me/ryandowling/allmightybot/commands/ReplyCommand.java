@@ -22,8 +22,8 @@ import me.ryandowling.allmightybot.AllmightyBot;
 import org.pircbotx.hooks.events.MessageEvent;
 
 public class ReplyCommand extends BaseCommand {
-    public ReplyCommand(String name, String description, String reply) {
-        super(name, description, reply);
+    public ReplyCommand(String name, String reply) {
+        super(name, reply);
     }
 
     @Override

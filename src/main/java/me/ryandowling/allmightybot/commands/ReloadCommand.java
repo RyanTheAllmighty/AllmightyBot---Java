@@ -22,8 +22,8 @@ import me.ryandowling.allmightybot.AllmightyBot;
 import org.pircbotx.hooks.events.MessageEvent;
 
 public class ReloadCommand extends BaseCommand {
-    public ReloadCommand(String name, String description) {
-        super(name, description);
+    public ReloadCommand(String name) {
+        super(name);
     }
 
     @Override
