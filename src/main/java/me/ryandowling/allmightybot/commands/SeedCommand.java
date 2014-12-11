@@ -31,6 +31,7 @@ import java.util.Random;
 public class SeedCommand extends BaseCommand {
     private final SeedType seedType;
     private static final Map<String, String> seeds = new HashMap<>();
+    private static long lastSeedMessage;
     private static boolean collectingSeeds = false;
 
     public SeedCommand(String name, SeedType seedType, int timeout) {
@@ -55,13 +56,19 @@ public class SeedCommand extends BaseCommand {
                     break;
                 case SUGGESTION:
                     if (!collectingSeeds) {
-                        event.getChannel().send().message("Seeds are no longer being asked for!");
+                        if ((lastSeedMessage + 10000) < System.currentTimeMillis()) {
+                            event.getChannel().send().message("Seeds are no longer being asked for!");
+                            lastSeedMessage = System.currentTimeMillis();
+                        }
                     } else {
                         String seedName = event.getMessage().substring(getName().length() + 2); // Remove '!command '
 
                         seeds.put(event.getUser().getNick(), seedName);
 
-                        event.getChannel().send().message("One or more seeds have been added/updated to the list!");
+                        if ((lastSeedMessage + 10000) < System.currentTimeMillis()) {
+                            event.getChannel().send().message("One or more seeds have been added to the list!");
+                            lastSeedMessage = System.currentTimeMillis();
+                        }
                     }
                     break;
                 case RANDOM:
