@@ -84,6 +84,30 @@ public abstract class BaseCommand implements Command {
         return this.name;
     }
 
+    public String getReply(MessageEvent event) {
+        String reply = this.getReply();
+
+        if (this.reply.contains("$[")) {
+            String message = event.getMessage().substring(getName().length() + 2); // Remove '!command '
+            String[] parts = message.split(" ");
+
+            for (int i = 1; i <= parts.length; i++) {
+                String pattern = "$[" + i + "]";
+                if (reply.contains(pattern)) {
+                    reply = reply.replace(pattern, parts[i - 1]);
+                } else {
+                    return null; // Whoops, pattern is wrong, don't send anything
+                }
+            }
+
+            if (this.reply.contains("$[")) {
+                return null; // We still have unreplaced things so no good
+            }
+        }
+
+        return reply;
+    }
+
     public String getReply() {
         return this.reply;
     }

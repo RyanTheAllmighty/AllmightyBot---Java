@@ -29,7 +29,13 @@ public class ReplyCommand extends BaseCommand {
     @Override
     public boolean run(AllmightyBot bot, MessageEvent event) {
         if (super.run(bot, event)) {
-            event.getChannel().send().message(this.getReply());
+            String reply = this.getReply(event);
+
+            if (reply == null) {
+                return false;
+            }
+            
+            event.getChannel().send().message(reply);
             return true;
         }
 
