@@ -25,6 +25,7 @@ public class TempCommand {
     private String name;
     private String reply;
     private CommandLevel level;
+    private int timeout = 10;
 
     public String getType() {
         return this.type;
@@ -44,5 +45,9 @@ public class TempCommand {
 
     public CommandLevel getLevel() {
         return this.level;
+    }
+
+    public int getTimeout() {
+        return this.timeout;
     }
 }

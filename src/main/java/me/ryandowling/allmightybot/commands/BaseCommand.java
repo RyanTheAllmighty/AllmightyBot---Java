@@ -30,18 +30,34 @@ public abstract class BaseCommand implements Command {
     private String name;
     private String reply;
     private CommandLevel level;
+    private int timeout;
+    private long lastRun;
 
-    public BaseCommand(String name) {
+    public BaseCommand(String name, int timeout) {
         this.name = name;
+        this.timeout = timeout;
     }
 
-    public BaseCommand(String name, String reply) {
+    public BaseCommand(String name, String reply, int timeout) {
         this.name = name;
         this.reply = reply;
+        this.timeout = timeout;
     }
 
     public void setLevel(CommandLevel level) {
         this.level = level;
+    }
+
+    public boolean canRun() {
+        if ((this.lastRun + (this.timeout * 1000)) > System.currentTimeMillis()) {
+            logger.error("Cannot run command " + this.name + " as it was run less than " + this.timeout + " seconds " +
+                    "ago");
+            return false;
+        }
+
+        this.lastRun = System.currentTimeMillis();
+
+        return true;
     }
 
     public boolean canAccess(MessageEvent event) {
@@ -74,10 +90,6 @@ public abstract class BaseCommand implements Command {
 
     @Override
     public boolean run(AllmightyBot bot, MessageEvent event) {
-        if (!canAccess(event)) {
-            return false;
-        }
-
-        return true;
+        return (canRun() && canAccess(event));
     }
 }

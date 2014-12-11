@@ -161,12 +161,13 @@ public class AllmightyBot {
                         Command commandToAdd;
 
                         if (command.hasReply()) {
-                            commandConstructor = commandClass.getConstructor(String.class, String.class);
+                            commandConstructor = commandClass.getConstructor(String.class, String.class, int.class);
                             commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
-                                    .getReply());
+                                    .getReply(), command.getTimeout());
                         } else {
-                            commandConstructor = commandClass.getConstructor(String.class);
-                            commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName());
+                            commandConstructor = commandClass.getConstructor(String.class, int.class);
+                            commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
+                                    .getTimeout());
                         }
 
                         commandToAdd.setLevel(command.getLevel());

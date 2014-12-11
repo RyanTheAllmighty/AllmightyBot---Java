@@ -22,8 +22,8 @@ import me.ryandowling.allmightybot.AllmightyBot;
 import org.pircbotx.hooks.events.MessageEvent;
 
 public class ExitCommand extends BaseCommand {
-    public ExitCommand(String name) {
-        super(name);
+    public ExitCommand(String name, int timeout) {
+        super(name, timeout);
     }
 
     @Override
