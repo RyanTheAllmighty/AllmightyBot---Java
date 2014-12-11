@@ -20,6 +20,7 @@ package me.ryandowling.allmightybot.commands;
 
 import me.ryandowling.allmightybot.data.CommandLevel;
 import me.ryandowling.allmightybot.data.SeedType;
+import me.ryandowling.allmightybot.data.WorldType;
 
 public class TempCommand {
     private String type;
@@ -27,6 +28,7 @@ public class TempCommand {
     private String reply;
     private CommandLevel level;
     private SeedType seedType;
+    private WorldType worldType;
     private int timeout = 10;
 
     public String getType() {
@@ -53,11 +55,19 @@ public class TempCommand {
         return this.seedType;
     }
 
+    public WorldType getWorldType() {
+        return this.worldType;
+    }
+
     public int getTimeout() {
         return this.timeout;
     }
 
     public boolean isSeedCommand() {
         return this.seedType != null;
+    }
+
+    public boolean isWorldCommand() {
+        return this.worldType != null;
     }
 }

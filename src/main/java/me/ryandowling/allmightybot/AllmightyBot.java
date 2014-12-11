@@ -29,6 +29,7 @@ import me.ryandowling.allmightybot.data.Event;
 import me.ryandowling.allmightybot.data.EventType;
 import me.ryandowling.allmightybot.data.SeedType;
 import me.ryandowling.allmightybot.data.Settings;
+import me.ryandowling.allmightybot.data.WorldType;
 import me.ryandowling.allmightybot.listeners.CommandListener;
 import me.ryandowling.allmightybot.listeners.StartupListener;
 import me.ryandowling.allmightybot.listeners.UserListener;
@@ -55,6 +56,7 @@ import java.util.concurrent.TimeUnit;
 public class AllmightyBot {
     private final static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Logger logger = LogManager.getLogger(App.class.getName());
+    public final long startTime = System.currentTimeMillis();
     private Settings settings;
     private PircBotX pirc;
 
@@ -165,6 +167,10 @@ public class AllmightyBot {
                             commandConstructor = commandClass.getConstructor(String.class, SeedType.class, int.class);
                             commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
                                     .getSeedType(), command.getTimeout());
+                        } else if (command.isWorldCommand()) {
+                            commandConstructor = commandClass.getConstructor(String.class, WorldType.class, int.class);
+                            commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
+                                    .getWorldType(), command.getTimeout());
                         } else if (command.hasReply()) {
                             commandConstructor = commandClass.getConstructor(String.class, String.class, int.class);
                             commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
