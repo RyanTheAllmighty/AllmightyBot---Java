@@ -19,12 +19,14 @@
 package me.ryandowling.allmightybot.commands;
 
 import me.ryandowling.allmightybot.data.CommandLevel;
+import me.ryandowling.allmightybot.data.SeedType;
 
 public class TempCommand {
     private String type;
     private String name;
     private String reply;
     private CommandLevel level;
+    private SeedType seedType;
     private int timeout = 10;
 
     public String getType() {
@@ -47,7 +49,15 @@ public class TempCommand {
         return this.level;
     }
 
+    public SeedType getSeedType() {
+        return this.seedType;
+    }
+
     public int getTimeout() {
         return this.timeout;
+    }
+
+    public boolean isSeedCommand() {
+        return this.seedType != null;
     }
 }

@@ -27,6 +27,7 @@ import me.ryandowling.allmightybot.commands.TempCommand;
 import me.ryandowling.allmightybot.data.ChatLog;
 import me.ryandowling.allmightybot.data.Event;
 import me.ryandowling.allmightybot.data.EventType;
+import me.ryandowling.allmightybot.data.SeedType;
 import me.ryandowling.allmightybot.data.Settings;
 import me.ryandowling.allmightybot.listeners.CommandListener;
 import me.ryandowling.allmightybot.listeners.StartupListener;
@@ -160,7 +161,11 @@ public class AllmightyBot {
                         Constructor<?> commandConstructor;
                         Command commandToAdd;
 
-                        if (command.hasReply()) {
+                        if (command.isSeedCommand()) {
+                            commandConstructor = commandClass.getConstructor(String.class, SeedType.class, int.class);
+                            commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
+                                    .getSeedType(), command.getTimeout());
+                        } else if (command.hasReply()) {
                             commandConstructor = commandClass.getConstructor(String.class, String.class, int.class);
                             commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
                                     .getReply(), command.getTimeout());

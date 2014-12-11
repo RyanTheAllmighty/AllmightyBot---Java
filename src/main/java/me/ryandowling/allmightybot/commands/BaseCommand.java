@@ -88,6 +88,10 @@ public abstract class BaseCommand implements Command {
         return this.reply;
     }
 
+    public long getLastRun() {
+        return this.lastRun;
+    }
+
     @Override
     public boolean run(AllmightyBot bot, MessageEvent event) {
         return (canRun() && canAccess(event));
