@@ -42,7 +42,11 @@ public class CommandListener extends ListenerAdapter {
                 ());
 
         if (event.getMessage().startsWith("!")) {
-            Command command = CommandBus.find(event.getMessage().substring(1));
+            String commandString = event.getMessage().substring(1);
+            if (commandString.contains(" ")) {
+                commandString = commandString.substring(0, commandString.indexOf(" "));
+            }
+            Command command = CommandBus.find(commandString);
             if (command != null) {
                 if (!command.run(this.bot, event)) {
                     logger.error(event.getUser().getNick() + " tried to run command " + event.getMessage() + " with " +
