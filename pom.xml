@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>me.ryandowling</groupId>
 	<artifactId>allmightybot</artifactId>
-	<name>LedgeBot</name>
+	<name>Allmighty Bot</name>
 	<version>1.0.0.0</version>
 	<packaging>jar</packaging>
 	<description>Allmighty Bot is a bot used for RyanTheAllmighty's Twitch channel and is a general IRC bot</description>

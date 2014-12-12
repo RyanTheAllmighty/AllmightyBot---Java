@@ -232,6 +232,10 @@ public class AllmightyBot {
                 String key = entry.getKey();
                 Integer value = entry.getValue();
 
+                if (key == null || value == null) {
+                    continue;
+                }
+
                 FileUtils.write(Utils.getUserLoginTimeFile(key).toFile(), GSON.toJson(value));
             }
             logger.debug("User login time saved!");
@@ -239,6 +243,10 @@ public class AllmightyBot {
             for (Map.Entry<String, List<ChatLog>> entry : this.userLogs.entrySet()) {
                 String key = entry.getKey();
                 List<ChatLog> values = entry.getValue();
+
+                if (key == null || values == null) {
+                    continue;
+                }
 
                 FileUtils.write(Utils.getUserChatFile(key).toFile(), GSON.toJson(values));
             }
@@ -256,6 +264,11 @@ public class AllmightyBot {
     }
 
     public void userJoined(String nick) {
+        if (nick == null) {
+            logger.debug("A null user joined!");
+            return;
+        }
+
         logger.debug("User " + nick + " joined!");
         this.events.add(new Event(EventType.USERJOIN, nick));
 
@@ -282,6 +295,11 @@ public class AllmightyBot {
     }
 
     public void userParted(String nick, boolean kicked) {
+        if (nick == null) {
+            logger.debug("A null user parted!");
+            return;
+        }
+
         logger.debug("User " + nick + " parted!");
         this.events.add(new Event((kicked ? EventType.USERKICK : EventType.USERPART), nick));
 
@@ -319,6 +337,11 @@ public class AllmightyBot {
     }
 
     public void userSpoke(String nick, String message) {
+        if (nick == null) {
+            logger.debug("A null user spoke!");
+            return;
+        }
+
         logger.debug("User " + nick + " spoke!");
         this.events.add(new Event(EventType.USERMESSAGE, nick));
 
