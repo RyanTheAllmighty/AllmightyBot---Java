@@ -108,7 +108,18 @@ public class AllmightyBot {
         config.addListener(new UserListener(this));
         config.addListener(new CommandListener(this));
 
+        addShutdownHook();
+
         this.pirc = new PircBotX(config.buildConfiguration());
+    }
+
+    private void addShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                shutDown();
+            }
+        }));
     }
 
     /**
