@@ -25,6 +25,7 @@ import me.ryandowling.allmightybot.commands.Command;
 import me.ryandowling.allmightybot.commands.CommandBus;
 import me.ryandowling.allmightybot.commands.TempCommand;
 import me.ryandowling.allmightybot.data.ChatLog;
+import me.ryandowling.allmightybot.data.CommandLevel;
 import me.ryandowling.allmightybot.data.Event;
 import me.ryandowling.allmightybot.data.EventType;
 import me.ryandowling.allmightybot.data.SeedType;
@@ -65,6 +66,10 @@ public class AllmightyBot {
     private Map<String, List<ChatLog>> userLogs;
     private List<Event> events;
 
+    private StartupListener startupListener = new StartupListener(this);
+    private UserListener userListener = new UserListener(this);
+    private CommandListener commandListener = new CommandListener(this);
+
     public AllmightyBot() {
         if (Files.exists(Utils.getSettingsFile())) {
             try {
@@ -104,9 +109,9 @@ public class AllmightyBot {
         Configuration.Builder<PircBotX> config = this.settings.getBuilder();
 
         // Register the different listeners
-        config.addListener(new StartupListener(this));
-        config.addListener(new UserListener(this));
-        config.addListener(new CommandListener(this));
+        config.addListener(this.startupListener);
+        config.addListener(this.userListener);
+        config.addListener(this.commandListener);
 
         addShutdownHook();
 
@@ -222,6 +227,11 @@ public class AllmightyBot {
     public void shutDown() {
         logger.info("Bot shutting down!");
 
+        // Remove the listeners
+        this.pirc.getConfiguration().getListenerManager().removeListener(this.startupListener);
+        this.pirc.getConfiguration().getListenerManager().removeListener(this.userListener);
+        this.pirc.getConfiguration().getListenerManager().removeListener(this.commandListener);
+
         try {
             FileUtils.write(Utils.getSettingsFile().toFile(), GSON.toJson(this.settings));
             logger.debug("Settings saved!");
@@ -305,7 +315,7 @@ public class AllmightyBot {
 
         Date joined = this.userJoined.get(nick);
 
-        if (joined != null) {
+        if (joined != null && this.userOnlineTime.containsKey(nick)) {
             // User has left so add their time
             int timeOnline = this.userOnlineTime.get(nick);
             timeOnline += (int) Utils.getDateDiff(joined, new Date(), TimeUnit.SECONDS);
