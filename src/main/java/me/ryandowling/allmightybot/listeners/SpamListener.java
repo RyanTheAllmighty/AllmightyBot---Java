@@ -19,10 +19,9 @@
 package me.ryandowling.allmightybot.listeners;
 
 import me.ryandowling.allmightybot.AllmightyBot;
+import me.ryandowling.allmightybot.data.Spam;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
-
-import java.util.regex.Pattern;
 
 public class SpamListener extends ListenerAdapter {
     private AllmightyBot bot;
@@ -31,17 +30,18 @@ public class SpamListener extends ListenerAdapter {
         this.bot = bot;
     }
 
-    private static Pattern doritosPattern = Pattern.compile(Pattern.quote("dropped my bag of Dorito"), Pattern
-            .CASE_INSENSITIVE);
-
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         super.onMessage(event);
 
-        if (doritosPattern.matcher(event.getMessage()).find() && !event.getChannel().isOp(event.getUser())) {
-            event.getChannel().send().message("I'm sorry you've dropped them! I shall nom nom nom on them while you " +
-                    "get REKT! [Timed out]" + " [30 minutes]");
-            event.getChannel().send().message(".timeout " + event.getUser().getNick() + " 1800");
+        if (event.getUser() == event.getBot().getUserBot() || event.getChannel().isOp(event.getUser())) {
+            return;
+        }
+
+        for (Spam spam : this.bot.getSpams()) {
+            if (spam.shouldTakeAction(event)) {
+                spam.takeAction(event);
+            }
         }
     }
 }

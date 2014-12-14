@@ -29,11 +29,12 @@ import me.ryandowling.allmightybot.data.Event;
 import me.ryandowling.allmightybot.data.EventType;
 import me.ryandowling.allmightybot.data.SeedType;
 import me.ryandowling.allmightybot.data.Settings;
+import me.ryandowling.allmightybot.data.Spam;
 import me.ryandowling.allmightybot.data.WorldType;
 import me.ryandowling.allmightybot.listeners.CommandListener;
+import me.ryandowling.allmightybot.listeners.SpamListener;
 import me.ryandowling.allmightybot.listeners.StartupListener;
 import me.ryandowling.allmightybot.listeners.UserListener;
-import me.ryandowling.allmightybot.listeners.SpamListener;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -67,6 +68,8 @@ public class AllmightyBot {
     private Map<String, Integer> userOnlineTime;
     private Map<String, List<ChatLog>> userLogs;
     private List<Event> events;
+
+    private List<Spam> spams;
 
     private StartupListener startupListener = new StartupListener(this);
     private UserListener userListener = new UserListener(this);
@@ -143,7 +146,10 @@ public class AllmightyBot {
         this.userLogs = new HashMap<>();
         this.events = new ArrayList<>();
 
+        this.spams = new ArrayList<>();
+
         loadCommands();
+        loadSpamWatchers();
 
         // Load the events from a previous run for today if they exist
         if (Files.exists(Utils.getEventsFile())) {
@@ -219,6 +225,17 @@ public class AllmightyBot {
         }
     }
 
+    private void loadSpamWatchers() {
+        // Add all spam banning/timeout things
+        try {
+            Type listType = new TypeToken<ArrayList<Spam>>() {
+            }.getType();
+            this.spams = GSON.fromJson(FileUtils.readFileToString(Utils.getSpamFile().toFile()), listType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void reload() {
         CommandBus.removeAll();
 
@@ -229,7 +246,7 @@ public class AllmightyBot {
      * Issues a shutdown command to safely shutdown and save all files needed
      */
     public void shutDown() {
-        if(isShuttingDown) {
+        if (isShuttingDown) {
             return;
         }
 
@@ -387,5 +404,9 @@ public class AllmightyBot {
 
     public boolean isRegular(String nick) {
         return false;
+    }
+
+    public List<Spam> getSpams() {
+        return this.spams;
     }
 }
