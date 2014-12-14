@@ -48,8 +48,9 @@ public abstract class BaseCommand implements Command {
         this.level = level;
     }
 
-    public boolean canRun() {
-        if ((this.lastRun + (this.timeout * 1000)) > System.currentTimeMillis()) {
+    public boolean canRun(MessageEvent event) {
+        if (!event.getChannel().isOp(event.getUser()) && (this.lastRun + (this.timeout * 1000)) > System
+                .currentTimeMillis()) {
             logger.error("Cannot run command " + this.name + " as it was run less than " + this.timeout + " seconds " +
                     "ago");
             return false;
@@ -119,6 +120,6 @@ public abstract class BaseCommand implements Command {
 
     @Override
     public boolean run(AllmightyBot bot, MessageEvent event) {
-        return (canRun() && canAccess(event));
+        return (canRun(event) && canAccess(event));
     }
 }
