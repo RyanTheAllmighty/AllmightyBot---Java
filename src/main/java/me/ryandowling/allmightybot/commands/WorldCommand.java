@@ -19,14 +19,17 @@
 package me.ryandowling.allmightybot.commands;
 
 import me.ryandowling.allmightybot.AllmightyBot;
+import me.ryandowling.allmightybot.Utils;
 import me.ryandowling.allmightybot.data.WorldType;
 import org.pircbotx.hooks.events.MessageEvent;
 
+import java.util.List;
+
 public class WorldCommand extends BaseCommand {
     private final WorldType worldType;
-    private int worldNumber;
-    private String worldSeed;
-    private boolean hasBeenSet = false;
+    private static int worldNumber;
+    private static String worldSeed;
+    private static boolean hasBeenSet = false;
 
     public WorldCommand(String name, WorldType worldType, int timeout) {
         super(name, timeout);
@@ -39,29 +42,28 @@ public class WorldCommand extends BaseCommand {
         if (super.run(bot, event)) {
             switch (this.worldType) {
                 case NEW:
-                    String message = event.getMessage().substring(getName().length() + 2); // Remove '!command '
-                    String[] parts = message.split(" ");
+                    List<String> parts = Utils.getCommandsArguments(2, event.getMessage(), true);
 
-                    if (parts.length != 2) {
+                    if (parts.size() != 2) {
                         return false;
                     }
 
                     try {
-                        this.worldNumber = Integer.parseInt(parts[0]);
+                        worldNumber = Integer.parseInt(parts.get(0));
                     } catch (NumberFormatException e) {
                         return false;
                     }
 
-                    this.worldSeed = parts[1];
-                    this.hasBeenSet = true;
+                    worldSeed = parts.get(1);
+                    hasBeenSet = true;
                     break;
                 case QUERY:
                     if (!this.hasBeenSet) {
                         return false;
                     }
 
-                    event.getChannel().send().message("This is world number " + this.worldNumber + " with a seed of "
-                            + this.worldSeed);
+                    event.getChannel().send().message("This is world number " + this.worldNumber + " with a seed of " +
+                            "'" + this.worldSeed + "'");
                     break;
             }
             return true;

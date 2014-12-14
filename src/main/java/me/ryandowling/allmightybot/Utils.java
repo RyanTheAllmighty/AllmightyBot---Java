@@ -23,8 +23,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
     public static Path getCoreDir() {
@@ -93,5 +97,42 @@ public class Utils {
         int hours = totalMinutes / MINUTES_IN_AN_HOUR;
 
         return hours + " hours, " + minutes + " minutes and " + seconds + " seconds";
+    }
+
+    public static List<String> getCommandsArguments(String message, boolean removeFirst) {
+        List<String> list = new ArrayList<String>();
+
+        // Found thanks to http://stackoverflow.com/a/7804472
+        Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(message);
+        while (m.find()) {
+            list.add(m.group(1).replace("\"", ""));
+        }
+        if (removeFirst) {
+            list.remove(0);
+        }
+        return list;
+    }
+
+    public static List<String> getCommandsArguments(int count, String message, boolean removeFirst) {
+        List<String> list = new ArrayList<String>();
+
+        int begin = 0;
+
+        // Found thanks to http://stackoverflow.com/a/7804472
+        Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(message);
+        while (m.find()) {
+            begin += m.group(1).length() + 1; // Count the space and match
+            list.add(m.group(1).replace("\"", ""));
+            if (list.size() == count) {
+                break;
+            }
+        }
+
+        list.add(message.substring(begin));
+
+        if (removeFirst) {
+            list.remove(0);
+        }
+        return list;
     }
 }

@@ -327,7 +327,9 @@ public class AllmightyBot {
     }
 
     private void saveAllOnlineTime() {
-        for (Map.Entry<String, Date> entry : this.userJoined.entrySet()) {
+        Map<String, Date> map = new HashMap<>(this.userJoined);
+
+        for (Map.Entry<String, Date> entry : map.entrySet()) {
             String key = entry.getKey();
             Date value = entry.getValue();
 
@@ -342,7 +344,7 @@ public class AllmightyBot {
             timeOnline += (int) Utils.getDateDiff(value, new Date(), TimeUnit.SECONDS);
             this.userOnlineTime.put(key, timeOnline);
 
-            this.userJoined.remove(key);
+            map.remove(key);
         }
     }
 
