@@ -24,9 +24,9 @@ import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.List;
 
-public class RaidCommand extends ReplyCommand {
-    public RaidCommand(String name, String reply, int timeout) {
-        super(name, reply, timeout);
+public class PurgeCommand extends BaseCommand {
+    public PurgeCommand(String name, int timeout) {
+        super(name, timeout);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class RaidCommand extends ReplyCommand {
                 return false;
             }
 
-            event.getChannel().send().message(".host " + args.get(0));
+            event.getChannel().send().message(".timeout " + args.get(0) + " 1");
             return true;
         }
 
