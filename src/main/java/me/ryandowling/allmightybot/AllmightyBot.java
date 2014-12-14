@@ -25,7 +25,6 @@ import me.ryandowling.allmightybot.commands.Command;
 import me.ryandowling.allmightybot.commands.CommandBus;
 import me.ryandowling.allmightybot.commands.TempCommand;
 import me.ryandowling.allmightybot.data.ChatLog;
-import me.ryandowling.allmightybot.data.CommandLevel;
 import me.ryandowling.allmightybot.data.Event;
 import me.ryandowling.allmightybot.data.EventType;
 import me.ryandowling.allmightybot.data.SeedType;
@@ -60,6 +59,8 @@ public class AllmightyBot {
     public final long startTime = System.currentTimeMillis();
     private Settings settings;
     private PircBotX pirc;
+
+    private boolean isShuttingDown = false;
 
     private Map<String, Date> userJoined;
     private Map<String, Integer> userOnlineTime;
@@ -225,6 +226,12 @@ public class AllmightyBot {
      * Issues a shutdown command to safely shutdown and save all files needed
      */
     public void shutDown() {
+        if(isShuttingDown) {
+            return;
+        }
+
+        this.isShuttingDown = true;
+
         logger.info("Bot shutting down!");
 
         // Remove the listeners
@@ -327,9 +334,7 @@ public class AllmightyBot {
     }
 
     private void saveAllOnlineTime() {
-        Map<String, Date> map = new HashMap<>(this.userJoined);
-
-        for (Map.Entry<String, Date> entry : map.entrySet()) {
+        for (Map.Entry<String, Date> entry : this.userJoined.entrySet()) {
             String key = entry.getKey();
             Date value = entry.getValue();
 
@@ -344,7 +349,7 @@ public class AllmightyBot {
             timeOnline += (int) Utils.getDateDiff(value, new Date(), TimeUnit.SECONDS);
             this.userOnlineTime.put(key, timeOnline);
 
-            map.remove(key);
+            this.userJoined.remove(key);
         }
     }
 
