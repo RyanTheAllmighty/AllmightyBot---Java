@@ -100,7 +100,8 @@ public abstract class BaseCommand implements Command {
                 }
             }
 
-            if (this.reply.contains("$[")) {
+            if (reply.contains("$[")) {
+                System.out.println(3);
                 return null; // We still have unreplaced things so no good
             }
         }

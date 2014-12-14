@@ -30,6 +30,7 @@ public class ReplyCommand extends BaseCommand {
     public boolean run(AllmightyBot bot, MessageEvent event) {
         if (super.run(bot, event)) {
             String reply = this.getReply(event);
+            System.out.println(reply);
 
             if (reply == null) {
                 return false;
