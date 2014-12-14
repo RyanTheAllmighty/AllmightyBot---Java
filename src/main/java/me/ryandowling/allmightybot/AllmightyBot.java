@@ -33,6 +33,7 @@ import me.ryandowling.allmightybot.data.WorldType;
 import me.ryandowling.allmightybot.listeners.CommandListener;
 import me.ryandowling.allmightybot.listeners.StartupListener;
 import me.ryandowling.allmightybot.listeners.UserListener;
+import me.ryandowling.allmightybot.listeners.SpamListener;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -70,6 +71,7 @@ public class AllmightyBot {
     private StartupListener startupListener = new StartupListener(this);
     private UserListener userListener = new UserListener(this);
     private CommandListener commandListener = new CommandListener(this);
+    private SpamListener spamListener = new SpamListener(this);
 
     public AllmightyBot() {
         if (Files.exists(Utils.getSettingsFile())) {
@@ -113,6 +115,7 @@ public class AllmightyBot {
         config.addListener(this.startupListener);
         config.addListener(this.userListener);
         config.addListener(this.commandListener);
+        config.addListener(this.spamListener);
 
         addShutdownHook();
 
@@ -238,6 +241,7 @@ public class AllmightyBot {
         this.pirc.getConfiguration().getListenerManager().removeListener(this.startupListener);
         this.pirc.getConfiguration().getListenerManager().removeListener(this.userListener);
         this.pirc.getConfiguration().getListenerManager().removeListener(this.commandListener);
+        this.pirc.getConfiguration().getListenerManager().removeListener(this.spamListener);
 
         try {
             FileUtils.write(Utils.getSettingsFile().toFile(), GSON.toJson(this.settings));
