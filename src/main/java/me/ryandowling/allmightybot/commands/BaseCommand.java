@@ -69,12 +69,13 @@ public abstract class BaseCommand implements Command {
             case ALL:
                 return true;
             case REGULAR:
-                return event.getUser().getNick().equals("ryantheallmighty") || event.getChannel().isOp(event.getUser
-                        ()) || App.INSTANCE.isRegular(event.getUser().getNick());
+                return event.getUser().getNick().equals(App.INSTANCE.getSettings().getTwitchChannel()) || event
+                        .getChannel().isOp(event.getUser()) || App.INSTANCE.isRegular(event.getUser().getNick());
             case MODERATOR:
-                return event.getUser().getNick().equals("ryantheallmighty") || event.getChannel().isOp(event.getUser());
+                return event.getUser().getNick().equalsIgnoreCase(App.INSTANCE.getSettings().getTwitchChannel()) ||
+                        event.getChannel().isOp(event.getUser());
             case CASTER:
-                return event.getUser().getNick().equals("ryantheallmighty");
+                return event.getUser().getNick().equalsIgnoreCase(App.INSTANCE.getSettings().getTwitchChannel());
             default:
                 return false;
         }
