@@ -19,23 +19,21 @@
 package me.ryandowling.allmightybot.commands;
 
 import me.ryandowling.allmightybot.AllmightyBot;
+import me.ryandowling.allmightybot.Utils;
 import org.pircbotx.hooks.events.MessageEvent;
 
-public class ReplyCommand extends BaseCommand {
-    public ReplyCommand(String name, String reply, int timeout) {
+import java.util.List;
+
+public class RaidCommand extends ReplyCommand {
+    public RaidCommand(String name, String reply, int timeout) {
         super(name, reply, timeout);
     }
 
     @Override
     public boolean run(AllmightyBot bot, MessageEvent event) {
         if (super.run(bot, event)) {
-            String reply = this.getReply(event);
-
-            if (reply == null) {
-                return false;
-            }
-            
-            event.getChannel().send().message(reply);
+            List<String> args = Utils.getCommandsArguments(1, event.getMessage(), true);
+            event.getChannel().send().message(".host " + args.get(0));
             return true;
         }
 
