@@ -255,9 +255,10 @@ public class AllmightyBot {
         logger.info("Bot shutting down!");
 
         // Remove the listeners
-        this.pirc.getConfiguration().getListenerManager().removeListener(this.userListener);
-        this.pirc.getConfiguration().getListenerManager().removeListener(this.commandListener);
-        this.pirc.getConfiguration().getListenerManager().removeListener(this.spamListener);
+        this.removeStartupListener();
+        this.removeUserListener();
+        this.removeCommandListener();
+        this.removeSpamListener();
 
         try {
             FileUtils.write(Utils.getSettingsFile().toFile(), GSON.toJson(this.settings));
@@ -425,6 +426,27 @@ public class AllmightyBot {
         if (this.startupListener != null) {
             this.pirc.getConfiguration().getListenerManager().removeListener(this.startupListener);
             this.startupListener = null;
+        }
+    }
+
+    public void removeUserListener() {
+        if (this.userListener != null) {
+            this.pirc.getConfiguration().getListenerManager().removeListener(this.userListener);
+            this.userListener = null;
+        }
+    }
+
+    public void removeSpamListener() {
+        if (this.spamListener != null) {
+            this.pirc.getConfiguration().getListenerManager().removeListener(this.spamListener);
+            this.spamListener = null;
+        }
+    }
+
+    public void removeCommandListener() {
+        if (this.commandListener != null) {
+            this.pirc.getConfiguration().getListenerManager().removeListener(this.commandListener);
+            this.commandListener = null;
         }
     }
 }
