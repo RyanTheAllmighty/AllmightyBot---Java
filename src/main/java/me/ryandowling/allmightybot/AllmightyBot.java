@@ -301,6 +301,10 @@ public class AllmightyBot {
     }
 
     public void userJoined(String nick) {
+        if (this.isShuttingDown) {
+            logger.debug("We're shutting down, so no more requests please!");
+        }
+
         if (nick == null) {
             logger.debug("A null user joined!");
             return;
@@ -332,6 +336,10 @@ public class AllmightyBot {
     }
 
     public void userParted(String nick, boolean kicked) {
+        if (this.isShuttingDown) {
+            logger.debug("We're shutting down, so no more requests please!");
+        }
+
         if (nick == null) {
             logger.debug("A null user parted!");
             return;
@@ -374,6 +382,10 @@ public class AllmightyBot {
     }
 
     public void userSpoke(String nick, String message) {
+        if (this.isShuttingDown) {
+            logger.debug("We're shutting down, so no more requests please!");
+        }
+
         if (nick == null) {
             logger.debug("A null user spoke!");
             return;
