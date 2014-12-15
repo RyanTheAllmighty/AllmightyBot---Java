@@ -255,7 +255,6 @@ public class AllmightyBot {
         logger.info("Bot shutting down!");
 
         // Remove the listeners
-        this.pirc.getConfiguration().getListenerManager().removeListener(this.startupListener);
         this.pirc.getConfiguration().getListenerManager().removeListener(this.userListener);
         this.pirc.getConfiguration().getListenerManager().removeListener(this.commandListener);
         this.pirc.getConfiguration().getListenerManager().removeListener(this.spamListener);
@@ -408,5 +407,12 @@ public class AllmightyBot {
 
     public List<Spam> getSpams() {
         return this.spams;
+    }
+
+    public void removeStartupListener() {
+        if (this.startupListener != null) {
+            this.pirc.getConfiguration().getListenerManager().removeListener(this.startupListener);
+            this.startupListener = null;
+        }
     }
 }
