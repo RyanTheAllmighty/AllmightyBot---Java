@@ -45,8 +45,6 @@ public class WorldCommand extends BaseCommand {
     @Override
     public boolean run(AllmightyBot bot, MessageEvent event) {
         if (super.run(bot, event)) {
-
-            System.out.println(worldDetails.getNumber() + " - " + worldDetails.getSeed());
             switch (this.worldType) {
                 case NEW:
                     List<String> parts = Utils.getCommandsArguments(2, event.getMessage(), true);
@@ -79,50 +77,36 @@ public class WorldCommand extends BaseCommand {
     }
 
     @Override
-    public boolean load() {
-        if (super.load() && !hasLoaded) {
-            hasLoaded = true;
+    public void load() {
+        super.load();
 
-            if (Files.exists(Utils.getCommandDataFile(this))) {
-                try {
-                    worldDetails = AllmightyBot.GSON.fromJson(FileUtils.readFileToString(Utils.getCommandDataFile
-                            (this).toFile()), WorldDetails.class);
-                    hasBeenSet = worldDetails.isSet();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                System.out.println(worldDetails.getNumber() + " - " + worldDetails.getSeed());
-
-                return true;
-            } else {
-                System.out.println("Default!");
-                worldDetails = new WorldDetails(); // If no loading then set a default
-            }
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean save() {
-        if (super.save() && !hasSaved) {
-            hasSaved = true;
-
+        if (Files.exists(Utils.getCommandDataFile(this))) {
             try {
-                FileUtils.write(Utils.getCommandDataFile(this).toFile(), AllmightyBot.GSON.toJson(worldDetails));
+                worldDetails = AllmightyBot.GSON.fromJson(FileUtils.readFileToString(Utils.getCommandDataFile(this)
+                        .toFile()), WorldDetails.class);
+                hasBeenSet = worldDetails.isSet();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            return true;
+        } else {
+            System.out.println("Default!");
+            worldDetails = new WorldDetails(); // If no loading then set a default
         }
-
-        return false;
     }
 
-    public static void newSeed(String seed) {
+    @Override
+    public void save() {
+        super.save();
+        try {
+            FileUtils.write(Utils.getCommandDataFile(this).toFile(), AllmightyBot.GSON.toJson(worldDetails));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void newSeed(String seed) {
         worldDetails.setSeed(seed);
         worldDetails.setNumber(worldDetails.getNumber() + 1);
+        this.save();
     }
 }

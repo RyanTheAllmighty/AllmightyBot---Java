@@ -39,4 +39,16 @@ public class CommandBus {
     public static Map<String, Command> getAll() {
         return commands;
     }
+
+    public static Command findByClassName(String className) {
+        for (Map.Entry<String, Command> entry : commands.entrySet()) {
+            Command command = entry.getValue();
+
+            if (command.getClass().getName().equalsIgnoreCase(className)) {
+                return command;
+            }
+        }
+
+        return null;
+    }
 }

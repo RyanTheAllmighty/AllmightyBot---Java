@@ -123,11 +123,9 @@ public abstract class BaseCommand implements Command {
         return (canRun(event) && canAccess(event));
     }
 
-    public boolean load() {
-        return true;
+    public void load() {
     }
 
-    public boolean save() {
-        return true;
+    public void save() {
     }
 }
