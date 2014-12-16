@@ -19,7 +19,6 @@
 package me.ryandowling.allmightybot;
 
 import me.ryandowling.allmightybot.commands.Command;
-import me.ryandowling.allmightybot.commands.WorldCommand;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -106,6 +105,18 @@ public class Utils {
         return hours + " hours, " + minutes + " minutes and " + seconds + " seconds";
     }
 
+    public static String timeConversionRaw(int totalSeconds) {
+        final int MINUTES_IN_AN_HOUR = 60;
+        final int SECONDS_IN_A_MINUTE = 60;
+
+        int seconds = totalSeconds % SECONDS_IN_A_MINUTE;
+        int totalMinutes = totalSeconds / SECONDS_IN_A_MINUTE;
+        int minutes = totalMinutes % MINUTES_IN_AN_HOUR;
+        int hours = totalMinutes / MINUTES_IN_AN_HOUR;
+
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
     public static List<String> getCommandsArguments(String message, boolean removeFirst) {
         List<String> list = new ArrayList<String>();
 
@@ -143,8 +154,8 @@ public class Utils {
         return list;
     }
 
-    public static Path getCommandDataFile(Command worldCommand) {
-        String name = worldCommand.getClass().getName();
+    public static Path getCommandDataFile(Command command) {
+        String name = command.getClass().getName();
         return getCoreDir().resolve("data").resolve(name.substring(name.lastIndexOf(".") + 1) + ".json");
     }
 }
