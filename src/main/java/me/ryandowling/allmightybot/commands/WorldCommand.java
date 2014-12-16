@@ -120,4 +120,9 @@ public class WorldCommand extends BaseCommand {
 
         return false;
     }
+
+    public static void newSeed(String seed) {
+        worldDetails.setSeed(seed);
+        worldDetails.setNumber(worldDetails.getNumber() + 1);
+    }
 }

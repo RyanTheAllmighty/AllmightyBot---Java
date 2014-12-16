@@ -87,6 +87,8 @@ public class SeedCommand extends BaseCommand {
                         event.getChannel().send().message("The winner was " + winner + " with the seed of '" + seed +
                                 "'");
 
+                        WorldCommand.newSeed(seed);
+
                         seeds.clear();
                     }
                     break;
