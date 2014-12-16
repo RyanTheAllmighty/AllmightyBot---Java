@@ -43,15 +43,6 @@ public class UserListener extends ListenerAdapter {
         super.onJoin(event);
         if (event.getUser() != event.getBot().getUserBot()) {
             this.bot.userJoined(event.getUser().getNick());
-        } else {
-            // The bot joined so we should log everyone who is in here now as being logged in now
-            ImmutableSortedSet<User> users = event.getChannel().getUsers();
-            for (User user : users) {
-                // Only if the user is not the bot
-                if (user != event.getBot().getUserBot()) {
-                    this.bot.userJoined(user.getNick());
-                }
-            }
         }
     }
 

@@ -30,6 +30,7 @@ import me.ryandowling.allmightybot.data.EventType;
 import me.ryandowling.allmightybot.data.SeedType;
 import me.ryandowling.allmightybot.data.Settings;
 import me.ryandowling.allmightybot.data.Spam;
+import me.ryandowling.allmightybot.data.TwitchChatters;
 import me.ryandowling.allmightybot.data.WorldType;
 import me.ryandowling.allmightybot.listeners.CommandListener;
 import me.ryandowling.allmightybot.listeners.SpamListener;
@@ -162,6 +163,7 @@ public class AllmightyBot {
         loadCommands();
         loadUserOnlineTime();
         loadSpamWatchers();
+        loadInitialUsers();
 
         // Load the events from a previous run for today if they exist
         if (Files.exists(Utils.getEventsFile())) {
@@ -202,6 +204,25 @@ public class AllmightyBot {
         // Shut it all down if we are still connected
         if (this.pirc.isConnected()) {
             this.shutDown();
+        }
+    }
+
+    private void loadInitialUsers() {
+        try {
+            String json = Utils.readURLToString("http://tmi.twitch.tv/group/user/" + this.settings.getTwitchChannel() +
+                    "/chatters");
+            TwitchChatters chatters = GSON.fromJson(json, TwitchChatters.class);
+
+            for (Map.Entry<String, List<String>> entry : chatters.getChatters().entrySet()) {
+                String key = entry.getKey();
+                List<String> value = entry.getValue();
+
+                for (String user : value) {
+                    this.userJoined(user);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

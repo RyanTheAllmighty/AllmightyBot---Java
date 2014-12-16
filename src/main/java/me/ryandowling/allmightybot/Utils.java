@@ -20,7 +20,12 @@ package me.ryandowling.allmightybot;
 
 import me.ryandowling.allmightybot.commands.Command;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -161,5 +166,25 @@ public class Utils {
     public static Path getCommandDataFile(Command command) {
         String name = command.getClass().getName();
         return getCoreDir().resolve("data").resolve(name.substring(name.lastIndexOf(".") + 1) + ".json");
+    }
+
+    public static String readURLToString(String url) throws IOException {
+        StringBuilder response = null;
+        URL urll = new URL(url);
+        URLConnection connection = urll.openConnection();
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.2; WOW64)");
+        connection.setConnectTimeout(5000);
+        BufferedReader in;
+        in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        response = new StringBuilder();
+        String inputLine;
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+
+        in.close();
+
+        return response.toString();
     }
 }
