@@ -55,7 +55,7 @@ public class Utils {
     }
 
     public static Path getUserLoginTimeFile(String user) {
-        Path file = getCoreDir().resolve("users").resolve(user);
+        Path file = getUsersDir().resolve(user);
         if (!Files.isDirectory(file)) {
             try {
                 Files.createDirectories(file);
@@ -66,8 +66,12 @@ public class Utils {
         return file.resolve("loginTime.json");
     }
 
+    public static Path getUsersDir() {
+        return getCoreDir().resolve("users");
+    }
+
     public static Path getUserChatFile(String user) {
-        Path file = getCoreDir().resolve("users").resolve(user);
+        Path file = getUsersDir().resolve(user);
         if (!Files.isDirectory(file)) {
             try {
                 Files.createDirectories(file);

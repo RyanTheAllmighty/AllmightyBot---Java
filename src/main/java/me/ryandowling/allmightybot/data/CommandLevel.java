@@ -19,5 +19,5 @@
 package me.ryandowling.allmightybot.data;
 
 public enum CommandLevel {
-    ALL, REGULAR, MODERATOR, CASTER;
+    ALL, REGULAR, MODERATOR, CASTER
 }

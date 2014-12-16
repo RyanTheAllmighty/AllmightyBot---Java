@@ -47,7 +47,9 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -158,6 +160,7 @@ public class AllmightyBot {
         this.spams = new ArrayList<>();
 
         loadCommands();
+        loadUserOnlineTime();
         loadSpamWatchers();
 
         // Load the events from a previous run for today if they exist
@@ -255,6 +258,26 @@ public class AllmightyBot {
         }
     }
 
+    private void loadUserOnlineTime() {
+        List<String> fileNames = new ArrayList<>();
+        try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Utils.getUsersDir())) {
+            for (Path path : directoryStream) {
+                if (Files.isDirectory(path)) {
+                    String username = path.getFileName().toString();
+                    if (Files.exists(Utils.getUserLoginTimeFile(username))) {
+                        int timeInChannel = GSON.fromJson(FileUtils.readFileToString(Utils.getUserLoginTimeFile
+                                (username).toFile()), Integer.TYPE);
+
+                        System.out.println("The user " + username + " has been in the channel for " + Utils
+                                .timeConversion(timeInChannel));
+                        this.userOnlineTime.put(username, timeInChannel);
+                    }
+                }
+            }
+        } catch (IOException ex) {
+        }
+    }
+
     private void loadSpamWatchers() {
         // Add all spam banning/timeout things
         try {
@@ -303,6 +326,8 @@ public class AllmightyBot {
                     continue;
                 }
 
+                logger.debug("User " + key + " has a login time of " + value);
+
                 FileUtils.write(Utils.getUserLoginTimeFile(key).toFile(), GSON.toJson(value));
             }
             logger.debug("User login time saved!");
@@ -328,6 +353,23 @@ public class AllmightyBot {
         if (this.pirc.isConnected()) {
             this.pirc.sendIRC().quitServer();
         }
+    }
+
+    public int timeInChannel(String nick) {
+        if (this.isShuttingDown) {
+            logger.debug("We're shutting down, so no more requests please!");
+        }
+
+        if (nick == null) {
+            logger.debug("A null user was passed into timeInChannel!");
+            return 0;
+        }
+
+        if (!this.userOnlineTime.containsKey(nick)) {
+            return 0;
+        }
+
+        return this.userOnlineTime.get(nick);
     }
 
     public void userJoined(String nick) {
@@ -359,6 +401,7 @@ public class AllmightyBot {
             }
 
             timeOnline += (int) Utils.getDateDiff(joined, new Date(), TimeUnit.SECONDS);
+            logger.debug(nick + " joined and now has an online time of " + timeOnline);
             this.userOnlineTime.put(nick, timeOnline);
         }
 
@@ -384,6 +427,7 @@ public class AllmightyBot {
             // User has left so add their time
             int timeOnline = this.userOnlineTime.get(nick);
             timeOnline += (int) Utils.getDateDiff(joined, new Date(), TimeUnit.SECONDS);
+            logger.debug(nick + " parted and now has an online time of " + timeOnline);
             this.userOnlineTime.put(nick, timeOnline);
         }
 
