@@ -51,8 +51,10 @@ import java.lang.reflect.Type;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -61,6 +63,7 @@ import java.util.concurrent.TimeUnit;
 public class AllmightyBot {
     public final static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Logger logger = LogManager.getLogger(App.class.getName());
+    private static final String DATE = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
     public final long startTime = System.currentTimeMillis();
     private Settings settings;
     private PircBotX pirc;
@@ -70,7 +73,7 @@ public class AllmightyBot {
     private boolean isShuttingDown = false;
 
     private Map<String, Date> userJoined;
-    private Map<String, Integer> userOnlineTime;
+    private Map<String, Map<String, Integer>> userOnlineTime;
     private Map<String, List<ChatLog>> userLogs;
     private List<Event> events;
 
@@ -289,8 +292,10 @@ public class AllmightyBot {
                 if (Files.isDirectory(path)) {
                     String username = path.getFileName().toString();
                     if (Files.exists(Utils.getUserLoginTimeFile(username))) {
-                        int timeInChannel = GSON.fromJson(FileUtils.readFileToString(Utils.getUserLoginTimeFile
-                                (username).toFile()), Integer.TYPE);
+                        Type type = new TypeToken<Map<String, Integer>>() {
+                        }.getType();
+                        Map<String, Integer> timeInChannel = GSON.fromJson(FileUtils.readFileToString(Utils
+                                .getUserLoginTimeFile(username).toFile()), type);
                         this.userOnlineTime.put(username, timeInChannel);
                     }
                 }
@@ -339,9 +344,9 @@ public class AllmightyBot {
 
             saveAllOnlineTime();
 
-            for (Map.Entry<String, Integer> entry : this.userOnlineTime.entrySet()) {
+            for (Map.Entry<String, Map<String, Integer>> entry : this.userOnlineTime.entrySet()) {
                 String key = entry.getKey();
-                Integer value = entry.getValue();
+                Map<String, Integer> value = entry.getValue();
 
                 if (key == null || value == null) {
                     continue;
@@ -392,7 +397,20 @@ public class AllmightyBot {
             return 0;
         }
 
-        return this.userOnlineTime.get(nick);
+        int timeOnline = 0;
+
+        for (Map.Entry<String, Integer> entry : this.userOnlineTime.get(nick).entrySet()) {
+            timeOnline += entry.getValue();
+        }
+
+        Date joined = this.userJoined.get(nick);
+
+        if (joined != null) {
+            // Add the time they've been in the channel for now
+            timeOnline += (int) Utils.getDateDiff(joined, new Date(), TimeUnit.SECONDS);
+        }
+
+        return timeOnline;
     }
 
     public void userJoined(String nick) {
@@ -421,15 +439,18 @@ public class AllmightyBot {
             joined = new Date();
         } else {
             // User was already joined so add their time
-            int timeOnline = 0;
+            Map<String, Integer> timeOnline = this.userOnlineTime.get(nick);
+            int online = 0;
 
-            try {
-                timeOnline = this.userOnlineTime.get(nick);
-            } catch (NullPointerException e) {
-                timeOnline = 0;
+            if (timeOnline != null) {
+                online = timeOnline.get(DATE);
+                online += (int) Utils.getDateDiff(joined, new Date(), TimeUnit.SECONDS);
+            } else {
+                timeOnline = new HashMap<>();
             }
 
-            timeOnline += (int) Utils.getDateDiff(joined, new Date(), TimeUnit.SECONDS);
+            timeOnline.put(DATE, online);
+
             this.userOnlineTime.put(nick, timeOnline);
         }
 
@@ -459,8 +480,18 @@ public class AllmightyBot {
 
         if (joined != null && this.userOnlineTime.containsKey(nick)) {
             // User has left so add their time
-            int timeOnline = this.userOnlineTime.get(nick);
-            timeOnline += (int) Utils.getDateDiff(joined, new Date(), TimeUnit.SECONDS);
+            Map<String, Integer> timeOnline = this.userOnlineTime.get(nick);
+            int online = 0;
+
+            if (timeOnline != null) {
+                online = timeOnline.get(DATE);
+                online += (int) Utils.getDateDiff(joined, new Date(), TimeUnit.SECONDS);
+            } else {
+                timeOnline = new HashMap<>();
+            }
+
+            timeOnline.put(DATE, online);
+
             this.userOnlineTime.put(nick, timeOnline);
         }
 
@@ -473,15 +504,18 @@ public class AllmightyBot {
             String key = entry.getKey();
             Date value = entry.getValue();
 
-            int timeOnline = 0;
+            Map<String, Integer> timeOnline = this.userOnlineTime.get(key);
+            int online = 0;
 
-            try {
-                timeOnline = this.userOnlineTime.get(key);
-            } catch (NullPointerException e) {
-                timeOnline = 0;
+            if (timeOnline != null) {
+                online = timeOnline.get(DATE);
+                online += (int) Utils.getDateDiff(value, new Date(), TimeUnit.SECONDS);
+            } else {
+                timeOnline = new HashMap<>();
             }
 
-            timeOnline += (int) Utils.getDateDiff(value, new Date(), TimeUnit.SECONDS);
+            timeOnline.put(DATE, online);
+
             this.userOnlineTime.put(key, timeOnline);
 
             this.userJoined.remove(key);
