@@ -53,9 +53,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class AllmightyBot {
@@ -153,9 +153,9 @@ public class AllmightyBot {
     public void startUp() {
         logger.info("Bot starting up!");
 
-        this.userJoined = new HashMap<>();
-        this.userOnlineTime = new HashMap<>();
-        this.userLogs = new HashMap<>();
+        this.userJoined = new ConcurrentHashMap<>();
+        this.userOnlineTime = new ConcurrentHashMap<>();
+        this.userLogs = new ConcurrentHashMap<>();
         this.events = new ArrayList<>();
 
         this.spams = new ArrayList<>();
