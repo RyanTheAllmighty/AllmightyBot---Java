@@ -402,6 +402,8 @@ public class AllmightyBot {
             return;
         }
 
+        nick = nick.toLowerCase();
+
         if (nick.equalsIgnoreCase(this.getSettings().getTwitchUsername())) {
             return; // Bot should not be considered here
         }
@@ -440,6 +442,8 @@ public class AllmightyBot {
             logger.debug("A null user parted!");
             return;
         }
+
+        nick = nick.toLowerCase();
 
         if (nick.equalsIgnoreCase(this.getSettings().getTwitchUsername())) {
             return; // Bot should not be considered here
@@ -490,6 +494,8 @@ public class AllmightyBot {
             logger.debug("A null user spoke!");
             return;
         }
+
+        nick = nick.toLowerCase();
 
         if (nick.equalsIgnoreCase(this.getSettings().getTwitchUsername())) {
             return; // Bot should not be considered here
