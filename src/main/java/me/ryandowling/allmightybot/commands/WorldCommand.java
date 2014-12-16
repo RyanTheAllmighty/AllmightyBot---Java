@@ -20,15 +20,18 @@ package me.ryandowling.allmightybot.commands;
 
 import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.Utils;
+import me.ryandowling.allmightybot.data.WorldDetails;
 import me.ryandowling.allmightybot.data.WorldType;
+import org.apache.commons.io.FileUtils;
 import org.pircbotx.hooks.events.MessageEvent;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 public class WorldCommand extends BaseCommand {
     private final WorldType worldType;
-    private static int worldNumber;
-    private static String worldSeed;
+    private static WorldDetails worldDetails;
     private static boolean hasBeenSet = false;
     private static boolean hasLoaded = false;
     private static boolean hasSaved = false;
@@ -42,6 +45,8 @@ public class WorldCommand extends BaseCommand {
     @Override
     public boolean run(AllmightyBot bot, MessageEvent event) {
         if (super.run(bot, event)) {
+
+            System.out.println(worldDetails.getNumber() + " - " + worldDetails.getSeed());
             switch (this.worldType) {
                 case NEW:
                     List<String> parts = Utils.getCommandsArguments(2, event.getMessage(), true);
@@ -51,21 +56,20 @@ public class WorldCommand extends BaseCommand {
                     }
 
                     try {
-                        worldNumber = Integer.parseInt(parts.get(0));
+                        worldDetails.setNumber(Integer.parseInt(parts.get(0)));
+                        worldDetails.setSeed(parts.get(1));
+                        hasBeenSet = true;
                     } catch (NumberFormatException e) {
                         return false;
                     }
-
-                    worldSeed = parts.get(1);
-                    hasBeenSet = true;
                     break;
                 case QUERY:
-                    if (!this.hasBeenSet) {
+                    if (!hasBeenSet) {
                         return false;
                     }
 
-                    event.getChannel().send().message("This is world number " + this.worldNumber + " with a seed of " +
-                            "'" + this.worldSeed + "'");
+                    event.getChannel().send().message("This is world number " + worldDetails.getNumber() + " with a " +
+                            "seed of '" + worldDetails.getSeed() + "'");
                     break;
             }
             return true;
@@ -78,9 +82,23 @@ public class WorldCommand extends BaseCommand {
     public boolean load() {
         if (super.load() && !hasLoaded) {
             hasLoaded = true;
-            System.out.println("Loading " + Utils.getCommandDataFile(this).toAbsolutePath());
 
-            return true;
+            if (Files.exists(Utils.getCommandDataFile(this))) {
+                try {
+                    worldDetails = AllmightyBot.GSON.fromJson(FileUtils.readFileToString(Utils.getCommandDataFile
+                            (this).toFile()), WorldDetails.class);
+                    hasBeenSet = worldDetails.isSet();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println(worldDetails.getNumber() + " - " + worldDetails.getSeed());
+
+                return true;
+            } else {
+                System.out.println("Default!");
+                worldDetails = new WorldDetails(); // If no loading then set a default
+            }
         }
 
         return false;
@@ -90,7 +108,12 @@ public class WorldCommand extends BaseCommand {
     public boolean save() {
         if (super.save() && !hasSaved) {
             hasSaved = true;
-            System.out.println("Saving " + Utils.getCommandDataFile(this).toAbsolutePath());
+
+            try {
+                FileUtils.write(Utils.getCommandDataFile(this).toFile(), AllmightyBot.GSON.toJson(worldDetails));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             return true;
         }

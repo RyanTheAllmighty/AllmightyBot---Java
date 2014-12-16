@@ -56,7 +56,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class AllmightyBot {
-    private final static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    public final static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Logger logger = LogManager.getLogger(App.class.getName());
     public final long startTime = System.currentTimeMillis();
     private Settings settings;
