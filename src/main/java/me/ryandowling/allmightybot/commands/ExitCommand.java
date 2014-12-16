@@ -30,7 +30,7 @@ public class ExitCommand extends BaseCommand {
     public boolean run(AllmightyBot bot, MessageEvent event) {
         if (super.run(bot, event)) {
             event.getChannel().send().message("Goodbye!");
-            bot.shutDown();
+            bot.triggerShutdown();
             return true;
         }
 

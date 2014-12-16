@@ -62,6 +62,8 @@ public class AllmightyBot {
     private Settings settings;
     private PircBotX pirc;
 
+    private boolean shutDown = false;
+
     private boolean isShuttingDown = false;
 
     private Map<String, Date> userJoined;
@@ -162,6 +164,25 @@ public class AllmightyBot {
             }
         }
 
+        Runnable r = new Runnable() {
+            public void run() {
+                while (true) {
+                    if (shutDown) {
+                        shutDown();
+                        break;
+                    }
+
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+
+        new Thread(r).start();
+
         try {
             this.pirc.startBot();
         } catch (IOException | IrcException e) {
@@ -255,12 +276,6 @@ public class AllmightyBot {
         this.isShuttingDown = true;
 
         logger.info("Bot shutting down!");
-
-        // Remove the listeners
-        this.removeStartupListener();
-        this.removeUserListener();
-        this.removeCommandListener();
-        this.removeSpamListener();
 
         for (Map.Entry<String, Command> entry : CommandBus.getAll().entrySet()) {
             Command command = entry.getValue();
@@ -455,5 +470,15 @@ public class AllmightyBot {
             this.pirc.getConfiguration().getListenerManager().removeListener(this.commandListener);
             this.commandListener = null;
         }
+    }
+
+    public void triggerShutdown() {
+        // Remove the listeners
+        this.removeStartupListener();
+        this.removeUserListener();
+        this.removeCommandListener();
+        this.removeSpamListener();
+
+        this.shutDown = true;
     }
 }
