@@ -288,9 +288,6 @@ public class AllmightyBot {
                     if (Files.exists(Utils.getUserLoginTimeFile(username))) {
                         int timeInChannel = GSON.fromJson(FileUtils.readFileToString(Utils.getUserLoginTimeFile
                                 (username).toFile()), Integer.TYPE);
-
-                        System.out.println("The user " + username + " has been in the channel for " + Utils
-                                .timeConversion(timeInChannel));
                         this.userOnlineTime.put(username, timeInChannel);
                     }
                 }
@@ -346,8 +343,6 @@ public class AllmightyBot {
                 if (key == null || value == null) {
                     continue;
                 }
-
-                logger.debug("User " + key + " has a login time of " + value);
 
                 FileUtils.write(Utils.getUserLoginTimeFile(key).toFile(), GSON.toJson(value));
             }
@@ -422,7 +417,6 @@ public class AllmightyBot {
             }
 
             timeOnline += (int) Utils.getDateDiff(joined, new Date(), TimeUnit.SECONDS);
-            logger.debug(nick + " joined and now has an online time of " + timeOnline);
             this.userOnlineTime.put(nick, timeOnline);
         }
 
@@ -448,7 +442,6 @@ public class AllmightyBot {
             // User has left so add their time
             int timeOnline = this.userOnlineTime.get(nick);
             timeOnline += (int) Utils.getDateDiff(joined, new Date(), TimeUnit.SECONDS);
-            logger.debug(nick + " parted and now has an online time of " + timeOnline);
             this.userOnlineTime.put(nick, timeOnline);
         }
 
