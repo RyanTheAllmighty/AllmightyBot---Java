@@ -22,6 +22,8 @@ import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.Utils;
 import org.pircbotx.hooks.events.MessageEvent;
 
+import java.util.List;
+
 public class EyeTimeCommand extends BaseCommand {
     public EyeTimeCommand(String name, int timeout) {
         super(name, timeout);
@@ -30,7 +32,13 @@ public class EyeTimeCommand extends BaseCommand {
     @Override
     public boolean run(AllmightyBot bot, MessageEvent event) {
         if (super.run(bot, event)) {
-            String nick = "ryantheallmighty";
+            List<String> parts = Utils.getCommandsArguments(1, event.getMessage(), true);
+
+            if (parts.size() != 1) {
+                return false;
+            }
+
+            String nick = parts.get(0).toLowerCase();
             int timeWatched = bot.timeInChannel(nick);
 
             if (timeWatched == 0) {
