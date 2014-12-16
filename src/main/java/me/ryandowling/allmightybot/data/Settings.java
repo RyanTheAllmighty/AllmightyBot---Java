@@ -21,6 +21,8 @@ package me.ryandowling.allmightybot.data;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 
+import java.util.Date;
+
 public class Settings {
     /**
      * If the initial setup has been completed
@@ -53,6 +55,11 @@ public class Settings {
     private boolean announceOnJoin;
 
     /**
+     * The time we last started the bot, used to continue online times when the bot fails
+     */
+    private Date startTime;
+
+    /**
      * Sets up some defaults where there is no settings file already there
      */
     public Settings() {
@@ -66,6 +73,7 @@ public class Settings {
 
     public void initialSetupComplete() {
         this.initialSetupComplete = true;
+        this.startTime = new Date();
     }
 
     public Configuration.Builder<PircBotX> getBuilder() {
@@ -112,5 +120,13 @@ public class Settings {
 
     public void setCastersName(String castersName) {
         this.castersName = castersName;
+    }
+
+    public Date getStartTime() {
+        return this.startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 }

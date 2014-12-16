@@ -26,7 +26,9 @@ import org.pircbotx.hooks.events.MessageEvent;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class HighlightCommand extends BaseCommand {
     public List<String> timesToHighlight = new ArrayList<>();
@@ -38,7 +40,7 @@ public class HighlightCommand extends BaseCommand {
     @Override
     public boolean run(AllmightyBot bot, MessageEvent event) {
         if (super.run(bot, event)) {
-            int uptime = (int) ((System.currentTimeMillis() - bot.startTime) / 1000);
+            int uptime = (int) Utils.getDateDiff(bot.getSettings().getStartTime(), new Date(), TimeUnit.SECONDS);
 
             timesToHighlight.add(Utils.timeConversionRaw(uptime));
 

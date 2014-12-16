@@ -64,7 +64,6 @@ public class AllmightyBot {
     public final static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Logger logger = LogManager.getLogger(App.class.getName());
     private static final String DATE = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-    public final long startTime = System.currentTimeMillis();
     private Settings settings;
     private PircBotX pirc;
 
@@ -125,6 +124,13 @@ public class AllmightyBot {
             } while (input == null);
 
             this.settings.initialSetupComplete();
+        }
+
+        if (this.settings.getStartTime() == null || Utils.getDateDiff(this.settings.getStartTime(), new Date(),
+                TimeUnit.HOURS) > 1) {
+            // It's been more than 1 hour since the last time the bot was started or it hasn't been started up yet, so
+            // this is a new stream
+            this.settings.setStartTime(new Date());
         }
 
         Configuration.Builder<PircBotX> config = this.settings.getBuilder();
