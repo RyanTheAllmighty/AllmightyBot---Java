@@ -20,20 +20,23 @@ package me.ryandowling.allmightybot.commands;
 
 import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.App;
-import me.ryandowling.allmightybot.Utils;
 import org.pircbotx.hooks.events.MessageEvent;
 
-public class UptimeCommand extends BaseCommand {
-    public UptimeCommand(String name, int timeout) {
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+public class TimeCommand extends BaseCommand {
+    public TimeCommand(String name, int timeout) {
         super(name, timeout);
     }
 
     @Override
     public boolean run(AllmightyBot bot, MessageEvent event) {
         if (super.run(bot, event)) {
-            int uptime = (int) ((System.currentTimeMillis() - bot.startTime) / 1000);
-            event.getChannel().send().message(App.INSTANCE.getSettings().getTwitchChannel() + " has been live for " +
-                    Utils.timeConversion(uptime));
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat dateFormater = new SimpleDateFormat("d/M/Y HH:mm:ss z");
+            event.getChannel().send().message("The current time for " + App.INSTANCE.getSettings().getTwitchChannel()
+                    + " is " + dateFormater.format(cal.getTime()));
             return true;
         }
 
