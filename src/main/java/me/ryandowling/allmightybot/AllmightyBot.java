@@ -163,18 +163,8 @@ public class AllmightyBot {
         loadCommands();
         loadUserOnlineTime();
         loadSpamWatchers();
+        loadEvents();
         loadInitialUsers();
-
-        // Load the events from a previous run for today if they exist
-        if (Files.exists(Utils.getEventsFile())) {
-            try {
-                Type listType = new TypeToken<ArrayList<Event>>() {
-                }.getType();
-                this.events = GSON.fromJson(FileUtils.readFileToString(Utils.getEventsFile().toFile()), listType);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
 
         Runnable r = new Runnable() {
             public void run() {
@@ -204,6 +194,19 @@ public class AllmightyBot {
         // Shut it all down if we are still connected
         if (this.pirc.isConnected()) {
             this.shutDown();
+        }
+    }
+
+    private void loadEvents() {
+        // Load the events from a previous run for today if they exist
+        if (Files.exists(Utils.getEventsFile())) {
+            try {
+                Type listType = new TypeToken<ArrayList<Event>>() {
+                }.getType();
+                this.events = GSON.fromJson(FileUtils.readFileToString(Utils.getEventsFile().toFile()), listType);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
