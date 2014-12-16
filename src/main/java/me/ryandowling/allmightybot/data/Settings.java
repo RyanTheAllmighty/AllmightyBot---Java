@@ -94,6 +94,10 @@ public class Settings {
         this.twitchChannel = twitchChannel;
     }
 
+    public String getTwitchUsername() {
+        return this.twitchUsername;
+    }
+
     public String getTwitchChannel() {
         return this.twitchChannel;
     }

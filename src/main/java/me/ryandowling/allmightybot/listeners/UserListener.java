@@ -18,12 +18,10 @@
 
 package me.ryandowling.allmightybot.listeners;
 
-import com.google.common.collect.ImmutableSortedSet;
 import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.App;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.pircbotx.User;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.KickEvent;
@@ -41,7 +39,7 @@ public class UserListener extends ListenerAdapter {
     @Override
     public void onJoin(JoinEvent event) throws Exception {
         super.onJoin(event);
-        if (event.getUser() != event.getBot().getUserBot()) {
+        if (!event.getUser().getNick().equalsIgnoreCase(bot.getSettings().getTwitchUsername())) {
             this.bot.userJoined(event.getUser().getNick());
         }
     }
@@ -49,7 +47,7 @@ public class UserListener extends ListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         super.onMessage(event);
-        if (event.getUser() != event.getBot().getUserBot()) {
+        if (!event.getUser().getNick().equalsIgnoreCase(bot.getSettings().getTwitchUsername())) {
             this.bot.userSpoke(event.getUser().getNick(), event.getMessage());
         }
     }
@@ -57,7 +55,7 @@ public class UserListener extends ListenerAdapter {
     @Override
     public void onPart(PartEvent event) throws Exception {
         super.onPart(event);
-        if (event.getUser() != event.getBot().getUserBot()) {
+        if (!event.getUser().getNick().equalsIgnoreCase(bot.getSettings().getTwitchUsername())) {
             this.bot.userParted(event.getUser().getNick(), false);
         }
     }
@@ -65,7 +63,7 @@ public class UserListener extends ListenerAdapter {
     @Override
     public void onKick(KickEvent event) throws Exception {
         super.onKick(event);
-        if (event.getUser() != event.getBot().getUserBot()) {
+        if (!event.getUser().getNick().equalsIgnoreCase(bot.getSettings().getTwitchUsername())) {
             this.bot.userParted(event.getUser().getNick(), true);
         }
     }

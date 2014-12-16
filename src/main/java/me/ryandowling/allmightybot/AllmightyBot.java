@@ -381,6 +381,10 @@ public class AllmightyBot {
             return 0;
         }
 
+        if (nick.equalsIgnoreCase(this.getSettings().getTwitchUsername())) {
+            return 0; // Bot should not be considered here
+        }
+
         if (!this.userOnlineTime.containsKey(nick)) {
             return 0;
         }
@@ -396,6 +400,10 @@ public class AllmightyBot {
         if (nick == null) {
             logger.debug("A null user joined!");
             return;
+        }
+
+        if (nick.equalsIgnoreCase(this.getSettings().getTwitchUsername())) {
+            return; // Bot should not be considered here
         }
 
         logger.debug("User " + nick + " joined!");
@@ -431,6 +439,10 @@ public class AllmightyBot {
         if (nick == null) {
             logger.debug("A null user parted!");
             return;
+        }
+
+        if (nick.equalsIgnoreCase(this.getSettings().getTwitchUsername())) {
+            return; // Bot should not be considered here
         }
 
         logger.debug("User " + nick + " parted!");
@@ -477,6 +489,10 @@ public class AllmightyBot {
         if (nick == null) {
             logger.debug("A null user spoke!");
             return;
+        }
+
+        if (nick.equalsIgnoreCase(this.getSettings().getTwitchUsername())) {
+            return; // Bot should not be considered here
         }
 
         logger.debug("User " + nick + " spoke!");
