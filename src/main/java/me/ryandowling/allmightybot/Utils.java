@@ -168,6 +168,10 @@ public class Utils {
         return getCoreDir().resolve("data").resolve(name.substring(name.lastIndexOf(".") + 1) + ".json");
     }
 
+    public static Path getStreamOnlineTimeFile() {
+        return getCoreDir().resolve("onlineTime.json");
+    }
+
     public static String readURLToString(String url) throws IOException {
         StringBuilder response = null;
         URL urll = new URL(url);

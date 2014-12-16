@@ -75,6 +75,7 @@ public class AllmightyBot {
     private Map<String, Map<String, Integer>> userOnlineTime;
     private Map<String, List<ChatLog>> userLogs;
     private List<Event> events;
+    private Map<String, Integer> streamOnlineTime;
 
     private List<Spam> spams;
 
@@ -166,11 +167,13 @@ public class AllmightyBot {
         this.userOnlineTime = new ConcurrentHashMap<>();
         this.userLogs = new ConcurrentHashMap<>();
         this.events = new ArrayList<>();
+        this.streamOnlineTime = new ConcurrentHashMap<>();
 
         this.spams = new ArrayList<>();
 
         loadCommands();
         loadUserOnlineTime();
+        loadStreamOnlineTime();
         loadSpamWatchers();
         loadEvents();
         loadInitialUsers();
@@ -310,6 +313,21 @@ public class AllmightyBot {
         }
     }
 
+    private void loadStreamOnlineTime() {
+        if (!Files.exists(Utils.getStreamOnlineTimeFile())) {
+            return;
+        }
+
+        try {
+            Type type = new TypeToken<Map<String, Integer>>() {
+            }.getType();
+            this.streamOnlineTime = GSON.fromJson(FileUtils.readFileToString(Utils.getStreamOnlineTimeFile().toFile()
+            ), type);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void loadSpamWatchers() {
         // Add all spam banning/timeout things
         try {
@@ -376,6 +394,19 @@ public class AllmightyBot {
 
             FileUtils.write(Utils.getEventsFile().toFile(), GSON.toJson(this.events));
             logger.debug("Events saved!");
+
+            // Calculate and add the time we've been online for today
+            if (this.streamOnlineTime.containsKey(DATE)) {
+                int timeOnline = this.streamOnlineTime.get(DATE);
+                timeOnline += Utils.getDateDiff(this.settings.getStartTime(), new Date(), TimeUnit.SECONDS);
+                this.streamOnlineTime.put(DATE, timeOnline);
+            } else {
+                int timeOnline = (int) Utils.getDateDiff(this.settings.getStartTime(), new Date(), TimeUnit.SECONDS);
+                this.streamOnlineTime.put(DATE, timeOnline);
+            }
+
+            FileUtils.write(Utils.getStreamOnlineTimeFile().toFile(), GSON.toJson(this.streamOnlineTime));
+            logger.debug("Online Time saved!");
         } catch (IOException e) {
             e.printStackTrace();
         }
