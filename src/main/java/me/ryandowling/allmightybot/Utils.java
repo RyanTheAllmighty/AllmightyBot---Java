@@ -18,6 +18,9 @@
 
 package me.ryandowling.allmightybot;
 
+import me.ryandowling.allmightybot.commands.Command;
+import me.ryandowling.allmightybot.commands.WorldCommand;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -138,5 +141,10 @@ public class Utils {
             list.remove(0);
         }
         return list;
+    }
+
+    public static Path getCommandDataFile(Command worldCommand) {
+        String name = worldCommand.getClass().getName();
+        return getCoreDir().resolve("data").resolve(name.substring(name.lastIndexOf(".") + 1) + ".json");
     }
 }

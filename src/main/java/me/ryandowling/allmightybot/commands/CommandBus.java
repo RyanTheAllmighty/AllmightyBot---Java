@@ -35,4 +35,8 @@ public class CommandBus {
     public static void removeAll() {
         commands.clear();
     }
+
+    public static Map<String, Command> getAll() {
+        return commands;
+    }
 }

@@ -209,6 +209,8 @@ public class AllmightyBot {
 
                         commandToAdd.setLevel(command.getLevel());
 
+                        commandToAdd.load(); // Load anything the command requires
+
                         CommandBus.add(commandToAdd);
                         logger.debug("Added command !" + command.getName() + " of type " + command.getType());
                     } catch (ClassNotFoundException e) {
@@ -259,6 +261,11 @@ public class AllmightyBot {
         this.removeUserListener();
         this.removeCommandListener();
         this.removeSpamListener();
+
+        for (Map.Entry<String, Command> entry : CommandBus.getAll().entrySet()) {
+            Command command = entry.getValue();
+            command.save();
+        }
 
         try {
             FileUtils.write(Utils.getSettingsFile().toFile(), GSON.toJson(this.settings));

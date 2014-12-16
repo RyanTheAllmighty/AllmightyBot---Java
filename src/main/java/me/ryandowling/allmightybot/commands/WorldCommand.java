@@ -30,6 +30,8 @@ public class WorldCommand extends BaseCommand {
     private static int worldNumber;
     private static String worldSeed;
     private static boolean hasBeenSet = false;
+    private static boolean hasLoaded = false;
+    private static boolean hasSaved = false;
 
     public WorldCommand(String name, WorldType worldType, int timeout) {
         super(name, timeout);
@@ -66,6 +68,30 @@ public class WorldCommand extends BaseCommand {
                             "'" + this.worldSeed + "'");
                     break;
             }
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean load() {
+        if (super.load() && !hasLoaded) {
+            hasLoaded = true;
+            System.out.println("Loading " + Utils.getCommandDataFile(this).toAbsolutePath());
+
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean save() {
+        if (super.save() && !hasSaved) {
+            hasSaved = true;
+            System.out.println("Saving " + Utils.getCommandDataFile(this).toAbsolutePath());
+
             return true;
         }
 

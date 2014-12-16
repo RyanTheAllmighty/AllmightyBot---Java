@@ -122,4 +122,12 @@ public abstract class BaseCommand implements Command {
     public boolean run(AllmightyBot bot, MessageEvent event) {
         return (canRun(event) && canAccess(event));
     }
+
+    public boolean load() {
+        return true;
+    }
+
+    public boolean save() {
+        return true;
+    }
 }

@@ -26,4 +26,6 @@ public interface Command {
     public String getName();
     public void setLevel(CommandLevel level);
     public boolean run(AllmightyBot bot, MessageEvent event);
+    public boolean load();
+    public boolean save();
 }
