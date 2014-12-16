@@ -35,7 +35,7 @@ public class TimeCommand extends BaseCommand {
         if (super.run(bot, event)) {
             Calendar cal = Calendar.getInstance();
             SimpleDateFormat dateFormater = new SimpleDateFormat("d/M/Y HH:mm:ss z");
-            event.getChannel().send().message("The current time for " + App.INSTANCE.getSettings().getTwitchChannel()
+            event.getChannel().send().message("The current time for " + App.INSTANCE.getSettings().getCastersName()
                     + " is " + dateFormater.format(cal.getTime()));
             return true;
         }

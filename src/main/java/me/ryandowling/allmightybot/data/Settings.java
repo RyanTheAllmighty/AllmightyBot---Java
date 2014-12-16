@@ -43,6 +43,11 @@ public class Settings {
     private String twitchChannel;
 
     /**
+     * The name of the caster
+     */
+    private String castersName;
+
+    /**
      * If the bot should announce itself when it joins
      */
     private boolean announceOnJoin;
@@ -95,5 +100,13 @@ public class Settings {
 
     public boolean shouldAnnounceOnJoin() {
         return this.announceOnJoin;
+    }
+
+    public String getCastersName() {
+        return this.castersName;
+    }
+
+    public void setCastersName(String castersName) {
+        this.castersName = castersName;
     }
 }

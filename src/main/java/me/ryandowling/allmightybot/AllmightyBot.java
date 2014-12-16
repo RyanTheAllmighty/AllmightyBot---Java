@@ -106,9 +106,16 @@ public class AllmightyBot {
             } while (input == null);
 
             do {
-                input = JOptionPane.showInputDialog(null, "Please enter the username of the Twitch user " + "whose " +
-                        "channel you wish to join", "User To Join", JOptionPane.QUESTION_MESSAGE);
+                input = JOptionPane.showInputDialog(null, "Please enter the username of the Twitch user whose " +
+                        "channel you wish to join! Must be in all lowercase", "User To Join", JOptionPane
+                        .QUESTION_MESSAGE);
                 settings.setTwitchChannel(input);
+            } while (input == null);
+
+            do {
+                input = JOptionPane.showInputDialog(null, "Please enter the name of the caster to display when " +
+                        "referencing them", "Casters Name", JOptionPane.QUESTION_MESSAGE);
+                settings.setCastersName(input);
             } while (input == null);
 
             this.settings.initialSetupComplete();

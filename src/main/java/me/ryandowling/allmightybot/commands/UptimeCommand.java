@@ -32,7 +32,7 @@ public class UptimeCommand extends BaseCommand {
     public boolean run(AllmightyBot bot, MessageEvent event) {
         if (super.run(bot, event)) {
             int uptime = (int) ((System.currentTimeMillis() - bot.startTime) / 1000);
-            event.getChannel().send().message(App.INSTANCE.getSettings().getTwitchChannel() + " has been live for " +
+            event.getChannel().send().message(App.INSTANCE.getSettings().getCastersName() + " has been live for " +
                     Utils.timeConversion(uptime));
             return true;
         }
