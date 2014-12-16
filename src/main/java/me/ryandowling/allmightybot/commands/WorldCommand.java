@@ -89,7 +89,6 @@ public class WorldCommand extends BaseCommand {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("Default!");
             worldDetails = new WorldDetails(); // If no loading then set a default
         }
     }
