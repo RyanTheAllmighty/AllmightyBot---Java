@@ -38,7 +38,7 @@ public class StartupListener extends ListenerAdapter {
         super.onJoin(event);
 
         if (event.getUser() == event.getBot().getUserBot()) {
-            //event.getChannel().send().message(".unhost"); // Unhost when we start up
+            event.getChannel().send().message(".unhost"); // Unhost when we start up
 
             if (this.bot.getSettings().shouldAnnounceOnJoin()) {
                 event.getChannel().send().message("Never fear, AllmightyBot is here!");

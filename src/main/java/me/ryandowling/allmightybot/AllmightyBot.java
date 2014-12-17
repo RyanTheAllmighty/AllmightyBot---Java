@@ -83,6 +83,7 @@ public class AllmightyBot {
     private UserListener userListener = new UserListener(this);
     private CommandListener commandListener = new CommandListener(this);
     private SpamListener spamListener = new SpamListener(this);
+    private Map<String, Integer> topUsers;
 
     public AllmightyBot() {
         if (Files.exists(Utils.getSettingsFile())) {
