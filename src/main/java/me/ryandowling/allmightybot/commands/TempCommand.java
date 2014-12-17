@@ -29,7 +29,7 @@ public class TempCommand {
     private CommandLevel level;
     private SeedType seedType;
     private WorldType worldType;
-    private int timeout = 10;
+    private int timeout = 3;
 
     public String getType() {
         return this.type;
