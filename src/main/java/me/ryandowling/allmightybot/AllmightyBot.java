@@ -127,10 +127,7 @@ public class AllmightyBot {
             this.settings.initialSetupComplete();
         }
 
-        if (this.settings.getStartTime() == null || Utils.getDateDiff(this.settings.getStartTime(), new Date(),
-                TimeUnit.HOURS) > 1) {
-            // It's been more than 1 hour since the last time the bot was started or it hasn't been started up yet, so
-            // this is a new stream
+        if (this.settings.getStartTime() == null) {
             this.settings.setStartTime(new Date());
         }
 
@@ -395,15 +392,7 @@ public class AllmightyBot {
             FileUtils.write(Utils.getEventsFile().toFile(), GSON.toJson(this.events));
             logger.debug("Events saved!");
 
-            // Calculate and add the time we've been online for today
-            if (this.streamOnlineTime.containsKey(DATE)) {
-                int timeOnline = this.streamOnlineTime.get(DATE);
-                timeOnline += Utils.getDateDiff(this.settings.getStartTime(), new Date(), TimeUnit.SECONDS);
-                this.streamOnlineTime.put(DATE, timeOnline);
-            } else {
-                int timeOnline = (int) Utils.getDateDiff(this.settings.getStartTime(), new Date(), TimeUnit.SECONDS);
-                this.streamOnlineTime.put(DATE, timeOnline);
-            }
+            saveStreamOnlineTime();
 
             FileUtils.write(Utils.getStreamOnlineTimeFile().toFile(), GSON.toJson(this.streamOnlineTime));
             logger.debug("Online Time saved!");
@@ -414,6 +403,12 @@ public class AllmightyBot {
         if (this.pirc.isConnected()) {
             this.pirc.sendIRC().quitServer();
         }
+    }
+
+    private void saveStreamOnlineTime() {
+        // Calculate and add the time we've been online for today
+        int timeOnline = (int) Utils.getDateDiff(this.settings.getStartTime(), new Date(), TimeUnit.SECONDS);
+        this.streamOnlineTime.put(DATE, timeOnline);
     }
 
     public int timeInChannel(String nick) {
@@ -641,5 +636,19 @@ public class AllmightyBot {
         this.removeSpamListener();
 
         this.shutDown = true;
+    }
+
+    public int getTotalLiveTime(boolean forceSave) {
+        int timeOnline = 0;
+
+        if (forceSave) {
+            saveStreamOnlineTime();
+        }
+
+        for (Map.Entry<String, Integer> entry : this.streamOnlineTime.entrySet()) {
+            timeOnline += entry.getValue();
+        }
+
+        return timeOnline;
     }
 }
