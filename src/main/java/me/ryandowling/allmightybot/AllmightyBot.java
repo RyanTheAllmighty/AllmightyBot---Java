@@ -540,7 +540,7 @@ public class AllmightyBot {
             Map<String, Integer> timeOnline = this.userOnlineTime.get(key);
             int online = 0;
 
-            if (timeOnline != null) {
+            if (timeOnline != null && timeOnline.containsKey(DATE)) {
                 online = timeOnline.get(DATE);
                 online += (int) Utils.getDateDiff(value, new Date(), TimeUnit.SECONDS);
             } else {
