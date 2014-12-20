@@ -21,6 +21,7 @@ package me.ryandowling.allmightybot;
 import me.ryandowling.allmightybot.commands.Command;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -170,6 +171,14 @@ public class Utils {
 
     public static Path getStreamOnlineTimeFile() {
         return getCoreDir().resolve("onlineTime.json");
+    }
+
+    public static Path getNowPlayingFile() {
+        return getCoreDir().resolve("nowplaying.txt");
+    }
+
+    public static Path getNowPlayingFileFile() {
+        return getCoreDir().resolve("nowplayingfile.txt");
     }
 
     public static String readURLToString(String url) throws IOException {
