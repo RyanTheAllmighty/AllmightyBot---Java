@@ -60,6 +60,16 @@ public class Settings {
     private Date startTime;
 
     /**
+     * The token for the Twitch API
+     */
+    private String twitchApiToken;
+
+    /**
+     * The client ID of the app for the Twitch API
+     */
+    private String twitchApiClientID;
+
+    /**
      * Sets up some defaults where there is no settings file already there
      */
     public Settings() {
@@ -128,5 +138,21 @@ public class Settings {
 
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
+    }
+
+    public String getTwitchApiToken() {
+        return this.twitchApiToken;
+    }
+
+    public void setTwitchApiToken(String twitchApiToken) {
+        this.twitchApiToken = twitchApiToken;
+    }
+
+    public String getTwitchApiClientID() {
+        return this.twitchApiClientID;
+    }
+
+    public void setTwitchApiClientID(String twitchApiClientID) {
+        this.twitchApiClientID = twitchApiClientID;
     }
 }

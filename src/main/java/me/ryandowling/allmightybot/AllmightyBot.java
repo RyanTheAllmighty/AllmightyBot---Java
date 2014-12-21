@@ -36,6 +36,7 @@ import me.ryandowling.allmightybot.listeners.CommandListener;
 import me.ryandowling.allmightybot.listeners.SpamListener;
 import me.ryandowling.allmightybot.listeners.StartupListener;
 import me.ryandowling.allmightybot.listeners.UserListener;
+import me.ryandowling.allmightybot.utils.TwitchAPI;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -113,6 +114,18 @@ public class AllmightyBot {
             } while (input == null);
 
             do {
+                input = JOptionPane.showInputDialog(null, "Please enter the API token of the Twitch user " + "acting " +
+                        "as the bot", "Twitch API Token", JOptionPane.QUESTION_MESSAGE);
+                settings.setTwitchApiToken(input);
+            } while (input == null);
+
+            do {
+                input = JOptionPane.showInputDialog(null, "Please enter the API client ID of the application using "
+                        + "the Twitch API", "Twitch API Client ID", JOptionPane.QUESTION_MESSAGE);
+                settings.setTwitchApiClientID(input);
+            } while (input == null);
+
+            do {
                 input = JOptionPane.showInputDialog(null, "Please enter the username of the Twitch user whose " +
                         "channel you wish to join! Must be in all lowercase", "User To Join", JOptionPane
                         .QUESTION_MESSAGE);
@@ -160,6 +173,9 @@ public class AllmightyBot {
 
     public void startUp() {
         logger.info("Bot starting up!");
+
+        // Check the Twitch API token to make sure it's all good
+        TwitchAPI.checkToken();
 
         this.userJoined = new ConcurrentHashMap<>();
         this.userOnlineTime = new ConcurrentHashMap<>();
