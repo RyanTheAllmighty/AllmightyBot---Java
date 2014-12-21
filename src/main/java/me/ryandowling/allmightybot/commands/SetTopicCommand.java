@@ -20,40 +20,42 @@ package me.ryandowling.allmightybot.commands;
 
 import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.App;
+import me.ryandowling.allmightybot.Utils;
 import me.ryandowling.allmightybot.utils.TwitchAPI;
 import org.json.simple.parser.ParseException;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import java.io.IOException;
+import java.util.List;
 
-public class TopicCommand extends BaseCommand {
-    private String topic;
-
-    public TopicCommand(String name, int timeout) {
+public class SetTopicCommand extends BaseCommand {
+    public SetTopicCommand(String name, int timeout) {
         super(name, timeout);
-        setChannelTopic();
     }
 
     @Override
     public boolean run(AllmightyBot bot, MessageEvent event) {
         if (super.run(bot, event)) {
-            event.getChannel().send().message("The channel's topic is '" + this.topic + "'");
-            return true;
+            List<String> arguments = Utils.getCommandsArguments(1, event.getMessage(), true);
+
+            String topic = arguments.get(0);
+
+            try {
+                TwitchAPI.setTopic(App.INSTANCE.getSettings().getTwitchChannel(), topic);
+
+                event.getChannel().send().message("The channel's topic is now '" + topic + "'");
+
+                TopicCommand command = (TopicCommand) CommandBus.findByClassName(TopicCommand.class.getName());
+                if (command != null) {
+                    command.setChannelTopic(topic);
+                }
+
+                return true;
+            } catch (IOException | ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         return false;
-    }
-
-    public void setChannelTopic() {
-        try {
-            this.topic = TwitchAPI.getTopic(App.INSTANCE.getSettings().getTwitchChannel());
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
-            this.topic = "ERROR!";
-        }
-    }
-
-    public void setChannelTopic(String topic) {
-        this.topic = topic;
     }
 }

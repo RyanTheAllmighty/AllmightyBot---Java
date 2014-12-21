@@ -18,10 +18,12 @@
 
 package me.ryandowling.allmightybot.utils;
 
+import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.App;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -49,7 +51,7 @@ public class TwitchAPIRequest {
     }
 
     public String get() throws IOException {
-        this.connect();
+        this.connect("GET");
 
         InputStream in = this.connection.getInputStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -67,9 +69,33 @@ public class TwitchAPIRequest {
         return response.toString();
     }
 
-    private void connect() throws IOException {
+    public String put(Object object) throws IOException {
+        this.connect("PUT", object);
+
+        InputStream in = this.connection.getInputStream();
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        StringBuilder response = new StringBuilder();
+        String inputLine;
+
+        while ((inputLine = br.readLine()) != null) {
+            response.append(inputLine);
+        }
+
+        in.close();
+
+        this.disconnect();
+
+        return response.toString();
+    }
+
+    private void connect(String requestMethod) throws IOException {
+        this.connect(requestMethod, null);
+    }
+
+    private void connect(String requestMethod, Object object) throws IOException {
         URL url = new URL(TWITCH_API_BASE + this.path);
         this.connection = (HttpsURLConnection) url.openConnection();
+        this.connection.setRequestMethod(requestMethod);
         this.connection.setUseCaches(false);
         this.connection.setDefaultUseCaches(false);
         this.connection.setRequestProperty("Cache-Control", "no-store,max-age=0,no-cache");
@@ -77,8 +103,23 @@ public class TwitchAPIRequest {
         this.connection.setRequestProperty("Pragma", "no-cache");
         this.connection.setRequestProperty("Authorization", "OAuth " + this.accessToken);
         this.connection.setRequestProperty("Client-ID", "OAuth " + this.clientID);
-        this.connection.setRequestProperty("Accept", "application/vnd.twitchtv.v2+json");
+        this.connection.setRequestProperty("Accept", "application/vnd.twitchtv.v3+json");
+        this.connection.setRequestProperty("Content-Type", "application/json");
+
+        if (object != null) {
+            this.connection.setRequestProperty("Content-Length", "" + AllmightyBot.GSON.toJson(object).getBytes()
+                    .length);
+            connection.setDoOutput(true);
+        }
+
         this.connection.connect();
+
+        if (object != null) {
+            DataOutputStream writer = new DataOutputStream(connection.getOutputStream());
+            writer.write(AllmightyBot.GSON.toJson(object).getBytes());
+            writer.flush();
+            writer.close();
+        }
     }
 
     private void disconnect() {
