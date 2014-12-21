@@ -28,15 +28,17 @@ import java.io.IOException;
 
 public class TopicCommand extends BaseCommand {
     private String topic;
+    private long lastUpdated;
 
     public TopicCommand(String name, int timeout) {
         super(name, timeout);
-        setChannelTopic();
+        checkChannelTopic();
     }
 
     @Override
     public boolean run(AllmightyBot bot, MessageEvent event) {
         if (super.run(bot, event)) {
+            checkChannelTopic();
             event.getChannel().send().message("The channel's topic is '" + this.topic + "'");
             return true;
         }
@@ -44,9 +46,17 @@ public class TopicCommand extends BaseCommand {
         return false;
     }
 
-    public void setChannelTopic() {
+    public void checkChannelTopic() {
+        if(this.lastUpdated > (System.currentTimeMillis() - ((60 * 5) * 1000))) {
+            // Only check the API if it's been at least 5 minutes
+            System.out.println("Topic is coming from cache!");
+            return;
+        }
+
         try {
+            System.out.println("Topic is coming from API!");
             this.topic = TwitchAPI.getTopic(App.INSTANCE.getSettings().getTwitchChannel());
+            this.lastUpdated = System.currentTimeMillis();
         } catch (IOException | ParseException e) {
             e.printStackTrace();
             this.topic = "ERROR!";
