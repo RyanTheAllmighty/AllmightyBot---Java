@@ -54,4 +54,14 @@ public class TwitchAPI {
 
         System.out.println("Finished checking Twitch API token");
     }
+
+    public static String getTopic(String username) throws IOException, ParseException {
+        TwitchAPIRequest request = new TwitchAPIRequest("/channels/" + username);
+
+        String response = request.get();
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) parser.parse(response);
+
+        return (String) jsonObject.get("status");
+    }
 }
