@@ -33,6 +33,7 @@ import me.ryandowling.allmightybot.data.Spam;
 import me.ryandowling.allmightybot.data.TwitchChatters;
 import me.ryandowling.allmightybot.data.WorldType;
 import me.ryandowling.allmightybot.listeners.CommandListener;
+import me.ryandowling.allmightybot.listeners.LinkListener;
 import me.ryandowling.allmightybot.listeners.SpamListener;
 import me.ryandowling.allmightybot.listeners.StartupListener;
 import me.ryandowling.allmightybot.listeners.UserListener;
@@ -80,10 +81,14 @@ public class AllmightyBot {
 
     private List<Spam> spams;
 
+    private List<String> allowedLinks;
+
     private StartupListener startupListener = new StartupListener(this);
     private UserListener userListener = new UserListener(this);
     private CommandListener commandListener = new CommandListener(this);
     private SpamListener spamListener = new SpamListener(this);
+    private LinkListener linkListener = new LinkListener(this);
+
     private Map<String, Integer> topUsers;
 
     public AllmightyBot() {
@@ -152,6 +157,7 @@ public class AllmightyBot {
         config.addListener(this.userListener);
         config.addListener(this.commandListener);
         config.addListener(this.spamListener);
+        config.addListener(this.linkListener);
 
         addShutdownHook();
 
@@ -184,11 +190,13 @@ public class AllmightyBot {
         this.streamOnlineTime = new ConcurrentHashMap<>();
 
         this.spams = new ArrayList<>();
+        this.allowedLinks = new ArrayList<>();
 
         loadCommands();
         loadUserOnlineTime();
         loadStreamOnlineTime();
         loadSpamWatchers();
+        loadAllowedLinks();
         loadEvents();
         loadInitialUsers();
 
@@ -348,6 +356,17 @@ public class AllmightyBot {
             Type listType = new TypeToken<ArrayList<Spam>>() {
             }.getType();
             this.spams = GSON.fromJson(FileUtils.readFileToString(Utils.getSpamFile().toFile()), listType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadAllowedLinks() {
+        // Add all allowed links
+        try {
+            Type listType = new TypeToken<ArrayList<String>>() {
+            }.getType();
+            this.allowedLinks = GSON.fromJson(FileUtils.readFileToString(Utils.getLinksFile().toFile()), listType);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -631,6 +650,13 @@ public class AllmightyBot {
         }
     }
 
+    public void removeCommandListener() {
+        if (this.commandListener != null) {
+            this.pirc.getConfiguration().getListenerManager().removeListener(this.commandListener);
+            this.commandListener = null;
+        }
+    }
+
     public void removeSpamListener() {
         if (this.spamListener != null) {
             this.pirc.getConfiguration().getListenerManager().removeListener(this.spamListener);
@@ -638,10 +664,10 @@ public class AllmightyBot {
         }
     }
 
-    public void removeCommandListener() {
-        if (this.commandListener != null) {
-            this.pirc.getConfiguration().getListenerManager().removeListener(this.commandListener);
-            this.commandListener = null;
+    public void removeLinkListener() {
+        if (this.linkListener != null) {
+            this.pirc.getConfiguration().getListenerManager().removeListener(this.linkListener);
+            this.linkListener = null;
         }
     }
 
@@ -651,6 +677,7 @@ public class AllmightyBot {
         this.removeUserListener();
         this.removeCommandListener();
         this.removeSpamListener();
+        this.removeLinkListener();
 
         this.shutDown = true;
     }
@@ -667,5 +694,9 @@ public class AllmightyBot {
         }
 
         return timeOnline;
+    }
+
+    public List<String> getAllowedLinks() {
+        return this.allowedLinks;
     }
 }
