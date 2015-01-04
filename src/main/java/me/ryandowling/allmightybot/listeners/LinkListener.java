@@ -19,6 +19,7 @@
 package me.ryandowling.allmightybot.listeners;
 
 import me.ryandowling.allmightybot.AllmightyBot;
+import me.ryandowling.allmightybot.commands.PermitCommand;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 
@@ -26,8 +27,8 @@ import java.util.regex.Pattern;
 
 public class LinkListener extends ListenerAdapter {
     private AllmightyBot bot;
-    private static final Pattern LINK_PATTERN = Pattern.compile(".*(https?://)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*" +
-            ".[a-z]{3}.?([a-z]+)" + "?" + ".*", Pattern.CASE_INSENSITIVE);
+    private static final String regex = ".*(https?://)?(www.)?([a-zA-Z0-9]+)\\.[a-zA-Z0-9]*.[a-z].?([a-z]+)?.*";
+    private static final Pattern LINK_PATTERN = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 
     public LinkListener(AllmightyBot bot) {
         this.bot = bot;
@@ -38,7 +39,8 @@ public class LinkListener extends ListenerAdapter {
         super.onMessage(event);
 
         if (event.getUser() == event.getBot().getUserBot() || event.getChannel().isOp(event.getUser()) ||
-                !LINK_PATTERN.matcher(event.getMessage()).matches()) {
+                !LINK_PATTERN.matcher(event.getMessage()).matches() || PermitCommand.hasPermit(event.getUser()
+                .getNick())) {
             return;
         }
 

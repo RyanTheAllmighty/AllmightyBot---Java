@@ -21,10 +21,8 @@ package me.ryandowling.allmightybot;
 import me.ryandowling.allmightybot.commands.Command;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
@@ -108,6 +106,10 @@ public class Utils {
     }
 
     public static String timeConversion(int totalSeconds) {
+        return timeConversion(totalSeconds, false);
+    }
+
+    public static String timeConversion(int totalSeconds, boolean noHours) {
         final int MINUTES_IN_AN_HOUR = 60;
         final int SECONDS_IN_A_MINUTE = 60;
 
@@ -116,7 +118,7 @@ public class Utils {
         int minutes = totalMinutes % MINUTES_IN_AN_HOUR;
         int hours = totalMinutes / MINUTES_IN_AN_HOUR;
 
-        return hours + " hours, " + minutes + " minutes and " + seconds + " seconds";
+        return (noHours ? "" : hours + " hours, ") + minutes + " minutes and " + seconds + " seconds";
     }
 
     public static String timeConversionRaw(int totalSeconds) {
