@@ -146,10 +146,6 @@ public class AllmightyBot {
             this.settings.initialSetupComplete();
         }
 
-        if (this.settings.getStartTime() == null) {
-            this.settings.setStartTime(new Date());
-        }
-
         Configuration.Builder<PircBotX> config = this.settings.getBuilder();
 
         // Register the different listeners
@@ -177,8 +173,15 @@ public class AllmightyBot {
      * Starts the bot up
      */
 
-    public void startUp() {
+    public void startUp(boolean newStream) {
         logger.info("Bot starting up!");
+
+        if (newStream) {
+            logger.info("This is a new stream!");
+            this.settings.setStartTime(new Date());
+        } else {
+            logger.info("This is continuing an existing stream!");
+        }
 
         // Check the Twitch API token to make sure it's all good
         TwitchAPI.checkToken();

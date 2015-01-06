@@ -25,6 +25,12 @@ public class App {
     public static final AllmightyBot INSTANCE = new AllmightyBot();
 
     public static void main(String[] args) {
-        INSTANCE.startUp();
+        boolean newStream = false;
+
+        if (args.length == 1) {
+            newStream = args[0].equalsIgnoreCase("new");
+        }
+
+        INSTANCE.startUp(newStream);
     }
 }
