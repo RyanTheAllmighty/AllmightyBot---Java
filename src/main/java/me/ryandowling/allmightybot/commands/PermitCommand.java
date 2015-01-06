@@ -22,9 +22,6 @@ import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.Utils;
 import org.pircbotx.hooks.events.MessageEvent;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +54,7 @@ public class PermitCommand extends BaseCommand {
             permits.put(username, permittedUntil);
 
             event.getChannel().send().message(username + " has been permitted to post links for " + Utils
-                    .timeConversion(seconds, true) + "!");
+                    .timeConversion(seconds) + "!");
             return true;
         }
 
