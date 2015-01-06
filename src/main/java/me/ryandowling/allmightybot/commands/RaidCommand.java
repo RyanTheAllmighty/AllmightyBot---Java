@@ -60,8 +60,6 @@ public class RaidCommand extends BaseCommand {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            return false;
         }
 
         return false;

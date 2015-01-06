@@ -90,6 +90,10 @@ public class TwitchAPI {
 
         StreamResponse response = AllmightyBot.GSON.fromJson(request.get(), StreamResponse.class);
 
+        if (response == null || response.getStream() == null) {
+            return 0;
+        }
+
         return response.getStream().getViewers();
     }
 }
