@@ -51,4 +51,14 @@ public class CommandBus {
 
         return null;
     }
+
+    public static Command findByCommandName(String commandName) {
+        for (Map.Entry<String, Command> entry : commands.entrySet()) {
+            if (entry.getKey().equalsIgnoreCase(commandName)) {
+                return entry.getValue();
+            }
+        }
+
+        return null;
+    }
 }

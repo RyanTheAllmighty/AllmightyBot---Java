@@ -29,6 +29,7 @@ public class TempCommand {
     private CommandLevel level;
     private SeedType seedType;
     private WorldType worldType;
+    private String aliasedTo;
     private int timeout = 3;
 
     public String getType() {
@@ -59,6 +60,10 @@ public class TempCommand {
         return this.worldType;
     }
 
+    public String getAliasedTo() {
+        return this.aliasedTo;
+    }
+
     public int getTimeout() {
         return this.timeout;
     }
@@ -69,5 +74,9 @@ public class TempCommand {
 
     public boolean isWorldCommand() {
         return this.worldType != null;
+    }
+
+    public boolean isAliasCommand() {
+        return this.aliasedTo != null;
     }
 }

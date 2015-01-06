@@ -289,6 +289,10 @@ public class AllmightyBot {
                             commandConstructor = commandClass.getConstructor(String.class, WorldType.class, int.class);
                             commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
                                     .getWorldType(), command.getTimeout());
+                        } else if (command.isAliasCommand()) {
+                            commandConstructor = commandClass.getConstructor(String.class, String.class, int.class);
+                            commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
+                                    .getAliasedTo(), command.getTimeout());
                         } else if (command.hasReply()) {
                             commandConstructor = commandClass.getConstructor(String.class, String.class, int.class);
                             commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
