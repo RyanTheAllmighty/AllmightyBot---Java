@@ -22,9 +22,7 @@ import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.Utils;
 import org.pircbotx.hooks.events.MessageEvent;
 
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class EyeTimeCommand extends BaseCommand {
     public EyeTimeCommand(String name, int timeout) {
@@ -42,11 +40,11 @@ public class EyeTimeCommand extends BaseCommand {
 
             String nick = parts.get(0).toLowerCase();
             int timeWatched = bot.timeInChannel(nick);
+            int uptime = bot.getTotalLiveTime(true);
 
             if (timeWatched == 0) {
                 event.getChannel().send().message("The user " + nick + " has not been in the channel before!");
             } else {
-                int uptime = (int) Utils.getDateDiff(bot.getSettings().getStartTime(), new Date(), TimeUnit.SECONDS);
                 double percent = (timeWatched * 1.0 / bot.getTotalLiveTime(true) * 1.0) * 100.0;
                 event.getChannel().send().message("The user " + nick + " has been in the channel for " + Utils
                         .timeConversion(timeWatched) + " while the streamer has been online for " + Utils
