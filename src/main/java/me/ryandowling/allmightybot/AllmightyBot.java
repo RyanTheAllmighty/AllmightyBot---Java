@@ -179,6 +179,7 @@ public class AllmightyBot {
         if (newStream) {
             logger.info("This is a new stream!");
             this.settings.setStartTime(new Date());
+            this.saveSettings();
         } else {
             logger.info("This is continuing an existing stream!");
         }
@@ -399,9 +400,7 @@ public class AllmightyBot {
         }
 
         try {
-            FileUtils.write(Utils.getSettingsFile().toFile(), GSON.toJson(this.settings));
-            logger.debug("Settings saved!");
-
+            saveSettings();
             saveAllOnlineTime();
 
             for (Map.Entry<String, Map<String, Integer>> entry : this.userOnlineTime.entrySet()) {
@@ -441,6 +440,15 @@ public class AllmightyBot {
 
         if (this.pirc.isConnected()) {
             this.pirc.sendIRC().quitServer();
+        }
+    }
+
+    private void saveSettings() {
+        try {
+            FileUtils.write(Utils.getSettingsFile().toFile(), GSON.toJson(this.settings));
+            logger.debug("Settings saved!");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
