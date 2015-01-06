@@ -24,6 +24,7 @@ import me.ryandowling.allmightybot.Utils;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class UptimeCommand extends BaseCommand {
@@ -34,9 +35,34 @@ public class UptimeCommand extends BaseCommand {
     @Override
     public boolean run(AllmightyBot bot, MessageEvent event) {
         if (super.run(bot, event)) {
-            int uptime = (int) Utils.getDateDiff(bot.getSettings().getStartTime(), new Date(), TimeUnit.SECONDS);
+            List<String> arguments;
+            String period = "";
+
+            try {
+                arguments = Utils.getCommandsArguments(1, event.getMessage(), true);
+                period = arguments.get(0);
+            } catch (StringIndexOutOfBoundsException ignored) {
+            }
+
+            period = period.toLowerCase();
+
+            int uptime;
+            String timePeriodString;
+
+            switch (period) {
+                case "all":
+                    uptime = bot.getTotalLiveTime(true);
+                    timePeriodString = "this year";
+                    break;
+                default:
+                    uptime = (int) Utils.getDateDiff(bot.getSettings().getStartTime(), new Date(), TimeUnit.SECONDS);
+                    timePeriodString = "today";
+                    break;
+            }
+
+
             event.getChannel().send().message(App.INSTANCE.getSettings().getCastersName() + " has been live for " +
-                    Utils.timeConversion(uptime));
+                    Utils.timeConversion(uptime) + " " + timePeriodString + "!");
             return true;
         }
 
