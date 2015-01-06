@@ -70,6 +70,11 @@ public class Settings {
     private String twitchApiClientID;
 
     /**
+     * The client ID of the app for the Twitch API
+     */
+    private boolean timeoutLinks;
+
+    /**
      * Sets up some defaults where there is no settings file already there
      */
     public Settings() {
@@ -84,6 +89,7 @@ public class Settings {
     public void initialSetupComplete() {
         this.initialSetupComplete = true;
         this.startTime = new Date();
+        this.timeoutLinks = true;
     }
 
     public Configuration.Builder<PircBotX> getBuilder() {
@@ -154,5 +160,13 @@ public class Settings {
 
     public void setTwitchApiClientID(String twitchApiClientID) {
         this.twitchApiClientID = twitchApiClientID;
+    }
+
+    public boolean shouldTimeoutLinks() {
+        return this.timeoutLinks;
+    }
+
+    public void setTimeoutLinks(boolean timeoutLinks) {
+        this.timeoutLinks = timeoutLinks;
     }
 }

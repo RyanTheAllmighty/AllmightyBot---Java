@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 
 public class LinkListener extends ListenerAdapter {
     private AllmightyBot bot;
-    private static final String regex = ".*(https?://)?(www.)?([a-zA-Z0-9]+)\\.[a-zA-Z0-9]*.[a-z].?([a-z]+)?.*";
+    private static final String regex = "\\b(https?://)?(www.)?([a-zA-Z0-9]+)\\.[a-zA-Z0-9]*.[a-z].?([a-z]+)?\\b";
     private static final Pattern LINK_PATTERN = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 
     public LinkListener(AllmightyBot bot) {
@@ -38,9 +38,9 @@ public class LinkListener extends ListenerAdapter {
     public void onMessage(MessageEvent event) throws Exception {
         super.onMessage(event);
 
-        if (event.getUser() == event.getBot().getUserBot() || event.getChannel().isOp(event.getUser()) ||
-                !LINK_PATTERN.matcher(event.getMessage()).matches() || PermitCommand.hasPermit(event.getUser()
-                .getNick())) {
+        if (!this.bot.getSettings().shouldTimeoutLinks() || event.getUser() == event.getBot().getUserBot() || event
+                .getChannel().isOp(event.getUser()) || !LINK_PATTERN.matcher(event.getMessage()).matches() ||
+                PermitCommand.hasPermit(event.getUser().getNick())) {
             return;
         }
 
@@ -48,7 +48,7 @@ public class LinkListener extends ListenerAdapter {
 
         for (String regex : this.bot.getAllowedLinks()) {
             Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-            if (pattern.matcher(event.getMessage()).matches()) {
+            if (pattern.matcher(event.getMessage()).find()) {
                 matched = true;
                 break;
             }
