@@ -57,7 +57,7 @@ public class RaidCommand extends BaseCommand {
                             "Allmighty raid has come your way!");
                     event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + "An " +
                             "Allmighty raid has come your way!");
-                    //event.getChannel().send().message(".host " + args.get(0));
+                    event.getChannel().send().message(".host " + args.get(0));
                     return true;
                 }
             } catch (IOException e) {
