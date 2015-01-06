@@ -34,7 +34,7 @@ public class ViewersCommand extends BaseCommand {
         if (super.run(bot, event)) {
             try {
                 event.getChannel().send().message("There are currently " + TwitchAPI.getViewerCount(bot.getSettings()
-                        .getTwitchUsername()) + " viewers!");
+                        .getTwitchChannel()) + " viewers!");
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();

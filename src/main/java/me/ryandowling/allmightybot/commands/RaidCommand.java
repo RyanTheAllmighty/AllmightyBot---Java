@@ -28,8 +28,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class RaidCommand extends BaseCommand {
-    public RaidCommand(String name, String reply, int timeout) {
-        super(name, reply, timeout);
+    public RaidCommand(String name, int timeout) {
+        super(name, timeout);
     }
 
     @Override
@@ -44,19 +44,22 @@ public class RaidCommand extends BaseCommand {
             try {
                 StreamResponse response = TwitchAPI.getStreamDetails(args.get(0));
 
-                event.getChannel().send().message("Head on over to " + response.getStream().getChannel().getURL() +
-                        " who is playing '" + response.getStream().getGame() + "' and write the message 'An Allmighty" +
-                        " raid has come your way!' once and only once and sit back and enjoy the stream :)");
-                event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + "An Allmighty " +
-                        "raid has come your way!");
-                event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + "An Allmighty " +
-                        "raid has come your way!");
-                event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + "An Allmighty " +
-                        "raid has come your way!");
-                event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + "An Allmighty " +
-                        "raid has come your way!");
-                //event.getChannel().send().message(".host " + args.get(0));
-                return true;
+                if (response != null && response.getStream() != null) {
+                    event.getChannel().send().message("Head on over to " + response.getStream().getChannel().getURL() +
+                            " who is playing '" + response.getStream().getGame() + "' and write the message 'An " +
+                            "Allmighty raid has come your way!' once and only once and sit back and enjoy the stream " +
+                            ":)");
+                    event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + "An " +
+                            "Allmighty raid has come your way!");
+                    event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + "An " +
+                            "Allmighty raid has come your way!");
+                    event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + "An " +
+                            "Allmighty raid has come your way!");
+                    event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + "An " +
+                            "Allmighty raid has come your way!");
+                    //event.getChannel().send().message(".host " + args.get(0));
+                    return true;
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

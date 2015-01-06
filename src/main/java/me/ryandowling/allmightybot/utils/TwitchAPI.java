@@ -59,11 +59,13 @@ public class TwitchAPI {
     }
 
     public static String getTopic(String username) throws IOException, ParseException {
-        TwitchAPIRequest request = new TwitchAPIRequest("/streams/" + username);
+        TwitchAPIRequest request = new TwitchAPIRequest("/channels/" + username);
 
-        StreamResponse response = AllmightyBot.GSON.fromJson(request.get(), StreamResponse.class);
+        String response = request.get();
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) parser.parse(response);
 
-        return response.getStream().getChannel().getStatus();
+        return (String) jsonObject.get("status");
     }
 
     public static String setTopic(String username, String topic) throws IOException, ParseException {

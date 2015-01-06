@@ -93,6 +93,7 @@ public class TwitchAPIRequest {
     }
 
     private void connect(String requestMethod, Object object) throws IOException {
+        System.out.println("Connecting to " + TWITCH_API_BASE + this.path);
         URL url = new URL(TWITCH_API_BASE + this.path);
         this.connection = (HttpsURLConnection) url.openConnection();
         this.connection.setRequestMethod(requestMethod);
