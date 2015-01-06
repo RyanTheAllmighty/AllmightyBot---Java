@@ -18,7 +18,9 @@
 
 package me.ryandowling.allmightybot.utils;
 
+import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.data.twitch.api.ChannelPutRequest;
+import me.ryandowling.allmightybot.data.twitch.api.StreamResponse;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -57,23 +59,37 @@ public class TwitchAPI {
     }
 
     public static String getTopic(String username) throws IOException, ParseException {
-        TwitchAPIRequest request = new TwitchAPIRequest("/channels/" + username);
+        TwitchAPIRequest request = new TwitchAPIRequest("/streams/" + username);
 
-        String response = request.get();
-        JSONParser parser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) parser.parse(response);
+        StreamResponse response = AllmightyBot.GSON.fromJson(request.get(), StreamResponse.class);
 
-        return (String) jsonObject.get("status");
+        return response.getStream().getChannel().getStatus();
     }
 
     public static String setTopic(String username, String topic) throws IOException, ParseException {
         TwitchAPIRequest request = new TwitchAPIRequest("/channels/" + username);
 
         String response = request.put(new ChannelPutRequest(topic));
-        
+
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = (JSONObject) parser.parse(response);
 
         return (String) jsonObject.get("status");
+    }
+
+    public static StreamResponse getStreamDetails(String username) throws IOException {
+        TwitchAPIRequest request = new TwitchAPIRequest("/streams/" + username);
+
+        String response = request.get();
+
+        return AllmightyBot.GSON.fromJson(response, StreamResponse.class);
+    }
+
+    public static int getViewerCount(String username) throws IOException {
+        TwitchAPIRequest request = new TwitchAPIRequest("/streams/" + username);
+
+        StreamResponse response = AllmightyBot.GSON.fromJson(request.get(), StreamResponse.class);
+
+        return response.getStream().getViewers();
     }
 }

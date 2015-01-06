@@ -1,0 +1,52 @@
+/*
+ * Allmighty Bot - https://github.com/RyanTheAllmighty/AllmightyBot
+ * Copyright (C) 2014 Ryan Dowling
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package me.ryandowling.allmightybot.data.twitch.api;
+
+import java.util.Map;
+
+public class TwitchStream {
+    private String game;
+    private int viewers;
+    private Map<String, String> preview;
+    private TwitchChannel channel;
+
+    public String getGame() {
+        return this.game;
+    }
+
+    public int getViewers() {
+        return this.viewers;
+    }
+
+    public String getSmallPreviewURL() {
+        return this.preview.get("small");
+    }
+
+    public String getMediumPreviewURL() {
+        return this.preview.get("medium");
+    }
+
+    public String getLargePreviewURL() {
+        return this.preview.get("large");
+    }
+
+    public TwitchChannel getChannel() {
+        return this.channel;
+    }
+}

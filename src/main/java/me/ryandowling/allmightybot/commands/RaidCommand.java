@@ -20,11 +20,14 @@ package me.ryandowling.allmightybot.commands;
 
 import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.Utils;
+import me.ryandowling.allmightybot.data.twitch.api.StreamResponse;
+import me.ryandowling.allmightybot.utils.TwitchAPI;
 import org.pircbotx.hooks.events.MessageEvent;
 
+import java.io.IOException;
 import java.util.List;
 
-public class RaidCommand extends ReplyCommand {
+public class RaidCommand extends BaseCommand {
     public RaidCommand(String name, String reply, int timeout) {
         super(name, reply, timeout);
     }
@@ -38,8 +41,27 @@ public class RaidCommand extends ReplyCommand {
                 return false;
             }
 
-            event.getChannel().send().message(".host " + args.get(0));
-            return true;
+            try {
+                StreamResponse response = TwitchAPI.getStreamDetails(args.get(0));
+
+                event.getChannel().send().message("Head on over to " + response.getStream().getChannel().getURL() +
+                        " who is playing '" + response.getStream().getGame() + "' and write the message 'An Allmighty" +
+                        " raid has come your way!' once and only once and sit back and enjoy the stream :)");
+                event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + "An Allmighty " +
+                        "raid has come your way!");
+                event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + "An Allmighty " +
+                        "raid has come your way!");
+                event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + "An Allmighty " +
+                        "raid has come your way!");
+                event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + "An Allmighty " +
+                        "raid has come your way!");
+                //event.getChannel().send().message(".host " + args.get(0));
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return false;
         }
 
         return false;
