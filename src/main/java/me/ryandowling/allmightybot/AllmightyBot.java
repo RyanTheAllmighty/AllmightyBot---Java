@@ -80,7 +80,6 @@ public class AllmightyBot {
     private Map<String, Integer> streamOnlineTime;
 
     private List<Spam> spams;
-
     private List<String> allowedLinks;
 
     private StartupListener startupListener = new StartupListener(this);
@@ -709,5 +708,15 @@ public class AllmightyBot {
 
     public List<String> getAllowedLinks() {
         return this.allowedLinks;
+    }
+
+    public boolean isModerator(String username) {
+        for (String mod : this.settings.getModerators()) {
+            if (mod.equalsIgnoreCase(username)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

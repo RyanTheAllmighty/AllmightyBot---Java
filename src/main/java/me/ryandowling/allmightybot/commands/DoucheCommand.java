@@ -19,8 +19,10 @@
 package me.ryandowling.allmightybot.commands;
 
 import me.ryandowling.allmightybot.AllmightyBot;
+import me.ryandowling.allmightybot.App;
 import me.ryandowling.allmightybot.Utils;
-import org.pircbotx.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ public class DoucheCommand extends BaseCommand {
     }
 
     private static final List<String> douches = new ArrayList<>();
+    private static final Logger logger = LogManager.getLogger(App.class.getName());
 
     @Override
     public boolean run(AllmightyBot bot, MessageEvent event) {
@@ -43,6 +46,11 @@ public class DoucheCommand extends BaseCommand {
             }
 
             String username = args.get(0);
+
+            if (bot.isModerator(username)) {
+                logger.warn("Cannot timeout/ban the user " + username);
+                return false;
+            }
 
             if (douches.contains(username)) {
                 douches.remove(username);

@@ -39,8 +39,8 @@ public class LinkListener extends ListenerAdapter {
         super.onMessage(event);
 
         if (!this.bot.getSettings().shouldTimeoutLinks() || event.getUser() == event.getBot().getUserBot() || event
-                .getChannel().isOp(event.getUser()) || !LINK_PATTERN.matcher(event.getMessage()).matches() ||
-                PermitCommand.hasPermit(event.getUser().getNick())) {
+                .getChannel().isOp(event.getUser()) || bot.isModerator(event.getUser().getNick()) || !LINK_PATTERN
+                .matcher(event.getMessage()).matches() || PermitCommand.hasPermit(event.getUser().getNick())) {
             return;
         }
 

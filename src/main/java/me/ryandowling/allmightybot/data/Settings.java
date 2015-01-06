@@ -22,6 +22,7 @@ import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 
 import java.util.Date;
+import java.util.List;
 
 public class Settings {
     /**
@@ -70,9 +71,14 @@ public class Settings {
     private String twitchApiClientID;
 
     /**
-     * The client ID of the app for the Twitch API
+     * If users should be timed out for posting links not in the whitelist or have no permit
      */
     private boolean timeoutLinks;
+
+    /**
+     * The moderators of the channel
+     */
+    private List<String> moderators;
 
     /**
      * Sets up some defaults where there is no settings file already there
@@ -168,5 +174,9 @@ public class Settings {
 
     public void setTimeoutLinks(boolean timeoutLinks) {
         this.timeoutLinks = timeoutLinks;
+    }
+
+    public List<String> getModerators() {
+        return this.moderators;
     }
 }
