@@ -774,6 +774,6 @@ public class AllmightyBot {
         };
 
         this.executor.scheduleAtFixedRate(runnable, settings.getTimedMessagesInterval(), settings
-                .getTimedMessagesInterval(), TimeUnit.MINUTES);
+                .getTimedMessagesInterval(), TimeUnit.SECONDS);
     }
 }
