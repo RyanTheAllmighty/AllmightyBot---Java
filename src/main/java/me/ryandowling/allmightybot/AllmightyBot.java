@@ -30,6 +30,7 @@ import me.ryandowling.allmightybot.data.EventType;
 import me.ryandowling.allmightybot.data.SeedType;
 import me.ryandowling.allmightybot.data.Settings;
 import me.ryandowling.allmightybot.data.Spam;
+import me.ryandowling.allmightybot.data.TimedMessage;
 import me.ryandowling.allmightybot.data.TwitchChatters;
 import me.ryandowling.allmightybot.data.WorldType;
 import me.ryandowling.allmightybot.listeners.CommandListener;
@@ -41,6 +42,7 @@ import me.ryandowling.allmightybot.utils.TwitchAPI;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.pircbotx.Channel;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
@@ -59,7 +61,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class AllmightyBot {
@@ -81,12 +86,15 @@ public class AllmightyBot {
 
     private List<Spam> spams;
     private List<String> allowedLinks;
+    private List<TimedMessage> timedMessages;
 
     private StartupListener startupListener = new StartupListener(this);
     private UserListener userListener = new UserListener(this);
     private CommandListener commandListener = new CommandListener(this);
     private SpamListener spamListener = new SpamListener(this);
     private LinkListener linkListener = new LinkListener(this);
+
+    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
     private Map<String, Integer> topUsers;
 
@@ -199,6 +207,7 @@ public class AllmightyBot {
         loadUserOnlineTime();
         loadStreamOnlineTime();
         loadSpamWatchers();
+        loadTimedMessages();
         loadAllowedLinks();
         loadEvents();
         loadInitialUsers();
@@ -366,6 +375,17 @@ public class AllmightyBot {
             Type listType = new TypeToken<ArrayList<Spam>>() {
             }.getType();
             this.spams = GSON.fromJson(FileUtils.readFileToString(Utils.getSpamFile().toFile()), listType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadTimedMessages() {
+        try {
+            Type listType = new TypeToken<ArrayList<TimedMessage>>() {
+            }.getType();
+            this.timedMessages = GSON.fromJson(FileUtils.readFileToString(Utils.getTimedMessagesFile().toFile()),
+                    listType);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -725,5 +745,35 @@ public class AllmightyBot {
         }
 
         return false;
+    }
+
+    public void startTimedMessages() {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Channel toRun = null;
+                for (Channel channel : pirc.getUserChannelDao().getAllChannels()) {
+                    if (channel.getName().contains(settings.getTwitchChannel().toLowerCase())) {
+                        toRun = channel;
+                        break;
+                    }
+                }
+
+                if (toRun == null) {
+                    return;
+                }
+
+                // Run a random one of the Times Messages
+
+                Random randomGenerator = new Random();
+                int index = randomGenerator.nextInt(timedMessages.size());
+                TimedMessage message = timedMessages.get(index);
+
+                toRun.send().message(message.getMessage());
+            }
+        };
+
+        this.executor.scheduleAtFixedRate(runnable, settings.getTimedMessagesInterval(), settings
+                .getTimedMessagesInterval(), TimeUnit.MINUTES);
     }
 }

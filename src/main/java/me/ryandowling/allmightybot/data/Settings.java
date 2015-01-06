@@ -81,6 +81,11 @@ public class Settings {
     private boolean forceCommands;
 
     /**
+     * The time in seconds between the Timed Message runs
+     */
+    private int timedMessagesInterval;
+
+    /**
      * The moderators of the channel
      */
     private List<String> moderators;
@@ -187,5 +192,9 @@ public class Settings {
 
     public List<String> getModerators() {
         return this.moderators;
+    }
+
+    public int getTimedMessagesInterval() {
+        return this.timedMessagesInterval;
     }
 }

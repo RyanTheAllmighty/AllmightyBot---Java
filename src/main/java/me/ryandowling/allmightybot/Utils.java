@@ -53,6 +53,10 @@ public class Utils {
         return getCoreDir().resolve("spam.json");
     }
 
+    public static Path getTimedMessagesFile() {
+        return getCoreDir().resolve("timedMessages.json");
+    }
+
     public static Path getLinksFile() {
         return getCoreDir().resolve("links.json");
     }

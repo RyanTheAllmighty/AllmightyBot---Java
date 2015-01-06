@@ -44,6 +44,7 @@ public class StartupListener extends ListenerAdapter {
                 event.getChannel().send().message("Never fear, AllmightyBot is here!");
             }
 
+            this.bot.startTimedMessages();
             this.bot.removeStartupListener();
         }
     }
