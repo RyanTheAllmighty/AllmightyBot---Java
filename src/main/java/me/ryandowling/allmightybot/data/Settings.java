@@ -76,6 +76,11 @@ public class Settings {
     private boolean timeoutLinks;
 
     /**
+     * If the bot shouldn't continue loading if one or more commands cannot be loaded
+     */
+    private boolean forceCommands;
+
+    /**
      * The moderators of the channel
      */
     private List<String> moderators;
@@ -170,6 +175,10 @@ public class Settings {
 
     public boolean shouldTimeoutLinks() {
         return this.timeoutLinks;
+    }
+
+    public boolean shouldForceCommands() {
+        return this.forceCommands;
     }
 
     public void setTimeoutLinks(boolean timeoutLinks) {

@@ -309,12 +309,15 @@ public class AllmightyBot {
 
                         CommandBus.add(commandToAdd);
                         logger.debug("Added command !" + command.getName() + " of type " + command.getType());
-                    } catch (ClassNotFoundException e) {
-                        logger.error("No class found for !" + command.getName() + " with type of " + command.getType());
-                    } catch (InstantiationException | InvocationTargetException | NoSuchMethodException |
-                            IllegalAccessException e) {
+                    } catch (ClassNotFoundException | InstantiationException | InvocationTargetException |
+                            NoSuchMethodException | IllegalAccessException e) {
                         logger.error("Error loading command !" + command.getName() + " with type of " + command
                                 .getType());
+                        if (this.getSettings().shouldForceCommands()) {
+                            logger.error("Force commands setting is on so we must exit since a command failed to " +
+                                    "load!");
+                            System.exit(1);
+                        }
                     }
                 }
             }
