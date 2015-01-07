@@ -1,0 +1,14 @@
+[
+    {
+        "message": "This message will be said every 15 minutes by default or however long you set it in the settings.json file"
+    },
+    {
+        "message": "Another message"
+    },
+    {
+        "message": "Yet another message"
+    },
+    {
+        "message": "Oh yeah did I mention they are said randomly"
+    }
+]

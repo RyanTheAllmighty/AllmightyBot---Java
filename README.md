@@ -14,9 +14,13 @@ Allmighty Bot is a bot used by me in my Twitch channel. Could probably also be u
 + Please use the IntelliJ-Coding-Style.xml for the project (if using IntelliJ) in order to keep all formatting consistent
 + Please don't do large commits. My preference is a single commit for a single fix/addition rather than bundled up commits
 
-### Usage
+### Getting Started
 
-Simply run 'mvn clean install' to get executable jar files in the target/ folder and run it.
+To get a runnable Jar file run 'mvn clean install' in the root of the project.
+
+After you have a runnable Jar file, you'll need to setup a bunch of stuff, mainly the commands, languages, etc. A bunch of example files for configuration is provided in the examples/ folder.
+
+While the bot is under development and constantly being updated, the bot may or may not work. As this intended for my use, there may be times when things are added/edited which break it for you. If you have any issues, please feel free to open an issue in this repository.
 
 ### License
 

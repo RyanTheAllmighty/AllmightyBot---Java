@@ -1,0 +1,15 @@
+{
+    "worldDetails": "This is world number $[1] with a seed of '$[2]'",
+    "randomUserPicked": "Abra Kadabra, I choose you $[1]",
+    "currentViewers": "There are currently $[1] viewers",
+    "currentTime": "The current time for $[1] is $[2]",
+    "uptimeToday": "$[1] has been live for $[2] today!",
+    "uptimeAll": "$[1] has been live for $[2] this year!",
+    "channelTopic": "The channel's topic is '$[1]'",
+    "channelTopicNow": "The channel's topic is now '$[1]'",
+    "currentSong": "The current song playing is '$[1]' by '$[2]'. Check them out at $[3]",
+    "newSeed": "Let's get a new seed. Type !seed (seed name) to suggest a seed. For example to suggest a seed of Example Seed use !seed Example Seed",
+    "seedAdded": "One or more seeds have been added to the list!",
+    "seedPickNone": "There was no winner as no seeds were submitted!",
+    "seedPick": "The winner was $[1] with a seed of '$[2]'"
+}

@@ -1,0 +1,148 @@
+[
+    {
+        "type": "me.ryandowling.allmightybot.commands.ExitCommand",
+        "name": "exit",
+        "level": "CASTER"
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.ReloadCommand",
+        "name": "reload",
+        "level": "CASTER",
+        "timeout": 0
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.PurgeCommand",
+        "name": "purge",
+        "level": "CASTER",
+        "timeout": 0
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.SeedCommand",
+        "name": "newseed",
+        "seedType": "NEW",
+        "level": "CASTER",
+        "timeout": 0
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.SeedCommand",
+        "name": "pickseed",
+        "seedType": "RANDOM",
+        "level": "CASTER",
+        "timeout": 0
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.SeedCommand",
+        "name": "seed",
+        "seedType": "SUGGESTION",
+        "level": "ALL",
+        "timeout": 0
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.SongCommand",
+        "name": "song",
+        "level": "ALL"
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.WorldCommand",
+        "name": "newworld",
+        "worldType": "NEW",
+        "level": "CASTER",
+        "timeout": 0
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.PermitCommand",
+        "name": "permit",
+        "level": "MODERATOR",
+        "timeout": 0
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.RandomCommand",
+        "name": "random",
+        "level": "MODERATOR"
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.LinkCommand",
+        "name": "links",
+        "level": "MODERATOR",
+        "timeout": 0
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.DoucheCommand",
+        "name": "douche",
+        "level": "MODERATOR",
+        "timeout": 0
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.WorldCommand",
+        "name": "world",
+        "worldType": "QUERY",
+        "level": "ALL"
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.HighlightCommand",
+        "name": "highlight",
+        "level": "REGULAR"
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.TopicCommand",
+        "name": "topic",
+        "level": "ALL"
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.AliasCommand",
+        "name": "title",
+        "aliasedTo": "topic",
+        "level": "ALL"
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.SetTopicCommand",
+        "name": "settopic",
+        "level": "CASTER",
+        "timeout": 0
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.AliasCommand",
+        "name": "settitle",
+        "aliasedTo": "settopic",
+        "level": "CASTER",
+        "timeout": 0
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.EyeTimeCommand",
+        "name": "eyetime",
+        "level": "CASTER",
+        "timeout": 0
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.UptimeCommand",
+        "name": "uptime",
+        "level": "ALL"
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.TimeCommand",
+        "name": "time",
+        "level": "ALL"
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.ViewersCommand",
+        "name": "viewers",
+        "level": "ALL"
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.RaidCommand",
+        "name": "raid",
+        "level": "CASTER"
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.ReplyCommand",
+        "name": "test",
+        "reply": "This is a test",
+        "level": "ALL"
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.ReplyCommand",
+        "name": "test2",
+        "reply": "This is a test which will place the argument passed after the command here -> $[1]",
+        "level": "ALL"
+    }
+]
