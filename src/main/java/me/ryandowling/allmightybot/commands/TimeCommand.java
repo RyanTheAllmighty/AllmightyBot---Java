@@ -20,6 +20,7 @@ package me.ryandowling.allmightybot.commands;
 
 import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.App;
+import me.ryandowling.allmightybot.Utils;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import java.text.SimpleDateFormat;
@@ -34,9 +35,9 @@ public class TimeCommand extends BaseCommand {
     public boolean run(AllmightyBot bot, MessageEvent event) {
         if (super.run(bot, event)) {
             Calendar cal = Calendar.getInstance();
-            SimpleDateFormat dateFormater = new SimpleDateFormat("d/M/Y HH:mm:ss z");
-            event.getChannel().send().message("The current time for " + App.INSTANCE.getSettings().getCastersName()
-                    + " is " + dateFormater.format(cal.getTime()));
+            SimpleDateFormat dateFormater = new SimpleDateFormat(bot.getSettings().getTimeCommandFormat());
+            event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("currentTime"), App
+                    .INSTANCE.getSettings().getCastersName(), dateFormater.format(cal.getTime())));
             return true;
         }
 

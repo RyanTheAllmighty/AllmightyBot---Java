@@ -43,7 +43,8 @@ public class SetTopicCommand extends BaseCommand {
             try {
                 TwitchAPI.setTopic(App.INSTANCE.getSettings().getTwitchChannel(), topic);
 
-                event.getChannel().send().message("The channel's topic is now '" + topic + "'");
+                event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("channelTopicNow"),
+                        topic));
 
                 TopicCommand command = (TopicCommand) CommandBus.findByClassName(TopicCommand.class.getName());
                 if (command != null) {

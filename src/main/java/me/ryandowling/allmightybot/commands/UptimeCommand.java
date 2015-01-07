@@ -46,24 +46,18 @@ public class UptimeCommand extends BaseCommand {
 
             period = period.toLowerCase();
 
-            int uptime;
-            String timePeriodString;
-
             switch (period) {
                 case "all":
-                    uptime = bot.getTotalLiveTime(true);
-                    timePeriodString = "this year";
-                    break;
+                    event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("uptimeAll"),
+                            App.INSTANCE.getSettings().getCastersName(), Utils.timeConversion(bot.getTotalLiveTime
+                                    (true))));
+                    return true;
                 default:
-                    uptime = (int) Utils.getDateDiff(bot.getSettings().getStartTime(), new Date(), TimeUnit.SECONDS);
-                    timePeriodString = "today";
-                    break;
+                    event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("uptimeToday"),
+                            App.INSTANCE.getSettings().getCastersName(), Utils.timeConversion((int) Utils.getDateDiff
+                                    (bot.getSettings().getStartTime(), new Date(), TimeUnit.SECONDS))));
+                    return true;
             }
-
-
-            event.getChannel().send().message(App.INSTANCE.getSettings().getCastersName() + " has been live for " +
-                    Utils.timeConversion(uptime) + " " + timePeriodString + "!");
-            return true;
         }
 
         return false;

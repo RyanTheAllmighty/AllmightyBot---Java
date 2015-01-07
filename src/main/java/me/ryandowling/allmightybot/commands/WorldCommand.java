@@ -66,8 +66,8 @@ public class WorldCommand extends BaseCommand {
                         return false;
                     }
 
-                    event.getChannel().send().message("This is world number " + worldDetails.getNumber() + " with a " +
-                            "seed of '" + worldDetails.getSeed() + "'");
+                    event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("worldDetails")
+                            , String.valueOf(worldDetails.getNumber()), worldDetails.getSeed()));
                     break;
             }
             return true;

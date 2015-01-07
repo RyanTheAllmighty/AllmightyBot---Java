@@ -19,10 +19,12 @@
 package me.ryandowling.allmightybot.commands;
 
 import me.ryandowling.allmightybot.AllmightyBot;
+import me.ryandowling.allmightybot.Utils;
 import me.ryandowling.allmightybot.utils.TwitchAPI;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 public class ViewersCommand extends BaseCommand {
     public ViewersCommand(String name, int timeout) {
@@ -33,8 +35,9 @@ public class ViewersCommand extends BaseCommand {
     public boolean run(AllmightyBot bot, MessageEvent event) {
         if (super.run(bot, event)) {
             try {
-                event.getChannel().send().message("There are currently " + TwitchAPI.getViewerCount(bot.getSettings()
-                        .getTwitchChannel()) + " viewers!");
+                DecimalFormat formatter = new DecimalFormat("#,###");
+                event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("currentViewers"),
+                        formatter.format(TwitchAPI.getViewerCount(bot.getSettings().getTwitchChannel()))));
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();

@@ -20,6 +20,7 @@ package me.ryandowling.allmightybot.commands;
 
 import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.App;
+import me.ryandowling.allmightybot.Utils;
 import me.ryandowling.allmightybot.utils.TwitchAPI;
 import org.json.simple.parser.ParseException;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -39,7 +40,8 @@ public class TopicCommand extends BaseCommand {
     public boolean run(AllmightyBot bot, MessageEvent event) {
         if (super.run(bot, event)) {
             checkChannelTopic();
-            event.getChannel().send().message("The channel's topic is '" + this.topic + "'");
+            event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("channelTopic"), this
+                    .topic));
             return true;
         }
 
@@ -47,14 +49,12 @@ public class TopicCommand extends BaseCommand {
     }
 
     public void checkChannelTopic() {
-        if(this.lastUpdated > (System.currentTimeMillis() - ((60 * 5) * 1000))) {
-            // Only check the API if it's been at least 5 minutes
-            System.out.println("Topic is coming from cache!");
+        // Only check the API if it's been at least 5 minutes
+        if (this.lastUpdated > (System.currentTimeMillis() - ((60 * 5) * 1000))) {
             return;
         }
 
         try {
-            System.out.println("Topic is coming from API!");
             this.topic = TwitchAPI.getTopic(App.INSTANCE.getSettings().getTwitchChannel());
             this.lastUpdated = System.currentTimeMillis();
         } catch (IOException | ParseException e) {

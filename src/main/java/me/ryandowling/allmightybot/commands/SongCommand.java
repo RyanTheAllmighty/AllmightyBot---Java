@@ -54,8 +54,8 @@ public class SongCommand extends BaseCommand {
                 e.printStackTrace();
             }
 
-            event.getChannel().send().message(String.format("The current song playing is '%s' by '%s'. Check them " +
-                    "out" + " at %s", song, artist, website));
+            event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("currentSong"), song,
+                    artist, website));
             return true;
         }
 

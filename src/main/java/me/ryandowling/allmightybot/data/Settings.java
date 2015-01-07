@@ -21,6 +21,7 @@ package me.ryandowling.allmightybot.data;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -86,6 +87,11 @@ public class Settings {
     private int timedMessagesInterval;
 
     /**
+     * The format of the date for the time command
+     */
+    private String timeCommandFormat;
+
+    /**
      * The moderators of the channel
      */
     private List<String> moderators;
@@ -106,6 +112,14 @@ public class Settings {
         this.initialSetupComplete = true;
         this.startTime = new Date();
         this.timeoutLinks = true;
+        this.forceCommands = true;
+        this.timedMessagesInterval = 900;
+        this.timeCommandFormat = "d/M/Y HH:mm:ss z";
+
+        List<String> modList = new ArrayList<>();
+        modList.add(getTwitchUsername().toLowerCase());
+        modList.add(getTwitchChannel().toLowerCase());
+        this.moderators = modList;
     }
 
     public Configuration.Builder<PircBotX> getBuilder() {
@@ -196,5 +210,9 @@ public class Settings {
 
     public int getTimedMessagesInterval() {
         return this.timedMessagesInterval;
+    }
+
+    public String getTimeCommandFormat() {
+        return this.timeCommandFormat;
     }
 }
