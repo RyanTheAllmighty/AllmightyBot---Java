@@ -55,7 +55,7 @@ public class SeedCommand extends BaseCommand {
                     if (!collectingSeeds) {
                         if ((lastSeedMessage + 10000) < System.currentTimeMillis()) {
                             // Seeds aren't being asked for so run the world command instead
-                            CommandBus.findByClassName(WorldCommand.class.getName()).run(bot, event);
+                            CommandBus.findByCommandName("world").run(bot, event);
                         }
                     } else {
                         String seedName = event.getMessage().substring(getName().length() + 2); // Remove '!command '
