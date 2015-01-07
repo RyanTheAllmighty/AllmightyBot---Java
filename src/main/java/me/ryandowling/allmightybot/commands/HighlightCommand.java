@@ -46,8 +46,8 @@ public class HighlightCommand extends BaseCommand {
 
             save();
 
-            event.getChannel().send().message("The time " + Utils.timeConversionRaw(uptime) + " has been saved to be" +
-                    " highlighted after the stream!");
+            event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("highlight"), Utils
+                    .timeConversionRaw(uptime)));
 
             return true;
         }

@@ -1,4 +1,5 @@
 {
+    "exitMessage": "Goodbye!",
     "worldDetails": "This is world number $[1] with a seed of '$[2]'",
     "randomUserPicked": "Abra Kadabra, I choose you $[1]",
     "currentViewers": "There are currently $[1] viewers",
@@ -11,5 +12,15 @@
     "newSeed": "Let's get a new seed. Type !seed (seed name) to suggest a seed. For example to suggest a seed of Example Seed use !seed Example Seed",
     "seedAdded": "One or more seeds have been added to the list!",
     "seedPickNone": "There was no winner as no seeds were submitted!",
-    "seedPick": "The winner was $[1] with a seed of '$[2]'"
+    "seedPick": "The winner was $[1] with a seed of '$[2]'",
+    "doucheWarning": "Stop being a douche $[1]! Read the rules and come back later, this is your first and final warning! [Timed out] [10 minutes]",
+    "douche": "WOW! You're such a douche $[1]! Read the rules and come back another day as you've already been warned! [Timed out] [12 hours]",
+    "eyetimeNone": "The user $[1] has not been in the channel before!",
+    "eyetime": "The user $[1] has been in the channel for $[2] while the streamer has been online for $[3] which means they've been here for $[4]% of the streams!",
+    "highlight": "The time $[1] has been saved to be highlighted after the stream!",
+    "linkTimeoutsOn": "Link timeouts have been turned on!",
+    "linkTimeoutsOff": "Link timeouts have been turned off!",
+    "permit": "$[1] has been permitted to post links for $[2]!",
+    "raid": "Head on over to $[1] who is playing '$[2]' and write the message $[3] once and only once and sit back and enjoy the stream :)",
+    "raidMessage": "$[1] - An Allmighty raid has come your way!"
 }

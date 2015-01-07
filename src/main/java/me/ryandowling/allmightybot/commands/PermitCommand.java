@@ -53,8 +53,8 @@ public class PermitCommand extends BaseCommand {
 
             permits.put(username, permittedUntil);
 
-            event.getChannel().send().message(username + " has been permitted to post links for " + Utils
-                    .timeConversion(seconds) + "!");
+            event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("permit"), username,
+                    Utils.timeConversion(seconds)));
             return true;
         }
 

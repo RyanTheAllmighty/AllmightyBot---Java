@@ -48,21 +48,20 @@ public class DoucheCommand extends BaseCommand {
             String username = args.get(0);
 
             if (bot.isModerator(username)) {
-                logger.warn("Cannot timeout/ban the user " + username);
+                logger.warn("Cannot timeout/ban the user " + username + " as they are a moderator!");
                 return false;
             }
 
             if (douches.contains(username)) {
                 douches.remove(username);
 
-                event.getChannel().send().message("WOW! You're such a douche " + username + "! Read the rules and " +
-                        "come back another day as you've already been warned! [Timed out] [12 hours]");
+                event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("douche"), username));
                 event.getChannel().send().message(".timeout " + username + " 43200");
             } else {
                 douches.add(username);
 
-                event.getChannel().send().message("Stop being a douche " + username + "! Read the rules and come back" +
-                        " later, this is your first and final warning! [Timed out] [10 minutes]");
+                event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("doucheWarning"),
+                        username));
                 event.getChannel().send().message(".timeout " + username + " 600");
             }
             return true;

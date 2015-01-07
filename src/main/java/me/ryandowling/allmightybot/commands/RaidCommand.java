@@ -45,18 +45,17 @@ public class RaidCommand extends BaseCommand {
                 StreamResponse response = TwitchAPI.getStreamDetails(args.get(0));
 
                 if (response != null && response.getStream() != null) {
-                    event.getChannel().send().message("Head on over to " + response.getStream().getChannel().getURL() +
-                            " who is playing '" + response.getStream().getGame() + "' and write the message 'An " +
-                            "Allmighty raid has come your way!' once and only once and sit back and enjoy the stream " +
-                            ":)");
-                    event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + "An " +
-                            "Allmighty raid has come your way!");
-                    event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + "An " +
-                            "Allmighty raid has come your way!");
-                    event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + "An " +
-                            "Allmighty raid has come your way!");
-                    event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + "An " +
-                            "Allmighty raid has come your way!");
+                    event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("raid"),
+                            response.getStream().getChannel().getURL(), response.getStream().getGame(), bot
+                                    .getLangValue("raidMessage")));
+                    event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + bot
+                            .getLangValue("raidMessage"));
+                    event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + bot
+                            .getLangValue("raidMessage"));
+                    event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + bot
+                            .getLangValue("raidMessage"));
+                    event.getChannel().send().message(response.getStream().getChannel().getURL() + " - " + bot
+                            .getLangValue("raidMessage"));
                     event.getChannel().send().message(".host " + args.get(0));
                     return true;
                 }

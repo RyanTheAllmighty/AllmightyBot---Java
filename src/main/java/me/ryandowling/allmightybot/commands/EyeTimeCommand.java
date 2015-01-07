@@ -43,13 +43,13 @@ public class EyeTimeCommand extends BaseCommand {
             int uptime = bot.getTotalLiveTime(true);
 
             if (timeWatched == 0) {
-                event.getChannel().send().message("The user " + nick + " has not been in the channel before!");
+                event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("eyetimeNone"),
+                        nick));
             } else {
                 double percent = (timeWatched * 1.0 / bot.getTotalLiveTime(true) * 1.0) * 100.0;
-                event.getChannel().send().message("The user " + nick + " has been in the channel for " + Utils
-                        .timeConversion(timeWatched) + " while the streamer has been online for " + Utils
-                        .timeConversion(uptime) + " which means they've been here for " + String.format("%.2f",
-                        percent) + "% of the streams!");
+                event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("eyetime"), nick,
+                        Utils.timeConversion(timeWatched), Utils.timeConversion(uptime), String.format("%.2f",
+                                percent)));
             }
             return true;
         }

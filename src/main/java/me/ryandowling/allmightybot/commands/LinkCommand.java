@@ -44,11 +44,11 @@ public class LinkCommand extends BaseCommand {
 
             if (links.equalsIgnoreCase("true") || links.equalsIgnoreCase("yes") || links.equalsIgnoreCase("on")) {
                 bot.getSettings().setTimeoutLinks(true);
-                event.getChannel().send().message("Link timeouts have been turned on!");
+                event.getChannel().send().message(bot.getLangValue("linkTimeoutsOn"));
             } else if (links.equalsIgnoreCase("false") || links.equalsIgnoreCase("no") || links.equalsIgnoreCase
                     ("off")) {
                 bot.getSettings().setTimeoutLinks(false);
-                event.getChannel().send().message("Link timeouts have been turned off!");
+                event.getChannel().send().message(bot.getLangValue("linkTimeoutsOff"));
             }
 
             return true;

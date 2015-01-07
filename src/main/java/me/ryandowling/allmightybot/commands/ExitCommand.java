@@ -29,7 +29,7 @@ public class ExitCommand extends BaseCommand {
     @Override
     public boolean run(AllmightyBot bot, MessageEvent event) {
         if (super.run(bot, event)) {
-            event.getChannel().send().message("Goodbye!");
+            event.getChannel().send().message(bot.getLangValue("exitMessage"));
             bot.triggerShutdown();
             return true;
         }
