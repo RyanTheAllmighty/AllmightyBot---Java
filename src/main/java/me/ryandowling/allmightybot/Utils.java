@@ -197,6 +197,10 @@ public class Utils {
         return getCoreDir().resolve("onlineTime.json");
     }
 
+    public static Path getLangFile() {
+        return getCoreDir().resolve("lang.json");
+    }
+
     public static Path getNowPlayingFile() {
         return getCoreDir().resolve("nowplaying.txt");
     }
@@ -223,5 +227,20 @@ public class Utils {
         in.close();
 
         return response.toString();
+    }
+
+    public static String replaceVariablesInString(String string, String... replacements) {
+        String reply = string;
+
+        if (reply.contains("$[")) {
+            for (int i = 1; i <= reply.split("\\$\\[").length; i++) {
+                String pattern = "$[" + i + "]";
+                if (reply.contains(pattern)) {
+                    reply = reply.replace(pattern, replacements[i - 1]);
+                }
+            }
+        }
+
+        return reply;
     }
 }

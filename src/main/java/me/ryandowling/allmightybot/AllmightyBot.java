@@ -84,6 +84,8 @@ public class AllmightyBot {
     private List<Event> events;
     private Map<String, Integer> streamOnlineTime;
 
+    private Map<String, String> lang;
+
     private List<Spam> spams;
     private List<String> allowedLinks;
     private List<TimedMessage> timedMessages;
@@ -200,12 +202,15 @@ public class AllmightyBot {
         this.events = new ArrayList<>();
         this.streamOnlineTime = new ConcurrentHashMap<>();
 
+        this.lang = new HashMap<>();
+
         this.spams = new ArrayList<>();
         this.allowedLinks = new ArrayList<>();
 
         loadCommands();
         loadUserOnlineTime();
         loadStreamOnlineTime();
+        loadLang();
         loadSpamWatchers();
         loadTimedMessages();
         loadAllowedLinks();
@@ -364,6 +369,21 @@ public class AllmightyBot {
             }.getType();
             this.streamOnlineTime = GSON.fromJson(FileUtils.readFileToString(Utils.getStreamOnlineTimeFile().toFile()
             ), type);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadLang() {
+        if (!Files.exists(Utils.getLangFile())) {
+            logger.error("Error! Cannot find the lang.json file! We have to exit!");
+            System.exit(1);
+        }
+
+        try {
+            Type type = new TypeToken<Map<String, String>>() {
+            }.getType();
+            this.lang = GSON.fromJson(FileUtils.readFileToString(Utils.getLangFile().toFile()), type);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -775,5 +795,14 @@ public class AllmightyBot {
 
         this.executor.scheduleAtFixedRate(runnable, settings.getTimedMessagesInterval(), settings
                 .getTimedMessagesInterval(), TimeUnit.SECONDS);
+    }
+
+    public String getLangValue(String key) {
+        if (!this.lang.containsKey(key)) {
+            logger.error("No lang value set for key " + key);
+            return "Oh noes!";
+        }
+
+        return this.lang.get(key);
     }
 }

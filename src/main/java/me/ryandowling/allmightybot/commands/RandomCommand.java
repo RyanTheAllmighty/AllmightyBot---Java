@@ -58,7 +58,8 @@ public class RandomCommand extends BaseCommand {
                 int index = randomGenerator.nextInt(users.size());
                 String username = users.get(index);
 
-                event.getChannel().send().message("Abra Kadabra, I choose you " + username);
+                event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("randomUserPicked")
+                        , username));
             } catch (IOException e) {
                 e.printStackTrace();
             }
