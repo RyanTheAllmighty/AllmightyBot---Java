@@ -242,11 +242,6 @@ public class AllmightyBot {
             e.printStackTrace();
         }
 
-        // Shut it all down if we are still connected
-        if (this.pirc.isConnected()) {
-            this.shutDown();
-        }
-
         System.exit(0);
     }
 
@@ -343,7 +338,6 @@ public class AllmightyBot {
     }
 
     private void loadUserOnlineTime() {
-        List<String> fileNames = new ArrayList<>();
         try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Utils.getUsersDir())) {
             for (Path path : directoryStream) {
                 if (Files.isDirectory(path)) {
@@ -486,11 +480,7 @@ public class AllmightyBot {
             e.printStackTrace();
         }
 
-        while (this.pirc.isConnected()) {
-            this.pirc.sendIRC().quitServer("Bye");
-        }
-
-        System.out.println("End");
+        this.pirc.sendIRC().quitServer("Bye");
     }
 
     private void saveSettings() {
@@ -607,48 +597,34 @@ public class AllmightyBot {
 
         Date joined = this.userJoined.get(nick);
 
-        if (joined != null && this.userOnlineTime.containsKey(nick)) {
-            // User has left so add their time
-            Map<String, Integer> timeOnline = this.userOnlineTime.get(nick);
-            int online = 0;
-
-            if (timeOnline != null) {
-                online = timeOnline.get(DATE);
-                online += (int) Utils.getDateDiff(joined, new Date(), TimeUnit.SECONDS);
-            } else {
-                timeOnline = new HashMap<>();
-            }
-
-            timeOnline.put(DATE, online);
-
-            this.userOnlineTime.put(nick, timeOnline);
-        }
-
-        // Remove the user from the time joined list since they have left
-        this.userJoined.remove(nick);
+        this.saveOnlineTime(nick, joined);
     }
 
     private void saveAllOnlineTime() {
         for (Map.Entry<String, Date> entry : this.userJoined.entrySet()) {
-            String key = entry.getKey();
-            Date value = entry.getValue();
-
-            Map<String, Integer> timeOnline = this.userOnlineTime.get(key);
-            int online = 0;
-
-            if (timeOnline != null && timeOnline.containsKey(DATE)) {
-                online = timeOnline.get(DATE);
-                online += (int) Utils.getDateDiff(value, new Date(), TimeUnit.SECONDS);
-            } else {
-                timeOnline = new HashMap<>();
-            }
-
-            timeOnline.put(DATE, online);
-
-            this.userOnlineTime.put(key, timeOnline);
-
-            this.userJoined.remove(key);
+            this.saveOnlineTime(entry.getKey(), entry.getValue());
         }
+    }
+
+    private void saveOnlineTime(String username, Date joinedTime) {
+        Map<String, Integer> timeOnline = this.userOnlineTime.get(username);
+        int online = 0;
+
+        if (timeOnline == null) {
+            timeOnline = new HashMap<>();
+        }
+
+        if (timeOnline.containsKey(DATE)) {
+            online = timeOnline.get(DATE);
+        }
+
+        online += (int) Utils.getDateDiff(joinedTime, new Date(), TimeUnit.SECONDS);
+
+        timeOnline.put(DATE, online);
+
+        this.userOnlineTime.put(username, timeOnline);
+
+        this.userJoined.remove(username);
     }
 
     public void userSpoke(String nick, String message) {
