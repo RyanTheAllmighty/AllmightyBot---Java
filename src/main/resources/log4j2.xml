@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="error" name="AllmightyBot">
     <Appenders>
-        <RollingRandomAccessFile name="File-Output" fileName="logs/AllmightyBot.log" filePattern="logs/archived/$$
-        {date:yyyy-MM}/AllmightyBot-%d{MM-dd-yyyy}.log.gz">
+        <RollingRandomAccessFile name="File-Output" fileName="logs/AllmightyBot.log" filePattern="logs/archived/${date:MM-yyyy}/AllmightyBot-%d{dd-MM-yyyy}.log.gz">
             <PatternLayout pattern="[%d{dd/M/yyy HH:mm:ss a}] [%level] %m%n"/>
             <Policies>
-                <TimeBasedTriggeringPolicy/>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
             </Policies>
         </RollingRandomAccessFile>
         <Console name="STDOUT" target="SYSTEM_OUT">

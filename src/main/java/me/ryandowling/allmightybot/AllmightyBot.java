@@ -246,6 +246,8 @@ public class AllmightyBot {
         if (this.pirc.isConnected()) {
             this.shutDown();
         }
+
+        System.exit(0);
     }
 
     private void loadEvents() {
@@ -484,9 +486,11 @@ public class AllmightyBot {
             e.printStackTrace();
         }
 
-        if (this.pirc.isConnected()) {
-            this.pirc.sendIRC().quitServer();
+        while (this.pirc.isConnected()) {
+            this.pirc.sendIRC().quitServer("Bye");
         }
+
+        System.out.println("End");
     }
 
     private void saveSettings() {
