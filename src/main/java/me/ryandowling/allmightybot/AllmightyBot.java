@@ -208,6 +208,7 @@ public class AllmightyBot {
         this.allowedLinks = new ArrayList<>();
 
         loadCommands();
+        loadUserChatLogs();
         loadUserOnlineTime();
         loadStreamOnlineTime();
         loadLang();
@@ -334,6 +335,24 @@ public class AllmightyBot {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void loadUserChatLogs() {
+        try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Utils.getUsersDir())) {
+            for (Path path : directoryStream) {
+                if (Files.isDirectory(path)) {
+                    String username = path.getFileName().toString();
+                    if (Files.exists(Utils.getUserChatFile(username))) {
+                        Type type = new TypeToken<List<ChatLog>>() {
+                        }.getType();
+                        List<ChatLog> chatMessages = GSON.fromJson(FileUtils.readFileToString(Utils.getUserChatFile
+                                (username).toFile()), type);
+                        this.userLogs.put(username, chatMessages);
+                    }
+                }
+            }
+        } catch (IOException ex) {
         }
     }
 
