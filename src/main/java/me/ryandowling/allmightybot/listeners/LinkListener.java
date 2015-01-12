@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 
 public class LinkListener extends ListenerAdapter {
     private AllmightyBot bot;
-    private static final String regex = "\\b(https?://)?(www.)?([a-zA-Z0-9]+)\\.[a-zA-Z0-9]*.[a-z].?([a-z]+)?\\b";
+    private static final String regex = "[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)";
     private static final Pattern LINK_PATTERN = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 
     public LinkListener(AllmightyBot bot) {
@@ -39,8 +39,8 @@ public class LinkListener extends ListenerAdapter {
         super.onMessage(event);
 
         if (!this.bot.getSettings().shouldTimeoutLinks() || event.getUser() == event.getBot().getUserBot() || event
-                .getChannel().isOp(event.getUser()) || bot.isModerator(event.getUser().getNick()) || !LINK_PATTERN
-                .matcher(event.getMessage()).matches() || PermitCommand.hasPermit(event.getUser().getNick())) {
+                .getChannel().isOp(event.getUser()) || bot.isModerator(event.getUser().getNick()) || PermitCommand
+                .hasPermit(event.getUser().getNick()) || !LINK_PATTERN.matcher(event.getMessage()).find()) {
             return;
         }
 
