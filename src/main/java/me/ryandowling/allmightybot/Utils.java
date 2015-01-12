@@ -233,7 +233,7 @@ public class Utils {
         String reply = string;
 
         if (reply.contains("$[")) {
-            for (int i = 1; i <= reply.split("\\$\\[").length; i++) {
+            for (int i = 1; i <= replacements.length; i++) {
                 String pattern = "$[" + i + "]";
                 if (reply.contains(pattern)) {
                     reply = reply.replace(pattern, replacements[i - 1]);

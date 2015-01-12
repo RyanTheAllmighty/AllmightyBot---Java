@@ -21,6 +21,6 @@
     "linkTimeoutsOn": "Link timeouts have been turned on!",
     "linkTimeoutsOff": "Link timeouts have been turned off!",
     "permit": "$[1] has been permitted to post links for $[2]!",
-    "raid": "Head on over to $[1] who is playing '$[2]' and write the message $[3] once and only once and sit back and enjoy the stream :)",
-    "raidMessage": "$[1] - An Allmighty raid has come your way!"
+    "raid": "Head on over to $[1] who is playing '$[2]' and write the message '$[3]' once and only once and sit back and enjoy the stream :)",
+    "raidMessage": "An Allmighty raid has come your way!"
 }
