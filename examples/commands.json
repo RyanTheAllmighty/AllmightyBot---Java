@@ -73,6 +73,11 @@
         "timeout": 0
     },
     {
+        "type": "me.ryandowling.allmightybot.commands.SeenCommand",
+        "name": "seen",
+        "level": "MODERATOR"
+    },
+    {
         "type": "me.ryandowling.allmightybot.commands.WorldCommand",
         "name": "world",
         "worldType": "QUERY",

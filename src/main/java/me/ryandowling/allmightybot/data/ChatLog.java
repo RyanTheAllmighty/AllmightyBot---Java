@@ -30,4 +30,16 @@ public class ChatLog {
         this.message = message;
         this.time = new Date();
     }
+
+    public String getUser() {
+        return this.user;
+    }
+
+    public String getMessage() {
+        return this.message;
+    }
+
+    public Date getTime() {
+        return this.time;
+    }
 }

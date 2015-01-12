@@ -804,4 +804,14 @@ public class AllmightyBot {
 
         return this.lang.get(key);
     }
+
+    public Date getLastSpokeTime(String username) {
+        username = username.toLowerCase();
+
+        if (!this.userLogs.containsKey(username)) {
+            return null;
+        }
+
+        return this.userLogs.get(username).get(this.userLogs.get(username).size() - 1).getTime();
+    }
 }
