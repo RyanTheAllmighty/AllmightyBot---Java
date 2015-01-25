@@ -24,5 +24,6 @@
     "raid": "Head on over to $[1] who is playing '$[2]' and write the message '$[3]' once and only once and sit back and enjoy the stream :)",
     "raidMessage": "An Allmighty raid has come your way!",
     "seenUser": "$[1] was last seen here $[2] ago!",
-    "neverSeenUser": "I've never seen $[1] here!"
+    "neverSeenUser": "I've never seen $[1] here!",
+    "startupSentence" : "Never fear, AllmightyBot is here!"
 }

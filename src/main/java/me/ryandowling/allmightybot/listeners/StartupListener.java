@@ -41,7 +41,7 @@ public class StartupListener extends ListenerAdapter {
             event.getChannel().send().message(".unhost"); // Unhost when we start up
 
             if (this.bot.getSettings().shouldAnnounceOnJoin()) {
-                event.getChannel().send().message("Never fear, AllmightyBot is here!");
+                event.getChannel().send().message(App.INSTANCE.getLangValue("startupSentence"));
             }
 
             this.bot.startTimedMessages();
