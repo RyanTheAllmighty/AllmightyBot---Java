@@ -78,17 +78,17 @@ public class AllmightyBot {
 
     private boolean isShuttingDown = false;
 
-    private Map<String, Date> userJoined;
-    private Map<String, Map<String, Integer>> userOnlineTime;
-    private Map<String, List<ChatLog>> userLogs;
-    private List<Event> events;
-    private Map<String, Integer> streamOnlineTime;
+    private Map<String, Date> userJoined = new ConcurrentHashMap<>();
+    private Map<String, Map<String, Integer>> userOnlineTime = new ConcurrentHashMap<>();
+    private Map<String, List<ChatLog>> userLogs = new ConcurrentHashMap<>();
+    private List<Event> events = new ArrayList<>();
+    private Map<String, Integer> streamOnlineTime = new ConcurrentHashMap<>();
 
-    private Map<String, String> lang;
+    private Map<String, String> lang = new HashMap<>();
 
-    private List<Spam> spams;
-    private List<String> allowedLinks;
-    private List<TimedMessage> timedMessages;
+    private List<Spam> spams = new ArrayList<>();
+    private List<String> allowedLinks = new ArrayList<>();
+    private List<TimedMessage> timedMessages = new ArrayList<>();
 
     private StartupListener startupListener = new StartupListener(this);
     private UserListener userListener = new UserListener(this);
@@ -99,6 +99,8 @@ public class AllmightyBot {
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
     private Map<String, Integer> topUsers;
+
+    private boolean firstTime = false;
 
     public AllmightyBot() {
         if (Files.exists(Utils.getSettingsFile())) {
@@ -115,44 +117,88 @@ public class AllmightyBot {
         if (!this.settings.hasInitialSetupBeenCompleted()) {
             String input = null;
 
-            do {
-                input = JOptionPane.showInputDialog(null, "Please enter the username of the Twitch user " + "to act " +
-                        "as the bot", "Twitch Username", JOptionPane.QUESTION_MESSAGE);
-                settings.setTwitchUsername(input);
-            } while (input == null);
+            input = JOptionPane.showInputDialog(null, "Please enter the username of the Twitch user " + "to act " +
+                    "as the bot", "Twitch Username", JOptionPane.QUESTION_MESSAGE);
 
-            do {
-                input = JOptionPane.showInputDialog(null, "Please enter the token of the Twitch user " + "acting as " +
-                        "the bot", "Twitch Token", JOptionPane.QUESTION_MESSAGE);
-                settings.setTwitchToken(input);
-            } while (input == null);
+            if (input == null) {
+                logger.error("Failed to input proper things when setting up! Do it properly next time!");
+                System.exit(0);
+            }
 
-            do {
-                input = JOptionPane.showInputDialog(null, "Please enter the API token of the Twitch user " + "acting " +
-                        "as the bot", "Twitch API Token", JOptionPane.QUESTION_MESSAGE);
-                settings.setTwitchApiToken(input);
-            } while (input == null);
+            settings.setTwitchUsername(input);
 
-            do {
-                input = JOptionPane.showInputDialog(null, "Please enter the API client ID of the application using "
-                        + "the Twitch API", "Twitch API Client ID", JOptionPane.QUESTION_MESSAGE);
-                settings.setTwitchApiClientID(input);
-            } while (input == null);
+            input = JOptionPane.showInputDialog(null, "Please enter the IRC oauth token of the Twitch user " +
+                    "acting as the bot", "Twitch Token", JOptionPane.QUESTION_MESSAGE);
 
-            do {
-                input = JOptionPane.showInputDialog(null, "Please enter the username of the Twitch user whose " +
-                        "channel you wish to join! Must be in all lowercase", "User To Join", JOptionPane
-                        .QUESTION_MESSAGE);
-                settings.setTwitchChannel(input);
-            } while (input == null);
+            if (input == null) {
+                logger.error("Failed to input proper things when setting up! Do it properly next time!");
+                System.exit(0);
+            }
 
-            do {
-                input = JOptionPane.showInputDialog(null, "Please enter the name of the caster to display when " +
-                        "referencing them", "Casters Name", JOptionPane.QUESTION_MESSAGE);
-                settings.setCastersName(input);
-            } while (input == null);
+            settings.setTwitchToken(input);
+
+            input = JOptionPane.showInputDialog(null, "Please enter the API token of the Twitch user " + "acting " +
+                    "as the bot", "Twitch API Token", JOptionPane.QUESTION_MESSAGE);
+
+            if (input == null) {
+                logger.error("Failed to input proper things when setting up! Do it properly next time!");
+                System.exit(0);
+            }
+
+            settings.setTwitchApiToken(input);
+
+            input = JOptionPane.showInputDialog(null, "Please enter the API client ID of the application using " +
+                    "the Twitch API", "Twitch API Client ID", JOptionPane.QUESTION_MESSAGE);
+
+            if (input == null) {
+                logger.error("Failed to input proper things when setting up! Do it properly next time!");
+                System.exit(0);
+            }
+
+            settings.setTwitchApiClientID(input);
+
+            input = JOptionPane.showInputDialog(null, "Please enter the username of the Twitch user whose " +
+                    "channel you wish to join! Must be in all lowercase", "User To Join", JOptionPane.QUESTION_MESSAGE);
+
+            if (input == null) {
+                logger.error("Failed to input proper things when setting up! Do it properly next time!");
+                System.exit(0);
+            }
+
+            settings.setTwitchChannel(input);
+
+            input = JOptionPane.showInputDialog(null, "Please enter the name of the caster to display when " +
+                    "referencing them", "Casters Name", JOptionPane.QUESTION_MESSAGE);
+
+            if (input == null) {
+                logger.error("Failed to input proper things when setting up! Do it properly next time!");
+                System.exit(0);
+            }
+
+            settings.setCastersName(input);
+
+            input = JOptionPane.showInputDialog(null, "How often do you want to run the timed messages (in " +
+                    "minutes)?", "Timed Messages", JOptionPane.QUESTION_MESSAGE);
+            try {
+                settings.setTimedMessagesInterval(Integer.parseInt(input) * 60);
+            } catch (NumberFormatException e) {
+                input = null;
+            }
+
+            if (input == null) {
+                logger.error("Failed to input proper things when setting up! Do it properly next time!");
+                System.exit(0);
+            }
+
+            int reply = JOptionPane.showConfirmDialog(null, "Do you want the bot to announce itself on join " +
+                            "(message " + "customisable in the lang.json file after startup)?", "Self Announce",
+                    JOptionPane.YES_NO_OPTION);
+            if (reply != JOptionPane.YES_OPTION) {
+                settings.setAnnounceOnJoin(false);
+            }
 
             this.settings.initialSetupComplete();
+            this.firstTime = true;
         }
 
         Configuration.Builder<PircBotX> config = this.settings.getBuilder();
@@ -193,19 +239,13 @@ public class AllmightyBot {
             logger.info("This is continuing an existing stream!");
         }
 
+        if (this.firstTime) {
+            logger.info("Creating default files!");
+            this.settings.setupExampleStuff();
+        }
+
         // Check the Twitch API token to make sure it's all good
         TwitchAPI.checkToken();
-
-        this.userJoined = new ConcurrentHashMap<>();
-        this.userOnlineTime = new ConcurrentHashMap<>();
-        this.userLogs = new ConcurrentHashMap<>();
-        this.events = new ArrayList<>();
-        this.streamOnlineTime = new ConcurrentHashMap<>();
-
-        this.lang = new HashMap<>();
-
-        this.spams = new ArrayList<>();
-        this.allowedLinks = new ArrayList<>();
 
         loadCommands();
         loadUserChatLogs();
@@ -813,5 +853,9 @@ public class AllmightyBot {
         }
 
         return this.userLogs.get(username).get(this.userLogs.get(username).size() - 1).getTime();
+    }
+
+    public List<TimedMessage> getTimedMessages() {
+        return this.timedMessages;
     }
 }

@@ -18,9 +18,15 @@
 
 package me.ryandowling.allmightybot.data;
 
+import me.ryandowling.allmightybot.AllmightyBot;
+import me.ryandowling.allmightybot.App;
+import me.ryandowling.allmightybot.Utils;
+import org.apache.commons.io.FileUtils;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -113,13 +119,68 @@ public class Settings {
         this.startTime = new Date();
         this.timeoutLinks = true;
         this.forceCommands = true;
-        this.timedMessagesInterval = 900;
         this.timeCommandFormat = "d/M/Y HH:mm:ss z";
 
         List<String> modList = new ArrayList<>();
         modList.add(getTwitchUsername().toLowerCase());
         modList.add(getTwitchChannel().toLowerCase());
         this.moderators = modList;
+    }
+
+    public void setupExampleStuff() {
+        // Timed messages
+        App.INSTANCE.getTimedMessages().add(new TimedMessage().create("This is a test message which the bot will run " +
+                "" + " every now and then"));
+
+        try {
+            FileUtils.writeStringToFile(Utils.getTimedMessagesFile().toFile(), AllmightyBot.GSON.toJson(App.INSTANCE
+                    .getTimedMessages()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Spam timeouts
+        App.INSTANCE.getSpams().add(new Spam().create("Go fuck yourself", "This is what the bot will say back! Make "
+                + "sure to be witty! [Timed out] [30 minutes]", SpamActionType.TIMEOUT, 30));
+        App.INSTANCE.getSpams().add(new Spam().create("Knob gobbler", "The bot says ban! [Ban]", SpamActionType.BAN,
+                30));
+
+        try {
+            FileUtils.writeStringToFile(Utils.getSpamFile().toFile(), AllmightyBot.GSON.toJson(App.INSTANCE.getSpams
+                    ()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Link whitelist
+        App.INSTANCE.getAllowedLinks().add(".*?\\.*twitter.com.*?");
+
+        try {
+            FileUtils.writeStringToFile(Utils.getLinksFile().toFile(), AllmightyBot.GSON.toJson(App.INSTANCE
+                    .getAllowedLinks()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Commands file
+        try {
+            URL inputUrl = System.class.getResource("/json/commands.json");
+            FileUtils.copyURLToFile(inputUrl, Utils.getCommandsFile().toFile());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Failed to copy commands.json to disk! Exiting!");
+            System.exit(1);
+        }
+
+        // Lang file
+        try {
+            URL inputUrl = System.class.getResource("/json/lang.json");
+            FileUtils.copyURLToFile(inputUrl, Utils.getLangFile().toFile());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Failed to copy lang.json to disk! Exiting!");
+            System.exit(1);
+        }
     }
 
     public Configuration.Builder<PircBotX> getBuilder() {
@@ -214,5 +275,13 @@ public class Settings {
 
     public String getTimeCommandFormat() {
         return this.timeCommandFormat;
+    }
+
+    public void setTimedMessagesInterval(int timedMessagesInterval) {
+        this.timedMessagesInterval = timedMessagesInterval;
+    }
+
+    public void setAnnounceOnJoin(boolean announceOnJoin) {
+        this.announceOnJoin = announceOnJoin;
     }
 }

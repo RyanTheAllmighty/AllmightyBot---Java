@@ -73,4 +73,13 @@ public class Spam {
                 break;
         }
     }
+
+    public Spam create(String search, String response, SpamActionType action, int time) {
+        this.search = search;
+        this.response = response;
+        this.action = action;
+        this.time = time;
+
+        return this;
+    }
 }

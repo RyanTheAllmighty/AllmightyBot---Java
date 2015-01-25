@@ -24,4 +24,10 @@ public class TimedMessage {
     public String getMessage() {
         return this.message;
     }
+
+    public TimedMessage create(String message) {
+        this.message = message;
+
+        return this;
+    }
 }

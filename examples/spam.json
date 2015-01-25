@@ -1,8 +1,0 @@
-[
-    {
-        "search": "Example Spam Text",
-        "response": "This is what the bot will say back! Make sure to be witty! [Timed out] [30 minutes]",
-        "action": "TIMEOUT",
-        "time": 30
-    }
-]
