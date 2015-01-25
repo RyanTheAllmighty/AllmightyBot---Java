@@ -14,6 +14,10 @@ Allmighty Bot is a bot used by me in my Twitch channel. Could probably also be u
 + Please use the IntelliJ-Coding-Style.xml for the project (if using IntelliJ) in order to keep all formatting consistent
 + Please don't do large commits. My preference is a single commit for a single fix/addition rather than bundled up commits
 
+### Downloads
+
+If you wish to download the bot without having to build it, you can do so via my Jenkins server at https://build.atlcdn.net/job/Allmighty%20Bot/
+
 ### Getting Started
 
 To get a runnable Jar file run 'mvn clean install' in the root of the project.
