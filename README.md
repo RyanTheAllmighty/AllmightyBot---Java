@@ -26,9 +26,10 @@ After you have a runnable Jar file, you'll need to setup a bunch of stuff, mainl
 bunch of example files are generated after setting up the bot.
 
 When starting the bot, you need to provide a command line argument on if this is a new stream or not. So when you
-start up the bot with 'java -jar AllmightyBot.jar' you should pass in true if this is a new stream or false if it's
-not (for instance if the bot got disconnected or your computer crashed etc) so to start a new stream you start the
-bot with 'java -jar AllmightyBot.jar true' or to continue the stream use 'java -jar AllmightyBot.jar false'
+start up the bot with 'java -jar AllmightyBot.jar' you should pass in the argument 'new' if this is a new stream or
+no argument if continuing (for instance if the bot got disconnected or your computer crashed etc) so to start a new
+stream you start the bot with 'java -jar AllmightyBot.jar new' or to continue you don't need to specify any extra
+arguments.
 
 On first startup you'll be asked to input some information. One of those things is a Twitch API token. To get a
 Twitch API token for use in the application you can either visit http://www.ryandowling.me/twitch-api-token-generator
