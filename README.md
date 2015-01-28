@@ -43,6 +43,10 @@ While the bot is under development and constantly being updated, the bot may or 
 use, there may be times when things are added/edited which break it for you. If you have any issues, please feel free
 to open an issue in this repository.
 
+Before opening an issue if an update breaks things, make sure you try starting the bot fresh with no files so it can
+regenerate new files since when certain files update, you won't get the new files which will cause issues, so getting
+them from a fresh instance of the bot would be advisable before posting an issue.
+
 ### License
 
 This work is licensed under the GNU General Public License v3.0. To view a copy of this license, visit
