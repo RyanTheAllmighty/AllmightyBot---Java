@@ -880,4 +880,8 @@ public class AllmightyBot {
     public List<TimedMessage> getTimedMessages() {
         return this.timedMessages;
     }
+
+    public List<ChatLog> getUsersChatLog(String username) {
+        return this.userLogs.get(username.toLowerCase());
+    }
 }

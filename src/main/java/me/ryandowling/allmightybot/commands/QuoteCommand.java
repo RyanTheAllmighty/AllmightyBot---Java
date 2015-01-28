@@ -21,6 +21,7 @@ package me.ryandowling.allmightybot.commands;
 import com.google.gson.reflect.TypeToken;
 import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.Utils;
+import me.ryandowling.allmightybot.data.ChatLog;
 import me.ryandowling.allmightybot.data.Quote;
 import me.ryandowling.allmightybot.data.QuoteType;
 import org.apache.commons.io.FileUtils;
@@ -61,18 +62,48 @@ public class QuoteCommand extends BaseCommand {
                     event.getChannel().send().message(bot.getLangValue("newQuoteAdded"));
                     break;
                 case SAY:
-                    if (quotes.size() == 0) {
-                        return false;
+                    List<String> arguments1 = Utils.getCommandsArguments(event.getMessage(), true);
+
+                    if (arguments1.size() == 0) {
+                        if (quotes.size() == 0) {
+                            return false;
+                        }
+
+                        Random random = new Random();
+                        Quote randomQuote = quotes.get(random.nextInt(quotes.size()));
+
+                        Calendar cal = new GregorianCalendar();
+                        cal.setTime(randomQuote.getDate());
+
+                        event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("sayQuote")
+                                , randomQuote.getQuote(), bot.getSettings().getCastersName(), cal.get(Calendar.YEAR)
+                                + ""));
+                    } else if (arguments1.size() == 1) {
+                        List<ChatLog> logs = bot.getUsersChatLog(arguments1.get(0));
+
+                        if (logs == null || logs.size() == 0) {
+                            return false;
+                        }
+
+                        Random random = new Random();
+                        ChatLog randomQuote;
+                        int tries = 0;
+
+                        do {
+                            tries++;
+                            randomQuote = logs.get(random.nextInt(logs.size()));
+                        } while (tries <= 100 && !randomQuote.getMessage().startsWith("!"));
+
+                        if (randomQuote.getMessage().startsWith("!")) {
+                            return false;
+                        }
+
+                        Calendar cal = new GregorianCalendar();
+                        cal.setTime(randomQuote.getTime());
+
+                        event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("sayQuote")
+                                , randomQuote.getMessage(), randomQuote.getUser(), cal.get(Calendar.YEAR) + ""));
                     }
-
-                    Random random = new Random();
-                    Quote randomQuote = quotes.get(random.nextInt(quotes.size()));
-
-                    Calendar cal = new GregorianCalendar();
-                    cal.setTime(randomQuote.getDate());
-
-                    event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("sayQuote"),
-                            randomQuote.getQuote(), bot.getSettings().getCastersName(), cal.get(Calendar.YEAR) + ""));
                     break;
             }
             return true;
