@@ -18,6 +18,7 @@
 
 package me.ryandowling.allmightybot.data;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.regex.Pattern;
@@ -55,11 +56,13 @@ public class Spam {
     }
 
     public boolean shouldTakeAction(MessageEvent event) {
+        String message = StringEscapeUtils.escapeJava(event.getMessage());
+
         if (this.pattern == null) {
             this.pattern = Pattern.compile(Pattern.quote(this.search), Pattern.CASE_INSENSITIVE);
         }
 
-        return this.pattern.matcher(event.getMessage()).find();
+        return this.pattern.matcher(message).find();
     }
 
     public void takeAction(MessageEvent event) {

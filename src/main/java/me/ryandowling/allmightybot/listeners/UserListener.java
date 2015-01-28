@@ -20,6 +20,7 @@ package me.ryandowling.allmightybot.listeners;
 
 import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.App;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -48,7 +49,7 @@ public class UserListener extends ListenerAdapter {
     public void onMessage(MessageEvent event) throws Exception {
         super.onMessage(event);
         if (!event.getUser().getNick().equalsIgnoreCase(bot.getSettings().getTwitchUsername())) {
-            this.bot.userSpoke(event.getUser().getNick(), event.getMessage());
+            this.bot.userSpoke(event.getUser().getNick(), StringEscapeUtils.escapeJava(event.getMessage()));
         }
     }
 

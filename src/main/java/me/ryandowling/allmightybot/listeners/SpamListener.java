@@ -20,6 +20,7 @@ package me.ryandowling.allmightybot.listeners;
 
 import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.data.Spam;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 
@@ -34,7 +35,9 @@ public class SpamListener extends ListenerAdapter {
     public void onMessage(MessageEvent event) throws Exception {
         super.onMessage(event);
 
-        if (event.getUser() == event.getBot().getUserBot() || event.getChannel().isOp(event.getUser())) {
+        System.out.println("Escaped: " + StringEscapeUtils.escapeJava(event.getMessage()));
+
+        if (event.getUser() == event.getBot().getUserBot()) {
             return;
         }
 
