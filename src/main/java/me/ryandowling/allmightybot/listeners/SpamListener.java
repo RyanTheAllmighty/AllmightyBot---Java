@@ -37,7 +37,7 @@ public class SpamListener extends ListenerAdapter {
 
         System.out.println("Escaped: " + StringEscapeUtils.escapeJava(event.getMessage()));
 
-        if (event.getUser() == event.getBot().getUserBot()) {
+        if (event.getUser() == event.getBot().getUserBot() || this.bot.isModerator(event.getUser().getNick())) {
             return;
         }
 
