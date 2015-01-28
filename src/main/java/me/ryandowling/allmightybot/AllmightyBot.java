@@ -481,6 +481,10 @@ public class AllmightyBot {
         CommandBus.removeAll();
 
         loadCommands();
+
+        this.spams.clear();
+
+        loadSpamWatchers();
     }
 
     /**
