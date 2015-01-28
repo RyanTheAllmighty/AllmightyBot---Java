@@ -125,15 +125,23 @@ public class Utils {
         int days = totalHours / HOURS_IN_A_DAY;
 
         if (days != 0) {
-            return days + " days, " + hours + " hours, " + minutes + " minutes and " + seconds + " seconds";
+            return days + " day" + (days == 1 ? "" : "s") + ", " + hours + " hour" + (hours == 1 ? "" : "s") + ", " +
+                    minutes + " minute" + (hours == 1 ? "" : "s") + " and " + seconds + " second" + (hours == 1 ? ""
+                    : "s");
         } else {
             if (hours != 0) {
-                return hours + " hours, " + minutes + " minutes and " + seconds + " seconds";
+                return hours + " hour" + (hours == 1 ? "" : "s") + ", " + minutes + " minute" + (minutes == 1 ? "" :
+                        "s") + " and " + seconds + " second" + (seconds == 1 ? "" : "s");
             } else {
                 if (minutes != 0) {
-                    return minutes + " minutes and " + seconds + " seconds";
+                    if (seconds == 0) {
+                        return minutes + " minute" + (minutes == 1 ? "" : "s");
+                    } else {
+                        return minutes + " minute" + (minutes == 1 ? "" : "s") + " and " + seconds + " second" +
+                                (seconds == 1 ? "" : "s");
+                    }
                 } else {
-                    return seconds + " seconds";
+                    return seconds + " second" + (seconds == 1 ? "" : "s");
                 }
             }
         }

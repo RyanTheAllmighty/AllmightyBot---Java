@@ -19,6 +19,8 @@
 package me.ryandowling.allmightybot.listeners;
 
 import me.ryandowling.allmightybot.AllmightyBot;
+import me.ryandowling.allmightybot.App;
+import me.ryandowling.allmightybot.Utils;
 import me.ryandowling.allmightybot.commands.PermitCommand;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -38,9 +40,9 @@ public class LinkListener extends ListenerAdapter {
     public void onMessage(MessageEvent event) throws Exception {
         super.onMessage(event);
 
-        if (!this.bot.getSettings().shouldTimeoutLinks() || event.getUser() == event.getBot().getUserBot() || event
-                .getChannel().isOp(event.getUser()) || bot.isModerator(event.getUser().getNick()) || PermitCommand
-                .hasPermit(event.getUser().getNick()) || !LINK_PATTERN.matcher(event.getMessage()).find()) {
+        if (!this.bot.getSettings().shouldTimeoutLinks() || event.getUser() == event.getBot().getUserBot() || bot
+                .isModerator(event.getUser().getNick()) || PermitCommand.hasPermit(event.getUser().getNick()) ||
+                !LINK_PATTERN.matcher(event.getMessage()).find()) {
             return;
         }
 
@@ -55,8 +57,10 @@ public class LinkListener extends ListenerAdapter {
         }
 
         if (!matched) {
-            event.getChannel().send().message("Please ask permission before posting links! [Timed out] [1 minute]");
-            event.getChannel().send().message(".timeout " + event.getUser().getNick() + " 60");
+            event.getChannel().send().message(Utils.replaceVariablesInString(App.INSTANCE.getLangValue
+                    ("linkTimeoutMessage"), Utils.timeConversion(App.INSTANCE.getSettings().getLinkTimeoutLength())));
+            event.getChannel().send().message(".timeout " + event.getUser().getNick() + " " + App.INSTANCE
+                    .getSettings().getLinkTimeoutLength());
         }
     }
 }

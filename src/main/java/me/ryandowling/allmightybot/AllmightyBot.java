@@ -185,6 +185,14 @@ public class AllmightyBot {
                 input = null;
             }
 
+            input = JOptionPane.showInputDialog(null, "How long do you want to time people out for when they post " +
+                    "links (in minutes)?", "Spam Timeouts", JOptionPane.QUESTION_MESSAGE);
+            try {
+                settings.setLinkTimeoutLength(Integer.parseInt(input) * 60);
+            } catch (NumberFormatException e) {
+                input = null;
+            }
+
             if (input == null) {
                 logger.error("Failed to input proper things when setting up! Do it properly next time!");
                 System.exit(0);

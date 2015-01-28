@@ -25,5 +25,6 @@
     "raidMessage": "An Allmighty raid has come your way!",
     "seenUser": "$[1] was last seen here $[2] ago!",
     "neverSeenUser": "I've never seen $[1] here!",
-    "startupSentence" : "Never fear, AllmightyBot is here!"
+    "startupSentence" : "Never fear, AllmightyBot is here!",
+    "linkTimeoutMessage" : "Please ask permission before posting links! [Timed out] [$[1]]"
 }
