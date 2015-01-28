@@ -27,6 +27,7 @@ import me.ryandowling.allmightybot.commands.TempCommand;
 import me.ryandowling.allmightybot.data.ChatLog;
 import me.ryandowling.allmightybot.data.Event;
 import me.ryandowling.allmightybot.data.EventType;
+import me.ryandowling.allmightybot.data.QuoteType;
 import me.ryandowling.allmightybot.data.SeedType;
 import me.ryandowling.allmightybot.data.Settings;
 import me.ryandowling.allmightybot.data.Spam;
@@ -345,6 +346,10 @@ public class AllmightyBot {
                             commandConstructor = commandClass.getConstructor(String.class, SeedType.class, int.class);
                             commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
                                     .getSeedType(), command.getTimeout());
+                        } else if (command.isQuoteCommand()) {
+                            commandConstructor = commandClass.getConstructor(String.class, QuoteType.class, int.class);
+                            commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command
+                                    .getQuoteType(), command.getTimeout());
                         } else if (command.isWorldCommand()) {
                             commandConstructor = commandClass.getConstructor(String.class, WorldType.class, int.class);
                             commandToAdd = (BaseCommand) commandConstructor.newInstance(command.getName(), command

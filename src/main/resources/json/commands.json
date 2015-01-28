@@ -38,6 +38,18 @@
         "timeout": 0
     },
     {
+        "type": "me.ryandowling.allmightybot.commands.QuoteCommand",
+        "name": "addquote",
+        "quoteType": "NEW",
+        "level": "MODERATOR"
+    },
+    {
+        "type": "me.ryandowling.allmightybot.commands.QuoteCommand",
+        "name": "quote",
+        "quoteType": "SAY",
+        "level": "ALL"
+    },
+    {
         "type": "me.ryandowling.allmightybot.commands.SongCommand",
         "name": "song",
         "level": "ALL"

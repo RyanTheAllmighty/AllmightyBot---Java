@@ -27,5 +27,7 @@
     "seenUser": "$[1] was last seen here $[2] ago!",
     "neverSeenUser": "I've never seen $[1] here!",
     "startupSentence" : "Never fear, AllmightyBot is here!",
-    "linkTimeoutMessage" : "Please ask permission before posting links! [Timed out] [$[1]]"
+    "linkTimeoutMessage" : "Please ask permission before posting links! [Timed out] [$[1]]",
+    "sayQuote" : "'$[1]' - $[2] $[3]",
+    "newQuoteAdded": "New quote has been added!"
 }

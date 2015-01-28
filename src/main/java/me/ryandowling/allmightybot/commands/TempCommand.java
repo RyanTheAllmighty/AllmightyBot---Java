@@ -19,6 +19,7 @@
 package me.ryandowling.allmightybot.commands;
 
 import me.ryandowling.allmightybot.data.CommandLevel;
+import me.ryandowling.allmightybot.data.QuoteType;
 import me.ryandowling.allmightybot.data.SeedType;
 import me.ryandowling.allmightybot.data.WorldType;
 
@@ -29,6 +30,7 @@ public class TempCommand {
     private CommandLevel level;
     private SeedType seedType;
     private WorldType worldType;
+    private QuoteType quoteType;
     private String aliasedTo;
     private int timeout = 3;
 
@@ -64,6 +66,10 @@ public class TempCommand {
         return this.aliasedTo;
     }
 
+    public QuoteType getQuoteType() {
+        return this.quoteType;
+    }
+
     public int getTimeout() {
         return this.timeout;
     }
@@ -78,5 +84,9 @@ public class TempCommand {
 
     public boolean isAliasCommand() {
         return this.aliasedTo != null;
+    }
+
+    public boolean isQuoteCommand() {
+        return this.quoteType != null;
     }
 }
