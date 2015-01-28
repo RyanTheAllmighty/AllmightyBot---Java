@@ -491,6 +491,11 @@ public class AllmightyBot {
     }
 
     public void reload() {
+        for (Map.Entry<String, Command> entry : CommandBus.getAll().entrySet()) {
+            Command command = entry.getValue();
+            command.save();
+        }
+
         CommandBus.removeAll();
 
         loadCommands();
