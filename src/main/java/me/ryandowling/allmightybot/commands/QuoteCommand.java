@@ -92,7 +92,7 @@ public class QuoteCommand extends BaseCommand {
                         do {
                             tries++;
                             randomQuote = logs.get(random.nextInt(logs.size()));
-                        } while (tries <= 100 && !randomQuote.getMessage().startsWith("!"));
+                        } while (tries <= 100 && randomQuote.getMessage().startsWith("!"));
 
                         if (randomQuote.getMessage().startsWith("!")) {
                             return false;
@@ -102,7 +102,8 @@ public class QuoteCommand extends BaseCommand {
                         cal.setTime(randomQuote.getTime());
 
                         event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("sayQuote")
-                                , randomQuote.getMessage(), randomQuote.getUser(), cal.get(Calendar.YEAR) + ""));
+                                , randomQuote.getMessage(), randomQuote.getUser(), Utils.getPrintableMonth(cal.get
+                                (Calendar.MONTH)) + " " + cal.get(Calendar.YEAR)));
                     }
                     break;
             }
