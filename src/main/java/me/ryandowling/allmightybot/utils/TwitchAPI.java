@@ -21,6 +21,7 @@ package me.ryandowling.allmightybot.utils;
 import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.data.twitch.api.ChannelPutRequest;
 import me.ryandowling.allmightybot.data.twitch.api.StreamResponse;
+import me.ryandowling.allmightybot.data.twitch.api.TwitchChannel;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -97,5 +98,17 @@ public class TwitchAPI {
         }
 
         return response.getStream().getViewers();
+    }
+
+    public static int getFollowerCount(String username) throws IOException {
+        TwitchAPIRequest request = new TwitchAPIRequest("/channels/" + username);
+
+        TwitchChannel response = AllmightyBot.GSON.fromJson(request.get(), TwitchChannel.class);
+
+        if (response == null) {
+            return 0;
+        }
+
+        return response.getFollowers();
     }
 }

@@ -134,6 +134,11 @@
         "level": "ALL"
     },
     {
+        "type": "me.ryandowling.allmightybot.commands.FollowersCommand",
+        "name": "followers",
+        "level": "ALL"
+    },
+    {
         "type": "me.ryandowling.allmightybot.commands.RaidCommand",
         "name": "raid",
         "level": "CASTER"

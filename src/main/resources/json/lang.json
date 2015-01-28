@@ -3,6 +3,7 @@
     "worldDetails": "This is world number $[1] with a seed of '$[2]'",
     "randomUserPicked": "Abra Kadabra, I choose you $[1]",
     "currentViewers": "There are currently $[1] viewers",
+    "currentFollowers": "There are currently $[1] followers",
     "currentTime": "The current time for $[1] is $[2]",
     "uptimeToday": "$[1] has been live for $[2] today!",
     "uptimeAll": "$[1] has been live for $[2] this year!",
