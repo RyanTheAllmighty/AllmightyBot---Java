@@ -39,6 +39,15 @@ doing so.
 
 You'll also be asked for Twitch IRC oauth token which you can get from http://twitchapps.com/tmi
 
+In order to get the SongCommand working, you need to have 2 files in the root directory where the bot is. 'nowplaying
+.txt' and 'nowplayingfile.txt'. nowplaying.txt contains the artists name and song name seperate by ' - ' so for
+instance it should say 'Some Artist - Some Song'. The 'nowplayingfile.txt' file should contain the full path to where
+the song is on your computer. In order to have the bot provide the website for the artist, you must add a 'website
+.txt' file to each of your folders for each artist. So for instance you have an artist called 'Some Artist' the
+folder that their songs are in on your computer should have a 'Some Artist/website.txt' file with nothing but the
+link to that artists page. Yes I know this is confusing, but it's how it works with my setup to properly attribute
+and recognise all the artists music that I play.
+
 While the bot is under development and constantly being updated, the bot may or may not work. As this intended for my
 use, there may be times when things are added/edited which break it for you. If you have any issues, please feel free
 to open an issue in this repository.
