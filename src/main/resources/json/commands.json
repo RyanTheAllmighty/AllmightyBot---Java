@@ -55,6 +55,11 @@
         "level": "ALL"
     },
     {
+        "type": "me.ryandowling.allmightybot.commands.StrawPollCommand",
+        "name": "strawpoll",
+        "level": "MODERATOR"
+    },
+    {
         "type": "me.ryandowling.allmightybot.commands.WorldCommand",
         "name": "newworld",
         "worldType": "NEW",

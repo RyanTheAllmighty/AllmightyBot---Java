@@ -29,5 +29,6 @@
     "startupSentence" : "Never fear, AllmightyBot is here!",
     "linkTimeoutMessage" : "Please ask permission before posting links! [Timed out] [$[1]]",
     "sayQuote" : "'$[1]' - $[2] - $[3]",
-    "newQuoteAdded": "New quote has been added!"
+    "newQuoteAdded": "New quote has been added!",
+    "strawpollResponse": "A StrawPoll has been created! Go vote on it at $[1]"
 }
