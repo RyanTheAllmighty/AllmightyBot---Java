@@ -18,31 +18,65 @@
 
 package me.ryandowling.allmightybot.listeners;
 
+import com.google.gson.reflect.TypeToken;
 import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.App;
 import me.ryandowling.allmightybot.Utils;
 import me.ryandowling.allmightybot.commands.PermitCommand;
+import org.apache.commons.io.IOUtils;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class LinkListener extends ListenerAdapter {
     private AllmightyBot bot;
+    private static List<String> domains = new ArrayList<>();
     private static final String regex = "[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)";
     private static final Pattern LINK_PATTERN = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 
     public LinkListener(AllmightyBot bot) {
         this.bot = bot;
+
+        try {
+            Type type = new TypeToken<List<String>>() {
+            }.getType();
+
+            domains = AllmightyBot.GSON.fromJson(IOUtils.toString(System.class.getResource("/json/domains.json")),
+                    type);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Failed to read domains.json from jar! Exiting!");
+            System.exit(1);
+        }
     }
 
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         super.onMessage(event);
 
-        if (!this.bot.getSettings().shouldTimeoutLinks() || event.getUser() == event.getBot().getUserBot() || bot
-                .isModerator(event.getUser().getNick()) || PermitCommand.hasPermit(event.getUser().getNick()) ||
+        if (!this.bot.getSettings().shouldTimeoutLinks() || event.getUser() == event.getBot().getUserBot() ||
+                PermitCommand.hasPermit(event.getUser().getNick()) ||
                 !LINK_PATTERN.matcher(event.getMessage()).find()) {
+            return;
+        }
+
+        boolean containsDomain = false;
+
+        // Loop through the list of domains in the domains list (read from the jar) to see if it contains it
+        Pattern domainPattern;
+        for (String domain : domains) {
+            domainPattern = Pattern.compile(".*\\." + domain + " ?\\b", Pattern.CASE_INSENSITIVE);
+            if (domainPattern.matcher(event.getMessage()).find()) {
+                containsDomain = true;
+                break;
+            }
+        }
+
+        if (!containsDomain) {
             return;
         }
 
