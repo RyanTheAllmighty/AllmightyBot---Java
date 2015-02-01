@@ -6,7 +6,7 @@
 	<groupId>me.ryandowling</groupId>
 	<artifactId>allmightybot</artifactId>
 	<name>Allmighty Bot</name>
-	<version>1.0.0.0</version>
+	<version>1.0.0.%BUILD%</version>
 	<packaging>jar</packaging>
 	<description>Allmighty Bot is a bot used for RyanTheAllmighty's Twitch channel and is a general IRC bot</description>
 	<url>http://www.ryandowling.me</url>
