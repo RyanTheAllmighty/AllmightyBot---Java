@@ -55,13 +55,14 @@ public class DoucheCommand extends BaseCommand {
             if (douches.contains(username)) {
                 douches.remove(username);
 
-                event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("douche"), username));
+                event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("douche"),
+                        username, Utils.timeConversion(43200)));
                 event.getChannel().send().message(".timeout " + username + " 43200");
             } else {
                 douches.add(username);
 
                 event.getChannel().send().message(Utils.replaceVariablesInString(bot.getLangValue("doucheWarning"),
-                        username));
+                        username, Utils.timeConversion(600)));
                 event.getChannel().send().message(".timeout " + username + " 600");
             }
             return true;
