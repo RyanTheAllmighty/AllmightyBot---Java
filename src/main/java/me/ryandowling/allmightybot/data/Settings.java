@@ -83,9 +83,14 @@ public class Settings {
     private boolean timeoutLinks;
 
     /**
-     * How long in seconds users should be timed out for
+     * How long in seconds users should be timed out for on second offense
      */
-    private int linkTimeoutLength;
+    private int linkTimeoutLength1;
+
+    /**
+     * How long in seconds users should be timed out for on third and subsequent offenses
+     */
+    private int linkTimeoutLength2;
 
     /**
      * If the bot shouldn't continue loading if one or more commands cannot be loaded
@@ -123,7 +128,8 @@ public class Settings {
         this.initialSetupComplete = true;
         this.startTime = new Date();
         this.timeoutLinks = true;
-        this.linkTimeoutLength = 60;
+        this.linkTimeoutLength1 = 10;
+        this.linkTimeoutLength2 = 60;
         this.forceCommands = true;
         this.timeCommandFormat = "d/M/Y HH:mm:ss z";
 
@@ -291,11 +297,19 @@ public class Settings {
         this.announceOnJoin = announceOnJoin;
     }
 
-    public int getLinkTimeoutLength() {
-        return this.linkTimeoutLength;
+    public int getLinkTimeoutLength1() {
+        return this.linkTimeoutLength1;
     }
 
-    public void setLinkTimeoutLength(int linkTimeoutLength) {
-        this.linkTimeoutLength = linkTimeoutLength;
+    public void setLinkTimeoutLength1(int linkTimeoutLength1) {
+        this.linkTimeoutLength1 = linkTimeoutLength1;
+    }
+
+    public int getLinkTimeoutLength2() {
+        return this.linkTimeoutLength2;
+    }
+
+    public void setLinkTimeoutLength2(int linkTimeoutLength2) {
+        this.linkTimeoutLength2 = linkTimeoutLength2;
     }
 }

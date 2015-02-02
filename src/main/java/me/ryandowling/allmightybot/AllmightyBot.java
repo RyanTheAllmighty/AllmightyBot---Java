@@ -187,9 +187,17 @@ public class AllmightyBot {
             }
 
             input = JOptionPane.showInputDialog(null, "How long do you want to time people out for when they post " +
-                    "links (in minutes)?", "Spam Timeouts", JOptionPane.QUESTION_MESSAGE);
+                    "links after 1 warning (in minutes)?", "Spam Timeouts", JOptionPane.QUESTION_MESSAGE);
             try {
-                settings.setLinkTimeoutLength(Integer.parseInt(input) * 60);
+                settings.setLinkTimeoutLength1(Integer.parseInt(input) * 60);
+            } catch (NumberFormatException e) {
+                input = null;
+            }
+
+            input = JOptionPane.showInputDialog(null, "How long do you want to time people out for when they post " +
+                    "links after 2 and more warnings (in minutes)?", "Spam Timeouts", JOptionPane.QUESTION_MESSAGE);
+            try {
+                settings.setLinkTimeoutLength2(Integer.parseInt(input) * 60);
             } catch (NumberFormatException e) {
                 input = null;
             }

@@ -131,8 +131,22 @@ public class Utils {
                     : "s");
         } else {
             if (hours != 0) {
-                return hours + " hour" + (hours == 1 ? "" : "s") + ", " + minutes + " minute" + (minutes == 1 ? "" :
-                        "s") + " and " + seconds + " second" + (seconds == 1 ? "" : "s");
+                if (minutes != 0) {
+                    if (seconds == 0) {
+                        return hours + " hour" + (hours == 1 ? "" : "s") + ", " + minutes + " minute" + (minutes == 1
+                                ? "" : "s");
+                    } else {
+                        return hours + " hour" + (hours == 1 ? "" : "s") + ", " + minutes + " minute" + (minutes == 1
+                                ? "" : "s") + " and " + seconds + " second" + (seconds == 1 ? "" : "s");
+                    }
+                } else {
+                    if (seconds == 0) {
+                        return hours + " hour" + (hours == 1 ? "" : "s");
+                    } else {
+                        return hours + " hour" + (hours == 1 ? "" : "s") + ", " + seconds + " second" + (seconds == 1
+                                ? "" : "s");
+                    }
+                }
             } else {
                 if (minutes != 0) {
                     if (seconds == 0) {

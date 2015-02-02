@@ -29,11 +29,14 @@ import org.pircbotx.hooks.events.MessageEvent;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class LinkListener extends ListenerAdapter {
     private AllmightyBot bot;
+    private static Map<String, Integer> warnings = new HashMap<>();
     private static List<String> domains = new ArrayList<>();
     private static final String regex = "[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)";
     private static final Pattern LINK_PATTERN = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
@@ -58,8 +61,7 @@ public class LinkListener extends ListenerAdapter {
     public void onMessage(MessageEvent event) throws Exception {
         super.onMessage(event);
 
-        if (!this.bot.getSettings().shouldTimeoutLinks() || event.getUser() == event.getBot().getUserBot() || this
-                .bot.isModerator(event.getUser().getNick()) || PermitCommand.hasPermit(event.getUser().getNick()) ||
+        if (!this.bot.getSettings().shouldTimeoutLinks() || event.getUser() == event.getBot().getUserBot()  || PermitCommand.hasPermit(event.getUser().getNick()) ||
                 !LINK_PATTERN.matcher(event.getMessage()).find()) {
             return;
         }
@@ -91,10 +93,25 @@ public class LinkListener extends ListenerAdapter {
         }
 
         if (!matched) {
-            event.getChannel().send().message(Utils.replaceVariablesInString(App.INSTANCE.getLangValue
-                    ("linkTimeoutMessage"), Utils.timeConversion(App.INSTANCE.getSettings().getLinkTimeoutLength())));
-            event.getChannel().send().message(".timeout " + event.getUser().getNick() + " " + App.INSTANCE
-                    .getSettings().getLinkTimeoutLength());
+            if (!warnings.containsKey(event.getUser().getNick())) {
+                warnings.put(event.getUser().getNick(), 1);
+
+                event.getChannel().send().message(App.INSTANCE.getLangValue("linkTimeoutMessageWarning1"));
+                event.getChannel().send().message(".timeout " + event.getUser().getNick() + " " + 1);
+            } else {
+                int timeoutLength;
+
+                if (warnings.get(event.getUser().getNick()) == 1) {
+                    warnings.put(event.getUser().getNick(), 2);
+                    timeoutLength = App.INSTANCE.getSettings().getLinkTimeoutLength1();
+                } else {
+                    timeoutLength = App.INSTANCE.getSettings().getLinkTimeoutLength2();
+                }
+
+                event.getChannel().send().message(Utils.replaceVariablesInString(App.INSTANCE.getLangValue
+                        ("linkTimeoutMessageWarning2"), Utils.timeConversion(timeoutLength)));
+                event.getChannel().send().message(".timeout " + event.getUser().getNick() + " " + timeoutLength);
+            }
         }
     }
 }
