@@ -58,8 +58,8 @@ public class LinkListener extends ListenerAdapter {
     public void onMessage(MessageEvent event) throws Exception {
         super.onMessage(event);
 
-        if (!this.bot.getSettings().shouldTimeoutLinks() || event.getUser() == event.getBot().getUserBot() ||
-                PermitCommand.hasPermit(event.getUser().getNick()) ||
+        if (!this.bot.getSettings().shouldTimeoutLinks() || event.getUser() == event.getBot().getUserBot() || this
+                .bot.isModerator(event.getUser().getNick()) || PermitCommand.hasPermit(event.getUser().getNick()) ||
                 !LINK_PATTERN.matcher(event.getMessage()).find()) {
             return;
         }
