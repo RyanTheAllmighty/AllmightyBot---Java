@@ -156,9 +156,14 @@
         "level": "ALL"
     },
     {
-        "type": "me.ryandowling.allmightybot.commands.RaidCommand",
-        "name": "raid",
-        "level": "CASTER"
+      "type": "me.ryandowling.allmightybot.commands.RaidCommand",
+      "name": "raid",
+      "level": "CASTER"
+    },
+    {
+      "type": "me.ryandowling.allmightybot.commands.TrollChatCommand",
+      "name": "trollchat",
+      "level": "CASTER"
     },
     {
         "type": "me.ryandowling.allmightybot.commands.ReplyCommand",

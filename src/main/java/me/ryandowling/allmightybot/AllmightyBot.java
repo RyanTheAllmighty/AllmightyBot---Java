@@ -38,6 +38,7 @@ import me.ryandowling.allmightybot.listeners.CommandListener;
 import me.ryandowling.allmightybot.listeners.LinkListener;
 import me.ryandowling.allmightybot.listeners.SpamListener;
 import me.ryandowling.allmightybot.listeners.StartupListener;
+import me.ryandowling.allmightybot.listeners.TrollChatListener;
 import me.ryandowling.allmightybot.listeners.UserListener;
 import me.ryandowling.allmightybot.utils.TwitchAPI;
 import org.apache.commons.io.FileUtils;
@@ -96,6 +97,7 @@ public class AllmightyBot {
     private CommandListener commandListener = new CommandListener(this);
     private SpamListener spamListener = new SpamListener(this);
     private LinkListener linkListener = new LinkListener(this);
+    private TrollChatListener trollChatListener = new TrollChatListener(this);
 
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
@@ -226,6 +228,7 @@ public class AllmightyBot {
         config.addListener(this.commandListener);
         config.addListener(this.spamListener);
         config.addListener(this.linkListener);
+        config.addListener(this.trollChatListener);
 
         addShutdownHook();
 
@@ -797,6 +800,13 @@ public class AllmightyBot {
         }
     }
 
+    public void removeTrollChatListener() {
+        if (this.trollChatListener != null) {
+            this.pirc.getConfiguration().getListenerManager().removeListener(this.trollChatListener);
+            this.trollChatListener = null;
+        }
+    }
+
     public void triggerShutdown() {
         // Remove the listeners
         this.removeStartupListener();
@@ -804,6 +814,7 @@ public class AllmightyBot {
         this.removeCommandListener();
         this.removeSpamListener();
         this.removeLinkListener();
+        this.removeTrollChatListener();
 
         this.shutDown = true;
     }
@@ -883,6 +894,16 @@ public class AllmightyBot {
         }
 
         return this.userLogs.get(username).get(this.userLogs.get(username).size() - 1).getTime();
+    }
+
+    public Date getFirstSpokeTime(String username) {
+        username = username.toLowerCase();
+
+        if (!this.userLogs.containsKey(username)) {
+            return new Date();
+        }
+
+        return this.userLogs.get(username).get(0).getTime();
     }
 
     public List<TimedMessage> getTimedMessages() {

@@ -31,5 +31,8 @@
   "linkTimeoutMessageWarning2": "Please ask permission before posting links! [Timed out] [$[1]]",
   "sayQuote": "'$[1]' - $[2] - $[3]",
   "newQuoteAdded": "New quote has been added!",
-  "strawpollResponse": "A StrawPoll has been created! Go vote on it at $[1]"
+  "strawpollResponse": "A StrawPoll has been created! Go vote on it at $[1]",
+  "trollChatTimeoutMessage": "Troll chat mode is currently activated which means all new users who speak get timed out! Sorry about this, but it's necessary to remove the trolls!",
+  "trollChatOn": "Troll chat mode has been activated! You will be timed out for 4 hours if you haven't spoken here before!",
+  "trollChatOff": "Troll chat mode has been deactivated! You may all now speak!"
 }

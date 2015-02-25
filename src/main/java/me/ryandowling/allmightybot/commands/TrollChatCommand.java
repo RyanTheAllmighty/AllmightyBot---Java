@@ -24,8 +24,10 @@ import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.List;
 
-public class LinkCommand extends BaseCommand {
-    public LinkCommand(String name, int timeout) {
+public class TrollChatCommand extends BaseCommand {
+    public static boolean activated = false;
+
+    public TrollChatCommand(String name, int timeout) {
         super(name, timeout);
     }
 
@@ -38,15 +40,17 @@ public class LinkCommand extends BaseCommand {
                 return false;
             }
 
-            String links = arguments.get(0);
+            String trollChat = arguments.get(0);
 
-            if (links.equalsIgnoreCase("true") || links.equalsIgnoreCase("yes") || links.equalsIgnoreCase("on")) {
-                bot.getSettings().setTimeoutLinks(true);
-                event.getChannel().send().message(bot.getLangValue("linkTimeoutsOn"));
-            } else if (links.equalsIgnoreCase("false") || links.equalsIgnoreCase("no") || links.equalsIgnoreCase
+
+            if (trollChat.equalsIgnoreCase("false") || trollChat.equalsIgnoreCase("no") || trollChat.equalsIgnoreCase
                     ("off")) {
-                bot.getSettings().setTimeoutLinks(false);
-                event.getChannel().send().message(bot.getLangValue("linkTimeoutsOff"));
+                event.getChannel().send().message(bot.getLangValue("trollChatOff"));
+                activated = false;
+            } else if (trollChat.equalsIgnoreCase("true") || trollChat.equalsIgnoreCase("yes") || trollChat
+                    .equalsIgnoreCase("on")) {
+                event.getChannel().send().message(bot.getLangValue("trollChatOn"));
+                activated = true;
             } else {
                 return false;
             }
