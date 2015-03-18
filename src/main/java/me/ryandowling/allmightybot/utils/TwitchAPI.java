@@ -22,6 +22,7 @@ import me.ryandowling.allmightybot.AllmightyBot;
 import me.ryandowling.allmightybot.data.twitch.api.ChannelPutRequest;
 import me.ryandowling.allmightybot.data.twitch.api.StreamResponse;
 import me.ryandowling.allmightybot.data.twitch.api.TwitchChannel;
+import me.ryandowling.allmightybot.data.twitch.api.TwitchChatProperties;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -29,6 +30,7 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 
 public class TwitchAPI {
+
     public static void checkToken() {
         System.out.println("Checking Twitch API token");
 
@@ -110,5 +112,15 @@ public class TwitchAPI {
         }
 
         return response.getFollowers();
+    }
+
+    public static String getChatServerIP(String username) throws IOException {
+        TwitchAPIRequest request = new TwitchAPIRequest("/channels/" + username + "/chat_properties", true);
+
+        TwitchChatProperties response = AllmightyBot.GSON.fromJson(request.get(), TwitchChatProperties.class);
+
+        String serverIP = response.getChatServers().get(0);
+
+        return serverIP.substring(0, serverIP.indexOf(":"));
     }
 }

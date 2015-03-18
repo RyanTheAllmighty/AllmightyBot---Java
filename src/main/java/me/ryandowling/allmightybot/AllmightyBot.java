@@ -219,8 +219,19 @@ public class AllmightyBot {
             this.settings.initialSetupComplete();
             this.firstTime = true;
         }
+    }
 
+    private void loadBot() {
         Configuration.Builder<PircBotX> config = this.settings.getBuilder();
+
+        String chatServerIP = null;
+        try {
+            chatServerIP = TwitchAPI.getChatServerIP(this.settings.getTwitchChannel());
+            config.setServerHostname(chatServerIP);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
 
         // Register the different listeners
         config.addListener(this.startupListener);
@@ -250,6 +261,8 @@ public class AllmightyBot {
 
     public void startUp(boolean newStream) {
         logger.info("Bot starting up!");
+
+        loadBot();
 
         if (newStream) {
             logger.info("This is a new stream!");

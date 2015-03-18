@@ -31,9 +31,11 @@ import java.net.URL;
 
 public class TwitchAPIRequest {
     private static final String TWITCH_API_BASE = "https://api.twitch.tv/kraken";
+    private static final String TWITCH_API_BASE_ALT = "https://api.twitch.tv/api";
     private final String accessToken;
     private final String clientID;
     private String path = "/";
+    private boolean useAlt = false;
     private HttpsURLConnection connection;
 
     public TwitchAPIRequest() {
@@ -42,12 +44,18 @@ public class TwitchAPIRequest {
     }
 
     public TwitchAPIRequest(String path) {
+        this(path, false);
+    }
+
+    public TwitchAPIRequest(String path, boolean useAlt) {
         this();
         if (path.length() == 0 || !path.substring(0, 1).equals("/")) {
             this.path = "/" + path;
         } else {
             this.path = path;
         }
+
+        this.useAlt = useAlt;
     }
 
     public String get() throws IOException {
@@ -93,8 +101,8 @@ public class TwitchAPIRequest {
     }
 
     private void connect(String requestMethod, Object object) throws IOException {
-        System.out.println("Connecting to " + TWITCH_API_BASE + this.path);
-        URL url = new URL(TWITCH_API_BASE + this.path);
+        System.out.println("Connecting to " + (this.useAlt ? TWITCH_API_BASE_ALT : TWITCH_API_BASE) + this.path);
+        URL url = new URL((this.useAlt ? TWITCH_API_BASE_ALT : TWITCH_API_BASE) + this.path);
         this.connection = (HttpsURLConnection) url.openConnection();
         this.connection.setRequestMethod(requestMethod);
         this.connection.setUseCaches(false);
