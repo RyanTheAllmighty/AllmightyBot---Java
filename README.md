@@ -1,4 +1,4 @@
-AllmightyBot
+AllmightyBot - Java
 ====================================
 
 ### Warning
