@@ -1,9 +1,12 @@
-Allmighty Bot
+AllmightyBot
 ====================================
+
+### Warning
+This application is no longer being updated. For the updated version written in NodeJS see [here](https://github.com/RyanTheAllmighty/AllmightyBot)
 
 ### What is it?
 
-Allmighty Bot is a bot used by me in my Twitch channel. Could probably also be used as a general IRC bot.
+AllmightyBot is a bot used by me in my Twitch channel. Could probably also be used as a general IRC bot.
 
 ### Coding Standards
 
